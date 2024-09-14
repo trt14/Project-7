@@ -3,27 +3,63 @@ import 'package:flutter_image_stack/flutter_image_stack.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
+import 'package:project_7/src/widgits/custom_list_tile.dart';
+import 'package:project_7/src/widgits/custom_notification_project.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
     Color color = Colors.black;
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "My Projects :",
-                  style: TextStyle(fontSize: 30, color: color.primaryColor),
-                ),
+                  width: context.getWidth(),
+                  padding: const EdgeInsets.only(top: 8, left: 8),
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Text(
+                          "Welcome back 👋 ",
+                          style: TextStyle(
+                              color: color.txtBlackColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      CustomListTile(
+                        color: color,
+                        title: "Ali Altarouty",
+                        description: "Flutter Developer",
+                        widget: Icon(
+                          Icons.person_2_outlined,
+                          color: color.primaryColor,
+                        ),
+                      )
+                    ],
+                  )),
+              const SizedBox(
+                height: 10,
               ),
-              SizedBox(
+              Center(
+                  child: CustomNotificationProject(
+                      color: color,
+                      text: "Next your presintation'Project Name' after 5 days",
+                      icon: Icon(
+                        Icons.alarm,
+                        color: color.primaryColor,
+                      ))),
+              const SizedBox(
                 height: 10,
               ),
               CustomCardProject(
