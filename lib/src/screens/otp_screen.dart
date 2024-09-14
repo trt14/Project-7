@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_7/src/widgits/custom_pinput.dart';
-
+import 'package:project_7/src/widgits/custom_rich_text.dart';
 
 class OtpScreen extends StatelessWidget {
   const OtpScreen({super.key});
@@ -20,32 +20,10 @@ class OtpScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Center(
+              const Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(19.0),
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: const TextSpan(
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                              text: "Verification\n\n",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
-                          TextSpan(text: "Enter otp send to "),
-                          TextSpan(
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                              text: "example@email.com \n\n"),
-                          TextSpan(text: "code will expire in: "),
-                          TextSpan(
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold),
-                              text: "02:00"),
-                        ]),
-                  ),
+                  padding: EdgeInsets.all(19.0),
+                  child: CustomRichText(email: "example@email.com",time: "02:00",),
                 ),
               ),
               const SizedBox(
@@ -61,3 +39,4 @@ class OtpScreen extends StatelessWidget {
     );
   }
 }
+
