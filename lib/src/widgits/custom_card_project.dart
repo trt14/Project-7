@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_image_stack/flutter_image_stack.dart';
-import 'package:project_7/helper/screen.dart';
+import 'package:project_7/src/helper/screen.dart';
 
 class CustomCardProject extends StatelessWidget {
   const CustomCardProject(

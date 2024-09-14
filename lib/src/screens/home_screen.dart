@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_image_stack/flutter_image_stack.dart';
-import 'package:project_7/helper/screen.dart';
-import 'package:project_7/helper/colors.dart';
+import 'package:project_7/src/helper/screen.dart';
+import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
 
 class HomeScreen extends StatelessWidget {
