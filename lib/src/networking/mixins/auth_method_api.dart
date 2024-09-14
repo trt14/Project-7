@@ -7,7 +7,7 @@ import 'package:project_7/src/models/auth/auth_model.dart';
 
 import '../constant_networking.dart';
 
-mixin AuthApi on ConstantNetworking {
+mixin AuthMethodApi on ConstantNetworking {
   /*
   *
   * Create a new account

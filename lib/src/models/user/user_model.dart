@@ -48,8 +48,7 @@ class UserModel {
       link: json['link'] ?? "",
       projects: (json['projects'] as List)
               .map((i) => ProjectModel.fromJson(i))
-              .toList() ??
-          [],
+              .toList(),
       createdAt: DateTime.parse(json['created_at'] ?? ""),
       updatedAt: DateTime.parse(json['updated_at'] ?? ""),
     );

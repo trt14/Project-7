@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:project_7/src/models/user/user_model.dart';
 import 'package:project_7/src/networking/constant_networking.dart';
 
-mixin UserApi on ConstantNetworking {
+mixin UserMethodApi on ConstantNetworking {
   /*
   *
   * Method to fetch user profile information
@@ -55,7 +55,9 @@ mixin UserApi on ConstantNetworking {
   * */
   Future<UserModel> updateUserProfile(
       {required String token, required UserModel user}) async {
-    debugPrint("Iam at UpdateUserProfile");
+          if (kDebugMode) {
+            log("Iam at UpdateUserProfile");
+          }
     final userJson = user.toJson();
     try {
       // Construct the API endpoint URL
@@ -71,7 +73,9 @@ mixin UserApi on ConstantNetworking {
           },
         ),
       );
-      debugPrint("${response.statusMessage} ${response.statusCode}");
+            if (kDebugMode) {
+              log("${response.statusMessage} ${response.statusCode}");
+            }
       // Check if the request was successful (status code 200)
       if (response.statusCode == 200) {
         // Parse the response data and create a UserModel object
