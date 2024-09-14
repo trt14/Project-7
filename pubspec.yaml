@@ -13,7 +13,7 @@ dependencies:
   pinput: ^5.0.0
   dio: ^5.7.0
   intl: ^0.18.0
-
+  device_preview: ^1.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
