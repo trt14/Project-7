@@ -24,6 +24,18 @@ class UserModel {
     required this.createdAt,
     required this.updatedAt,
   });
+  void printUserDetails() {
+    print('ID: $id');
+    print('First Name: $firstName');
+    print('Last Name: $lastName');
+    print('Email: $email');
+    print('Role: $role');
+    print('Image URL: $imageUrl');
+    print('Link: ${link.toString()}');
+    print('Projects: ${projects.map((project) => project.toString()).join(", ")}');
+    print('Created At: $createdAt');
+    print('Updated At: $updatedAt');
+  }
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
@@ -32,13 +44,14 @@ class UserModel {
       lastName: json['last_name'],
       email: json['email'],
       role: json['role'],
-      imageUrl: json['image_url'],
-      link: json['link'],
+      imageUrl: json['image_url'] ?? "",
+      link: json['link'] ?? "",
       projects: (json['projects'] as List)
-          .map((i) => ProjectModel.fromJson(i))
-          .toList(),
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+              .map((i) => ProjectModel.fromJson(i))
+              .toList() ??
+          [],
+      createdAt: DateTime.parse(json['created_at'] ?? ""),
+      updatedAt: DateTime.parse(json['updated_at'] ?? ""),
     );
   }
 
