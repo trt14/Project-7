@@ -30,7 +30,6 @@ class CustomCardProject extends StatelessWidget {
       elevation: 20,
       child: Container(
         width: context.getWidth(value: 90 / 100),
-        height: context.getHeight(value: 20 / 100),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -141,7 +140,7 @@ class CustomCardProject extends StatelessWidget {
                                   ], // Border width around the images
                                 ),
                               )
-                            : const SizedBox(),
+                            : Text(""),
                         Row(
                           children: [
                             const Icon(
