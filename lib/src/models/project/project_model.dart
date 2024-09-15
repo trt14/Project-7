@@ -42,7 +42,7 @@ class ProjectModel {
   bool? allowEdit;
   bool? allowRating;
   bool? isPublic;
-  int? rating;
+  double? rating;
   String? createAt;
   String? updateAt;
   List<ImagesProjectModel>? imagesProject;
@@ -66,15 +66,15 @@ class ProjectModel {
     allowEdit = json['allow_edit'];
     allowRating = json['allow_rating'];
     isPublic = json['is_public'];
-    rating = json['rating'];
+    rating = (json['rating'] as num).toDouble();
     createAt = json['create_at'];
     updateAt = json['update_at'];
     imagesProject = List.from(json['images_project'])
-            .map((e) => ImagesProjectModel.fromJson(e))
-            .toList();
+        .map((e) => ImagesProjectModel.fromJson(e))
+        .toList();
     linksProject = List.from(json['links_project'])
-            .map((e) => LinksProjectModel.fromJson(e))
-            .toList();
+        .map((e) => LinksProjectModel.fromJson(e))
+        .toList();
     membersProject = List.from(json['members_project'])
         .map((e) => MembersProjectModel.fromJson(e))
         .toList();

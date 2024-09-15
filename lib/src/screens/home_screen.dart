@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_stack/flutter_image_stack.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/helper/colors.dart';
+import 'package:project_7/src/models/project/project_model.dart';
+import 'package:project_7/src/models/user/user_model.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
 import 'package:project_7/src/widgits/custom_list_tile.dart';
 import 'package:project_7/src/widgits/custom_notification_project.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.user});
+  final UserModel user;
   @override
   Widget build(BuildContext context) {
+    List<ProjectModel>? projects = user.projects;
+    print(projects?.length);
     Color color = Colors.black;
     return SafeArea(
       child: Scaffold(
@@ -39,8 +44,8 @@ class HomeScreen extends StatelessWidget {
                       ),
                       CustomListTile(
                         color: color,
-                        title: "Ali Altarouty",
-                        description: "Flutter Developer",
+                        title: "${user.firstName} ${user.lastName}",
+                        description: "${user.role}",
                         widget: Icon(
                           Icons.person_2_outlined,
                           color: color.primaryColor,
@@ -62,36 +67,54 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              CustomCardProject(
-                  supervisorName: "Al Altarouty dmsnab",
-                  projectName: "My Home",
-                  projectDescription:
-                      "jnjknvjenfv efv ervjernvjnerjnvjerrnvjenvjenjvnecvnvcev  vjkenrjvnejrkvn kjer verjvn jkernvjerv ev ejrnvjernvjenv ev erlvn env je ve vje vjer vejnvjenverr",
-                  projectType: "app",
-                  projectStatus: "COMPLETED",
-                  colorStatus: color.completedColor,
-                  projectDaysleft: "20 days left",
-                  isSelectedTeamMember: false),
-              CustomCardProject(
-                  supervisorName: "Al Altarouty dmsnab",
-                  projectName: "My Home",
-                  projectDescription:
-                      "jnjknvjenfv efv ervjernvjnerjnvjerrnvjenvjenjvnecvnvcev  vjkenrjvnejrkvn kjer verjvn jkernvjerv ev ejrnvjernvjenv ev erlvn env je ve vje vjer vejnvjenverr",
-                  projectType: "app",
-                  projectStatus: "UNCOMPLETED",
-                  colorStatus: color.uncompletedColor,
-                  projectDaysleft: "50 days left",
-                  isSelectedTeamMember: true),
-              CustomCardProject(
-                  supervisorName: "Al Altarouty dmsnab",
-                  projectName: "My Home",
-                  projectDescription:
-                      "jnjknvjenfv efv ervjernvjnerjnvjerrnvjenvjenjvnecvnvcev  vjkenrjvnejrkvn kjer verjvn jkernvjerv ev ejrnvjernvjenv ev erlvn env je ve vje vjer vejnvjenverr",
-                  projectType: "app",
-                  projectStatus: "HOLDING",
-                  colorStatus: color.holdingColor,
-                  projectDaysleft: "10 days left",
-                  isSelectedTeamMember: false),
+              ...List.generate(projects!.length, (index) {
+                return CustomCardProject(
+                    supervisorName: "",
+                    projectName: "${projects[index].projectName}",
+                    projectDescription: "${projects[index].projectDescription}",
+                    projectType: "${projects[index].type}",
+                    projectStatus: projects[index].presentationDate != null
+                        ? "COMPLETED"
+                        : "UNCOMPLETED",
+                    colorStatus: projects[index].presentationDate != null
+                        ? color.completedColor
+                        : color.uncompletedColor,
+                    projectDaysleft: "20 days left",
+                    isSelectedTeamMember:
+                        projects[index].membersProject!.isNotEmpty
+                            ? true
+                            : false);
+              }),
+              // CustomCardProject(
+              //     supervisorName: "Al Altarouty dmsnab",
+              //     projectName: "My Home",
+              //     projectDescription:
+              //         "jnjknvjenfv efv ervjernvjnerjnvjerrnvjenvjenjvnecvnvcev  vjkenrjvnejrkvn kjer verjvn jkernvjerv ev ejrnvjernvjenv ev erlvn env je ve vje vjer vejnvjenverr",
+              //     projectType: "app",
+              //     projectStatus: "COMPLETED",
+              //     colorStatus: color.completedColor,
+              //     projectDaysleft: "20 days left",
+              //     isSelectedTeamMember: false),
+              // CustomCardProject(
+              //     supervisorName: "Al Altarouty dmsnab",
+              //     projectName: "My Home",
+              //     projectDescription:
+              //         "jnjknvjenfv efv ervjernvjnerjnvjerrnvjenvjenjvnecvnvcev  vjkenrjvnejrkvn kjer verjvn jkernvjerv ev ejrnvjernvjenv ev erlvn env je ve vje vjer vejnvjenverr",
+              //     projectType: "app",
+              //     projectStatus: "UNCOMPLETED",
+              //     colorStatus: color.uncompletedColor,
+              //     projectDaysleft: "50 days left",
+              //     isSelectedTeamMember: true),
+              // CustomCardProject(
+              //     supervisorName: "Al Altarouty dmsnab",
+              //     projectName: "My Home",
+              //     projectDescription:
+              //         "jnjknvjenfv efv ervjernvjnerjnvjerrnvjenvjenjvnecvnvcev  vjkenrjvnejrkvn kjer verjvn jkernvjerv ev ejrnvjernvjenv ev erlvn env je ve vje vjer vejnvjenverr",
+              //     projectType: "app",
+              //     projectStatus: "HOLDING",
+              //     colorStatus: color.holdingColor,
+              //     projectDaysleft: "10 days left",
+              //     isSelectedTeamMember: false),
             ],
           ),
         ),
