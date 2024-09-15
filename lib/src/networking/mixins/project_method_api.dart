@@ -96,14 +96,14 @@ mixin ProjectMethodApi on ConstantNetworking {
     }
   }
 
-//Edit Project Presentation 
+//Edit Project Presentation
 //was not tested
   Future editProjectPresentationFile(
       {required String token,
       required String id,
       required File projectFile}) async {
     if (kDebugMode) {
-      log("Iam at editProjectPresentation");
+      log("Iam at editProjectPresentationFile");
     }
     try {
       final url = "$baseURL$editProjectPresentationEndPoint/$id";
@@ -116,6 +116,27 @@ mixin ProjectMethodApi on ConstantNetworking {
           },
         ),
       );
+      if (response.statusCode == 200) return response.data["data"];
+    } on DioException catch (error) {
+      throw FormatException(error.response?.data["data"]);
+    } catch (error) {
+      throw const FormatException("~there error with API");
+    }
+  }
+
+//not tested
+  Future editProjectImage(
+      {required String id, required List<File> imageFiles}) async {
+    if (kDebugMode) {
+      log("Iam at editProjectImage");
+    }
+    List formatedImage = [];
+    for (var element in imageFiles) {
+      formatedImage.add(element.readAsBytes());
+    }
+    try {
+      final url = "$baseURL$editProjectImagesEndPoint/$id";
+      final response = await dio.put(url, data: {"images": formatedImage});
       if (response.statusCode == 200) return response.data["data"];
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
