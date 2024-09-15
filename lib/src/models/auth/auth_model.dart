@@ -1,4 +1,10 @@
+import 'package:objectbox/objectbox.dart';
+
+@Entity()
 class AuthModel {
+  @Id()
+  int id = 0; // ObjectBox needs an ID for each entity
+
   String? token;
   String? refreshToken;
   int? expiresAt;

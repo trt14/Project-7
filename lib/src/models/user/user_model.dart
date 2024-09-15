@@ -1,7 +1,13 @@
+import 'package:objectbox/objectbox.dart';
+
 import '../project/project_model.dart';
 
+@Entity()
 class UserModel {
-  String id;
+  @Id()
+  int? id; // ObjectBox requires an ID field for each entity
+
+  String userId; // Unique identifier for the user from the API
   String firstName;
   String lastName;
   String email;
@@ -13,7 +19,8 @@ class UserModel {
   DateTime updatedAt;
 
   UserModel({
-    required this.id,
+    this.id,
+    required this.userId,
     required this.firstName,
     required this.lastName,
     required this.email,
@@ -27,7 +34,7 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
+      userId: json['id'],
       firstName: json['first_name'],
       lastName: json['last_name'],
       email: json['email'],
@@ -44,7 +51,7 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'id': userId,
       'first_name': firstName,
       'last_name': lastName,
       'email': email,
