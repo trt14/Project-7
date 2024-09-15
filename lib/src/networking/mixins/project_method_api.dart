@@ -137,7 +137,7 @@ mixin ProjectMethodApi on ConstantNetworking {
     try {
       final url = "$baseURL$editProjectImagesEndPoint/$id";
       final response = await dio.put(url, data: {"images": formatedImage});
-      if (response.statusCode == 200) return response.data["data"];
+      if (response.statusCode == 200) return response.statusCode;
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
     } catch (error) {
