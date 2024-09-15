@@ -46,7 +46,7 @@ mixin ProjectMethodApi on ConstantNetworking {
         log("${response.statusMessage} ${response.statusCode}");
       }
       if (response.statusCode == 200) {
-        return response.statusMessage;
+        return response.statusCode;
       } else {
         throw Exception('Failed to update project logo');
       }
@@ -57,16 +57,14 @@ mixin ProjectMethodApi on ConstantNetworking {
     }
   }
 
-  //
+  // method was tested
   Future updateProject(
-      {required String id,
-      required ProjectModel project,
-      required String token}) async {
+      {required ProjectModel project, required String token}) async {
     if (kDebugMode) {
       log("Iam at editProject");
     }
     try {
-      final url = "$baseURL$editProjectBaseEndPoint/$id";
+      final url = "$baseURL$editProjectBaseEndPoint/${project.projectId}";
       String? startDate = project.startDate;
       String? endDate = project.endDate;
       String? presentationDate = project.presentationDate;
@@ -91,6 +89,55 @@ mixin ProjectMethodApi on ConstantNetworking {
       } else {
         throw Exception('Failed to update project infromation');
       }
+    } on DioException catch (error) {
+      throw FormatException(error.response?.data["data"]);
+    } catch (error) {
+      throw const FormatException("~there error with API");
+    }
+  }
+
+//Edit Project Presentation
+//was not tested
+  Future editProjectPresentationFile(
+      {required String token,
+      required String id,
+      required File projectFile}) async {
+    if (kDebugMode) {
+      log("Iam at editProjectPresentationFile");
+    }
+    try {
+      final url = "$baseURL$editProjectPresentationEndPoint/$id";
+      final response = await dio.put(
+        url,
+        data: {"presentation_file": projectFile.readAsBytes()},
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      if (response.statusCode == 200) return response.data["data"];
+    } on DioException catch (error) {
+      throw FormatException(error.response?.data["data"]);
+    } catch (error) {
+      throw const FormatException("~there error with API");
+    }
+  }
+
+//not tested
+  Future editProjectImage(
+      {required String id, required List<File> imageFiles}) async {
+    if (kDebugMode) {
+      log("Iam at editProjectImage");
+    }
+    List formatedImage = [];
+    for (var element in imageFiles) {
+      formatedImage.add(element.readAsBytes());
+    }
+    try {
+      final url = "$baseURL$editProjectImagesEndPoint/$id";
+      final response = await dio.put(url, data: {"images": formatedImage});
+      if (response.statusCode == 200) return response.statusCode;
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
     } catch (error) {
