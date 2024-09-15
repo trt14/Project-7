@@ -46,7 +46,7 @@ mixin ProjectMethodApi on ConstantNetworking {
         log("${response.statusMessage} ${response.statusCode}");
       }
       if (response.statusCode == 200) {
-        return response.statusMessage;
+        return response.statusCode;
       } else {
         throw Exception('Failed to update project logo');
       }
