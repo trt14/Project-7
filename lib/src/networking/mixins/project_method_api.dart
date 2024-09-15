@@ -98,7 +98,7 @@ mixin ProjectMethodApi on ConstantNetworking {
 
 //Edit Project Presentation 
 //was not tested
-  Future editProjectPresentation(
+  Future editProjectPresentationFile(
       {required String token,
       required String id,
       required File projectFile}) async {
