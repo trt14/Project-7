@@ -59,8 +59,7 @@ mixin ProjectMethodApi on ConstantNetworking {
 
   // method was tested
   Future updateProject(
-      {required ProjectModel project,
-      required String token}) async {
+      {required ProjectModel project, required String token}) async {
     if (kDebugMode) {
       log("Iam at editProject");
     }
@@ -90,6 +89,34 @@ mixin ProjectMethodApi on ConstantNetworking {
       } else {
         throw Exception('Failed to update project infromation');
       }
+    } on DioException catch (error) {
+      throw FormatException(error.response?.data["data"]);
+    } catch (error) {
+      throw const FormatException("~there error with API");
+    }
+  }
+
+//Edit Project Presentation 
+//was not tested
+  Future editProjectPresentation(
+      {required String token,
+      required String id,
+      required File projectFile}) async {
+    if (kDebugMode) {
+      log("Iam at editProjectPresentation");
+    }
+    try {
+      final url = "$baseURL$editProjectPresentationEndPoint/$id";
+      final response = await dio.put(
+        url,
+        data: {"presentation_file": projectFile.readAsBytes()},
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      if (response.statusCode == 200) return response.data["data"];
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
     } catch (error) {
