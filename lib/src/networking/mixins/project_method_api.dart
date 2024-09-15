@@ -57,16 +57,15 @@ mixin ProjectMethodApi on ConstantNetworking {
     }
   }
 
-  //
+  // method was tested
   Future updateProject(
-      {required String id,
-      required ProjectModel project,
+      {required ProjectModel project,
       required String token}) async {
     if (kDebugMode) {
       log("Iam at editProject");
     }
     try {
-      final url = "$baseURL$editProjectBaseEndPoint/$id";
+      final url = "$baseURL$editProjectBaseEndPoint/${project.projectId}";
       String? startDate = project.startDate;
       String? endDate = project.endDate;
       String? presentationDate = project.presentationDate;
