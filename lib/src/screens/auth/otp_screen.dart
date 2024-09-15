@@ -9,25 +9,19 @@ class OtpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 30,
-              ),
-              Image.asset("assets/two_factor_authentication.png"),
-              const SizedBox(
-                height: 10,
-              ),
               const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(19.0),
-                  child: CustomRichText(email: "example@email.com",time: "02:00",),
+                child: CustomRichText(
+                  email: "example@email.com",
+                  time: "02:00",
                 ),
               ),
               const SizedBox(
-                height: 50,
+                height: 30,
               ),
               const Center(
                 child: CustomPinput(),
@@ -39,4 +33,3 @@ class OtpScreen extends StatelessWidget {
     );
   }
 }
-
