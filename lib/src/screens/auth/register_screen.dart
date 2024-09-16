@@ -73,7 +73,7 @@ class RegisterScreen extends StatelessWidget {
               color: color.primaryColor,
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const OtpScreen()));
+                    MaterialPageRoute(builder: (context) =>  OtpScreen(email: '',)));
               },
             ),
             Row(
@@ -88,7 +88,7 @@ class RegisterScreen extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LoginScreen()));
+                            builder: (context) =>  LoginScreen()));
                   },
                   child: Text(
                     "Login",
