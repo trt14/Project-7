@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_image_stack/flutter_image_stack.dart';
+import 'package:get_it/get_it.dart';
+import 'package:project_7/src/data%20layer/data_layer.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/models/project/project_model.dart';
@@ -10,11 +12,11 @@ import 'package:project_7/src/widgits/custom_list_tile.dart';
 import 'package:project_7/src/widgits/custom_notification_project.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key, required this.user});
-  final UserModel user;
+  const HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    List<ProjectModel>? projects = user.projects;
+    final user = GetIt.I.get<DataLayer>().user;
+    List<ProjectModel>? projects = user?.projects;
     Color color = Colors.black;
     return SafeArea(
       child: Scaffold(
@@ -47,12 +49,13 @@ class HomeScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ProfileScreen(user:user)));
+                                  builder: (context) =>
+                                      ProfileScreen()));
                         },
                         child: CustomListTile(
                           color: color,
-                          title: "${user.firstName} ${user.lastName}",
-                          description: "${user.role}",
+                          title: "${user?.firstName} ${user?.lastName}",
+                          description: "${user?.role}",
                           widget: Icon(
                             Icons.person_2_outlined,
                             color: color.primaryColor,

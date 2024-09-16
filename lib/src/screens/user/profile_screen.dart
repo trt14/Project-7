@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
+import 'package:project_7/src/data%20layer/data_layer.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
@@ -13,8 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 // TODO: add flutter_svg to pubspec.yaml
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({required this.user, super.key});
-  final UserModel user;
+  const ProfileScreen({super.key});
   @override
   Widget build(BuildContext context) {
     Color color = Colors.white;
@@ -24,9 +25,9 @@ class ProfileScreen extends StatelessWidget {
     TextEditingController linkedinController = TextEditingController();
     TextEditingController resumeController = TextEditingController();
     TextEditingController bindlinkController = TextEditingController();
-
-    nameController.text = "${user.firstName} ${user.lastName}";
-    emailController.text = user.email ?? "";
+    final user = GetIt.I.get<DataLayer>().user;
+    nameController.text = "${user?.firstName} ${user?.lastName}";
+    emailController.text = user?.email ?? "";
 
     return SafeArea(
       child: Scaffold(
@@ -37,7 +38,7 @@ class ProfileScreen extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(text: user.id ?? ""))
+                  Clipboard.setData(ClipboardData(text: user?.id ?? ""))
                       .then((value) {
                     if (context.mounted) {
                       showAlertSnackBar(
@@ -82,13 +83,13 @@ class ProfileScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       ProfilePic(
-                        img_url: user.imageUrl! ?? "sae",
+                        img_url: user?.imageUrl ?? "sae",
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       Text(
-                        "${user.firstName} ${user.lastName}",
+                        "${user?.firstName} ${user?.lastName}",
                         style: TextStyle(
                             fontSize: 20,
                             color: color.txtwhiteColor,
@@ -102,7 +103,7 @@ class ProfileScreen extends StatelessWidget {
                             fontWeight: FontWeight.w500),
                       ),
                       Text(
-                        user.role ?? "",
+                        user?.role ?? "",
                         style: TextStyle(
                             fontSize: 12,
                             color: color.holdingColor,

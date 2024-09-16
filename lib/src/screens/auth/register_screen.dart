@@ -73,7 +73,7 @@ class RegisterScreen extends StatelessWidget {
               color: color.primaryColor,
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>  OtpScreen(email: '',)));
+                    MaterialPageRoute(builder: (context) =>  OtpScreen()));
               },
             ),
             Row(

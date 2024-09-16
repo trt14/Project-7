@@ -56,15 +56,14 @@ mixin AuthMethodApi on ConstantNetworking {
     try {
       // Construct the API endpoint URL
       final url = '$baseURL$loginEndPoint';
-
+      log("this the email $email");
       // Prepare the request data
       final data = {'email': email};
-
+      log("before dio requres");
       // Make a POST request to the API endpoint
       final response = await dio.post(url, data: data);
-      if (kDebugMode) {
-        log("${response.statusMessage} ${response.statusCode}");
-      }
+
+      log("${response.statusMessage} ${response.statusCode}");
 
       // Return the response
       return response.statusCode;
