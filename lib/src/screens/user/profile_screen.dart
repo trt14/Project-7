@@ -4,8 +4,10 @@ import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/models/user/user_model.dart';
+import 'package:project_7/src/widgits/custom_alert.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
+import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
 import 'package:url_launcher/url_launcher.dart';
 // TODO: add flutter_svg to pubspec.yaml
@@ -18,6 +20,11 @@ class ProfileScreen extends StatelessWidget {
     Color color = Colors.white;
     TextEditingController emailController = TextEditingController();
     TextEditingController nameController = TextEditingController();
+    TextEditingController githubController = TextEditingController();
+    TextEditingController linkedinController = TextEditingController();
+    TextEditingController resumeController = TextEditingController();
+    TextEditingController bindlinkController = TextEditingController();
+
     nameController.text = "${user.firstName} ${user.lastName}";
     emailController.text = user.email ?? "";
 
@@ -46,7 +53,10 @@ class ProfileScreen extends StatelessWidget {
                   color: color.txtwhiteColor,
                 )),
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  //customAlert(context);
+                  // CustomLoading();
+                },
                 icon: Icon(
                   Icons.settings,
                   color: color.txtwhiteColor,
@@ -71,7 +81,9 @@ class ProfileScreen extends StatelessWidget {
                 child: Center(
                   child: Column(
                     children: [
-                      const ProfilePic(),
+                      ProfilePic(
+                        img_url: user.imageUrl! ?? "sae",
+                      ),
                       const SizedBox(
                         height: 15,
                       ),
@@ -149,7 +161,7 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     CustomTextField(
-                      title: "Name",
+                      title: "First Name",
                       color: color,
                       controller: nameController,
                       icon: Icon(
@@ -157,8 +169,14 @@ class ProfileScreen extends StatelessWidget {
                         color: color.primaryColor,
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    CustomTextField(
+                      title: "Last Name",
+                      color: color,
+                      controller: nameController,
+                      icon: Icon(
+                        Icons.person,
+                        color: color.primaryColor,
+                      ),
                     ),
                     CustomTextField(
                       title: "Email",
@@ -166,6 +184,42 @@ class ProfileScreen extends StatelessWidget {
                       controller: emailController,
                       icon: Icon(
                         Icons.email,
+                        color: color.primaryColor,
+                      ),
+                    ),
+                    CustomTextField(
+                      title: "Github",
+                      color: color,
+                      controller: emailController,
+                      icon: Icon(
+                        Icons.link,
+                        color: color.primaryColor,
+                      ),
+                    ),
+                    CustomTextField(
+                      title: "linkedin",
+                      color: color,
+                      controller: linkedinController,
+                      icon: Icon(
+                        Icons.link,
+                        color: color.primaryColor,
+                      ),
+                    ),
+                    CustomTextField(
+                      title: "Resume",
+                      color: color,
+                      controller: resumeController,
+                      icon: Icon(
+                        Icons.link,
+                        color: color.primaryColor,
+                      ),
+                    ),
+                    CustomTextField(
+                      title: "Bindlink",
+                      color: color,
+                      controller: bindlinkController,
+                      icon: Icon(
+                        Icons.link,
                         color: color.primaryColor,
                       ),
                     ),
@@ -187,7 +241,9 @@ class ProfileScreen extends StatelessWidget {
 class ProfilePic extends StatelessWidget {
   const ProfilePic({
     Key? key,
+    required this.img_url,
   }) : super(key: key);
+  final String img_url;
 
   @override
   Widget build(BuildContext context) {
@@ -199,10 +255,10 @@ class ProfilePic extends StatelessWidget {
         fit: StackFit.expand,
         clipBehavior: Clip.none,
         children: [
-          const CircleAvatar(
-            child: Icon(Icons.person),
-            // backgroundImage:
-            //     NetworkImage("https://i.postimg.cc/0jqKB6mS/Profile-Image.png"),
+          CircleAvatar(
+            // child: Icon(Icons.person),
+            backgroundImage:
+                NetworkImage(img_url ?? "https://placehold.co/100x100"),
           ),
           Positioned(
             right: -20,

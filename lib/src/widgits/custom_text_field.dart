@@ -25,6 +25,7 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
+        padding: EdgeInsets.all(8),
         constraints: const BoxConstraints(maxWidth: 400),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
