@@ -1,4 +1,5 @@
 import 'package:objectbox/objectbox.dart';
+import 'package:project_7/src/models/user/link_model.dart';
 
 import '../project/project_model.dart';
 
@@ -13,7 +14,8 @@ class UserModel {
   String email;
   String role;
   String imageUrl;
-  Map<String, dynamic> link;
+  LinkModel? link;
+
   List<ProjectModel> projects;
   DateTime createdAt;
   DateTime updatedAt;
@@ -40,7 +42,8 @@ class UserModel {
       email: json['email'],
       role: json['role'],
       imageUrl: json['image_url'],
-      link: json['link'],
+      // TODO test if LinkModel.fromJson() works
+      link: LinkModel.fromJson(json['link']),
       projects: (json['projects'] as List)
           .map((i) => ProjectModel.fromJson(i))
           .toList(),
@@ -57,7 +60,7 @@ class UserModel {
       'email': email,
       'role': role,
       'image_url': imageUrl,
-      'link': link,
+      'link': link?.toJson(), // TODO test if LinkModel.toJson() works
       'projects': projects.map((p) => p.toJson()).toList(),
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
