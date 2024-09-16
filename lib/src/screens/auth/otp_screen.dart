@@ -19,7 +19,7 @@ class OtpScreen extends StatelessWidget {
             children: [
               Center(
                 child: CustomRichText(
-                  email: "$email",
+                  email: email,
                   time: "02:00",
                 ),
               ),

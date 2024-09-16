@@ -3,11 +3,11 @@ import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/helper/screen.dart';
 
 class CustomElevatedBTN extends StatelessWidget {
-  CustomElevatedBTN(
+  const CustomElevatedBTN(
       {super.key, required this.text, required this.color, this.onPressed});
   final String text;
   final Color color;
-  Function()? onPressed;
+  final Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
