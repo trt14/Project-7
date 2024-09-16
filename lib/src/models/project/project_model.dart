@@ -1,110 +1,109 @@
-import 'member_project_model.dart';
+import 'package:project_7/src/models/project/image_project_model.dart';
+import 'package:project_7/src/models/project/member_project_model.dart';
 
 class ProjectModel {
-  String projectId;
-  String type;
-  String projectName;
-  String bootcampName;
-  String? startDate;
-  String? endDate;
-  String? presentationDate;
-  String? projectDescription;
-  String? logoUrl;
-  String? presentationUrl;
-  String userId;
-  String adminId;
-  DateTime timeEndEdit;
-  bool allowEdit;
-  bool allowRating;
-  bool isPublic;
-  double rating;
-  DateTime createAt;
-  DateTime updateAt;
-  List<dynamic> imagesProject;
-  List<dynamic> linksProject;
-  List<MemberProject> membersProject;
-
   ProjectModel({
     required this.projectId,
-    required this.type,
-    required this.projectName,
-    required this.bootcampName,
+    this.type,
+    this.projectName,
+    this.bootcampName,
     this.startDate,
     this.endDate,
     this.presentationDate,
     this.projectDescription,
     this.logoUrl,
     this.presentationUrl,
-    required this.userId,
-    required this.adminId,
-    required this.timeEndEdit,
-    required this.allowEdit,
-    required this.allowRating,
-    required this.isPublic,
-    required this.rating,
-    required this.createAt,
-    required this.updateAt,
-    required this.imagesProject,
-    required this.linksProject,
-    required this.membersProject,
+    this.userId,
+    this.adminId,
+    this.timeEndEdit,
+    this.allowEdit,
+    this.allowRating,
+    this.isPublic,
+    this.rating,
+    this.createAt,
+    this.updateAt,
+    this.imagesProject,
+    this.linksProject,
+    this.membersProject,
   });
+  late final String projectId;
+  String? type;
+  String? projectName;
+  String? bootcampName;
+  String? startDate;
+  String? endDate;
+  String? presentationDate;
+  String? projectDescription;
+  String? logoUrl;
+  String? presentationUrl;
+  String? userId;
+  String? adminId;
+  String? timeEndEdit;
+  bool? allowEdit;
+  bool? allowRating;
+  bool? isPublic;
+  int? rating;
+  String? createAt;
+  String? updateAt;
+  List<ImagesProjectModel>? imagesProject;
+  List<LinksProjectModel>? linksProject;
+  List<MembersProjectModel>? membersProject = [];
 
-  factory ProjectModel.fromJson(Map<String, dynamic> json) {
-    return ProjectModel(
-      projectId: json['project_id'],
-      type: json['type'],
-      projectName: json['project_name'],
-      bootcampName: json['bootcamp_name'],
-      startDate: json['start_date'],
-      endDate: json['end_date'],
-      presentationDate: json['presentation_date'],
-      projectDescription: json['project_description'],
-      logoUrl: json['logo_url'],
-      presentationUrl: json['presentation_url'],
-      userId: json['user_id'],
-      adminId: json['admin_id'],
-      timeEndEdit: DateTime.parse(json['time_end_edit']),
-      allowEdit: json['allow_edit'],
-      allowRating: json['allow_rating'],
-      isPublic: json['is_public'],
-
-      // TODO check the type of json['rating']
-      rating: (json['rating'] as num).toDouble(),
-
-      createAt: DateTime.parse(json['create_at']),
-      updateAt: DateTime.parse(json['update_at']),
-      imagesProject: json['images_project'] as List<dynamic>,
-      linksProject: json['links_project'] as List<dynamic>,
-      membersProject: (json['members_project'] as List)
-          .map((i) => MemberProject.fromJson(i))
-          .toList(),
-    );
+  ProjectModel.fromJson(Map<String, dynamic> json) {
+    projectId = json['project_id'];
+    type = json['type'];
+    projectName = json['project_name'];
+    bootcampName = json['bootcamp_name'];
+    startDate = json['start_date'];
+    endDate = json['end_date'];
+    presentationDate = json['presentation_date'];
+    projectDescription = json['project_description'];
+    logoUrl = json['logo_url'] ?? "";
+    presentationUrl = json['presentation_url'];
+    userId = json['user_id'];
+    adminId = json['admin_id'];
+    timeEndEdit = json['time_end_edit'];
+    allowEdit = json['allow_edit'];
+    allowRating = json['allow_rating'];
+    isPublic = json['is_public'];
+    rating = json['rating'];
+    createAt = json['create_at'];
+    updateAt = json['update_at'];
+    imagesProject = List.from(json['images_project'])
+            .map((e) => ImagesProjectModel.fromJson(e))
+            .toList();
+    linksProject = List.from(json['links_project'])
+            .map((e) => LinksProjectModel.fromJson(e))
+            .toList();
+    membersProject = List.from(json['members_project'])
+        .map((e) => MembersProjectModel.fromJson(e))
+        .toList();
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'project_id': projectId,
-      'type': type,
-      'project_name': projectName,
-      'bootcamp_name': bootcampName,
-      'start_date': startDate,
-      'end_date': endDate,
-      'presentation_date': presentationDate,
-      'project_description': projectDescription,
-      'logo_url': logoUrl,
-      'presentation_url': presentationUrl,
-      'user_id': userId,
-      'admin_id': adminId,
-      'time_end_edit': timeEndEdit.toIso8601String(),
-      'allow_edit': allowEdit,
-      'allow_rating': allowRating,
-      'is_public': isPublic,
-      'rating': rating,
-      'create_at': createAt.toIso8601String(),
-      'update_at': updateAt.toIso8601String(),
-      'images_project': imagesProject,
-      'links_project': linksProject,
-      'members_project': membersProject.map((m) => m.toJson()).toList(),
-    };
+    final data = <String, dynamic>{};
+    data['project_id'] = projectId;
+    data['type'] = type;
+    data['project_name'] = projectName;
+    data['bootcamp_name'] = bootcampName;
+    data['start_date'] = startDate;
+    data['end_date'] = endDate;
+    data['presentation_date'] = presentationDate;
+    data['project_description'] = projectDescription;
+    data['logo_url'] = logoUrl;
+    data['presentation_url'] = presentationUrl;
+    data['user_id'] = userId;
+    data['admin_id'] = adminId;
+    data['time_end_edit'] = timeEndEdit;
+    data['allow_edit'] = allowEdit;
+    data['allow_rating'] = allowRating;
+    data['is_public'] = isPublic;
+    data['rating'] = rating;
+    data['create_at'] = createAt;
+    data['update_at'] = updateAt;
+    data['images_project'] = imagesProject?.map((e) => e.toJson()).toList();
+    data['links_project'] = linksProject?.map((e) => e.toJson()).toList();
+    data['members_project'] = membersProject?.map((e) => e.toJson()).toList();
+    return data;
   }
 }
