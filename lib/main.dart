@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_7/src/screens/auth/register_screen.dart';
 import 'package:project_7/src/screens/home_screen.dart';
 import 'package:project_7/src/screens/auth/login_screen.dart';
 
@@ -11,6 +12,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: LoginScreen());
+    return MaterialApp(home: HomeScreen());
   }
 }

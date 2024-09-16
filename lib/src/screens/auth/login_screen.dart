@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(
-            height: context.getHeight(value: 0.7),
+            height: context.getHeight(value: 0.5),
             width: context.getWidth(),
             child: Stack(
               children: [
@@ -38,35 +38,12 @@ class LoginScreen extends StatelessWidget {
                       width: 300,
                     )),
                 Positioned(
-                    bottom: 10,
+                    bottom: 0,
                     right: 50,
                     child: Image.asset(
                       "assets/images/login.png",
                       width: 300,
                     )),
-                Positioned(
-                  top: 240,
-                  left: 140,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Lo",
-                        style: TextStyle(
-                            color: color.txtwhiteColor,
-                            fontSize: 40,
-                            fontWeight: FontWeight.w400),
-                      ),
-                      Text(
-                        "gin",
-                        style: TextStyle(
-                            color: color.secondaryColor,
-                            fontSize: 40,
-                            fontWeight: FontWeight.w400),
-                      )
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
