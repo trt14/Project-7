@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
+import 'package:project_7/src/models/user/user_model.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
@@ -10,14 +11,15 @@ import 'package:url_launcher/url_launcher.dart';
 // TODO: add flutter_svg to pubspec.yaml
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({required this.user, super.key});
+  final UserModel user;
   @override
   Widget build(BuildContext context) {
     Color color = Colors.white;
     TextEditingController emailController = TextEditingController();
     TextEditingController nameController = TextEditingController();
-    nameController.text = "Ali Altarouty";
-    emailController.text = "ali@ali.com";
+    nameController.text = "${user.firstName} ${user.lastName}";
+    emailController.text = user.email ?? "";
 
     return SafeArea(
       child: Scaffold(
@@ -28,12 +30,15 @@ class ProfileScreen extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(text: "123")).then((value) {
-                    showAlertSnackBar(
-                        color: color,
-                        context: context,
-                        title: "The ID has been copied.",
-                        colorStatus: color.completedColor);
+                  Clipboard.setData(ClipboardData(text: user.id ?? ""))
+                      .then((value) {
+                    if (context.mounted) {
+                      showAlertSnackBar(
+                          color: color,
+                          context: context,
+                          title: "The ID has been copied.",
+                          colorStatus: color.completedColor);
+                    }
                   });
                 },
                 icon: Icon(
@@ -60,7 +65,7 @@ class ProfileScreen extends StatelessWidget {
                 height: context.getHeight(value: 25 / 100),
                 decoration: BoxDecoration(
                     color: color.secondaryColor,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20))),
                 child: Center(
@@ -71,7 +76,7 @@ class ProfileScreen extends StatelessWidget {
                         height: 15,
                       ),
                       Text(
-                        "Ali Altarouty",
+                        "${user.firstName} ${user.lastName}",
                         style: TextStyle(
                             fontSize: 20,
                             color: color.txtwhiteColor,
@@ -85,7 +90,7 @@ class ProfileScreen extends StatelessWidget {
                             fontWeight: FontWeight.w500),
                       ),
                       Text(
-                        "User",
+                        user.role ?? "",
                         style: TextStyle(
                             fontSize: 12,
                             color: color.holdingColor,
@@ -152,7 +157,7 @@ class ProfileScreen extends StatelessWidget {
                         color: color.primaryColor,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     CustomTextField(
@@ -164,7 +169,7 @@ class ProfileScreen extends StatelessWidget {
                         color: color.primaryColor,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     CustomElevatedBTN(text: "Save", color: color),

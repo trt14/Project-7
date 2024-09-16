@@ -4,6 +4,7 @@ import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/models/project/project_model.dart';
 import 'package:project_7/src/models/user/user_model.dart';
+import 'package:project_7/src/screens/user/profile_screen.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
 import 'package:project_7/src/widgits/custom_list_tile.dart';
 import 'package:project_7/src/widgits/custom_notification_project.dart';
@@ -14,7 +15,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<ProjectModel>? projects = user.projects;
-    print(projects?.length);
     Color color = Colors.black;
     return SafeArea(
       child: Scaffold(
@@ -42,13 +42,21 @@ class HomeScreen extends StatelessWidget {
                               fontWeight: FontWeight.w500),
                         ),
                       ),
-                      CustomListTile(
-                        color: color,
-                        title: "${user.firstName} ${user.lastName}",
-                        description: "${user.role}",
-                        widget: Icon(
-                          Icons.person_2_outlined,
-                          color: color.primaryColor,
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfileScreen(user:user)));
+                        },
+                        child: CustomListTile(
+                          color: color,
+                          title: "${user.firstName} ${user.lastName}",
+                          description: "${user.role}",
+                          widget: Icon(
+                            Icons.person_2_outlined,
+                            color: color.primaryColor,
+                          ),
                         ),
                       )
                     ],
