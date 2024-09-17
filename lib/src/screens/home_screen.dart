@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_image_stack/flutter_image_stack.dart';
 import 'package:get_it/get_it.dart';
-import 'package:project_7/src/data%20layer/data_layer.dart';
+import 'package:project_7/src/data_layer/data_layer.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/models/project/project_model.dart';
@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = GetIt.I.get<DataLayer>().user;
-    List<ProjectModel>? projects = user?.projects;
+    List<ProjectModel> projects = user?.projects ?? [];
     Color color = Colors.black;
     return SafeArea(
       child: Scaffold(
@@ -49,8 +49,7 @@ class HomeScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProfileScreen()));
+                                  builder: (context) => const ProfileScreen()));
                         },
                         child: CustomListTile(
                           color: color,
@@ -78,7 +77,8 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              ...List.generate(projects!.length, (index) {
+            
+              ...List.generate(projects.length, (index) {
                 return CustomCardProject(
                     supervisorName: "",
                     projectName: "${projects[index].projectName}",

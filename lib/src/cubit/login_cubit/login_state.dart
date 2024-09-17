@@ -4,12 +4,11 @@ part of 'login_cubit.dart';
 sealed class LoginState {}
 
 final class LoginInitial extends LoginState {}
+final class LoadingState extends LoginState {}
 
 final class SuccessState extends LoginState {}
 
-final class DioError extends LoginState {}
-
-final class FaildState extends LoginState {
+final class FailedState extends LoginState {
   final String error;
-  FaildState({required this.error});
+  FailedState({required this.error});
 }
