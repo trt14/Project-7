@@ -19,6 +19,9 @@ dependencies:
   panara_dialogs: ^0.1.5
   flutter_bloc: ^8.1.6
   get_it: ^7.7.0
+  flutter_image_slideshow: ^0.1.6
+  timelines_plus: ^1.0.3
+  flutter_rating_bar: ^4.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

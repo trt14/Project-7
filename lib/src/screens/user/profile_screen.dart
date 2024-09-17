@@ -8,6 +8,7 @@ import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/models/user/user_model.dart';
 import 'package:project_7/src/widgits/custom_alert.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
+import 'package:project_7/src/widgits/custom_circle_profile.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
@@ -83,8 +84,7 @@ class ProfileScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       ProfilePic(
-                        img_url: user?.imageUrl ?? "sae",
-                      ),
+                          img_url: user?.imageUrl ?? "sae", color: color),
                       const SizedBox(
                         height: 15,
                       ),
@@ -191,7 +191,7 @@ class ProfileScreen extends StatelessWidget {
                     CustomTextField(
                       title: "Github",
                       color: color,
-                      controller: emailController,
+                      controller: githubController,
                       icon: Icon(
                         Icons.link,
                         color: color.primaryColor,
@@ -234,56 +234,6 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class ProfilePic extends StatelessWidget {
-  const ProfilePic({
-    Key? key,
-    required this.img_url,
-  }) : super(key: key);
-  final String img_url;
-
-  @override
-  Widget build(BuildContext context) {
-    Color color = Colors.white;
-    return SizedBox(
-      height: 115,
-      width: 115,
-      child: Stack(
-        fit: StackFit.expand,
-        clipBehavior: Clip.none,
-        children: [
-          CircleAvatar(
-            // child: Icon(Icons.person),
-            backgroundImage:
-                NetworkImage(img_url ?? "https://placehold.co/100x100"),
-          ),
-          Positioned(
-            right: -20,
-            bottom: 0,
-            child: SizedBox(
-              height: 50,
-              width: 50,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    side: const BorderSide(color: Colors.white),
-                  ),
-                  backgroundColor: color.bgColor,
-                ),
-                onPressed: () {},
-                child: Icon(
-                  Icons.add_a_photo,
-                  color: color.txtBlack45Color,
-                ),
-              ),
-            ),
-          )
-        ],
       ),
     );
   }
