@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
       this.keyboardType,
       this.inputFormatters,
       this.color,
+      this.maxLines = 1,
       this.errorText});
   final String title;
   final TextEditingController? controller;
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final String? errorText;
+  final int? maxLines;
   Color? color;
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class CustomTextField extends StatelessWidget {
                 keyboardType: keyboardType,
                 inputFormatters: inputFormatters,
                 obscureText: isPassword!,
+                maxLines: maxLines,
                 controller: controller,
                 decoration: InputDecoration(
                   errorText: errorText,

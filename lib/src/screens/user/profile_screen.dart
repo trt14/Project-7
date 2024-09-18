@@ -121,6 +121,7 @@ class ProfileScreen extends StatelessWidget {
                                 ProfilePic(
                                   img_url:
                                       profileCubit.get.user?.imageUrl ?? "sae",
+                                  color: color,
                                 ),
                                 const SizedBox(
                                   height: 15,

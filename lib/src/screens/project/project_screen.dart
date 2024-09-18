@@ -4,7 +4,6 @@ import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/widgits/custom_circle_profile.dart';
 import 'package:project_7/src/widgits/custom_list_tile.dart';
-import 'package:timelines_plus/timelines_plus.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProjectScreen extends StatelessWidget {
@@ -212,19 +211,6 @@ class ProjectScreen extends StatelessWidget {
                         ),
                       );
                     }),
-                // child: Row(
-                //   children: [
-                //     Container(
-                //       width: context.getWidth(value: 0.2),
-                //       color: Colors.red,
-                //       child: CustomListTile(
-                //         title: "Ali Altarouty",
-                //         description: "Position",
-                //         color: color,
-                //       ),
-                //     )
-                //   ],
-                // )),
               ),
               Container(
                   padding: const EdgeInsets.all(8),
