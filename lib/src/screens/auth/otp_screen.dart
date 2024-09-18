@@ -35,7 +35,6 @@ class OtpScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const HomeScreen()),
                 (Route<dynamic> route) => false,
               );
-              ;
             }
           },
           child: Scaffold(
@@ -47,7 +46,7 @@ class OtpScreen extends StatelessWidget {
                   children: [
                     Center(
                       child: CustomRichText(
-                        email: otpCubit.get.email ?? "",
+                        email: otpCubit.userDataLayer.email ?? "",
                         time: "02:00",
                       ),
                     ),
