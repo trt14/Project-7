@@ -1,5 +1,3 @@
-import 'package:objectbox/objectbox.dart';
-
 class AuthModel {
   String? token;
   String? refreshToken;
