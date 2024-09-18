@@ -55,10 +55,20 @@ mixin UserMethodApi on ConstantNetworking {
   * */
   Future<UserModel> updateUserProfile(
       {required String token, required UserModel user}) async {
-          if (kDebugMode) {
-            log("Iam at UpdateUserProfile");
-          }
-    final userJson = user.toJson();
+    if (kDebugMode) {
+      log("Iam at UpdateUserProfile");
+    }
+    Map<String, dynamic> userJson = user.toJson();
+    userJson["accounts"] = userJson.remove("link");
+    userJson.remove('image_url');
+    userJson.remove('projects');
+    userJson.remove('email');
+    userJson.remove('updated_at');
+    userJson.remove('created_at');
+    userJson.remove('role');
+    userJson.remove('id');
+
+    log(userJson.toString());
     try {
       // Construct the API endpoint URL
       final url = '$baseURL$updateProfileEndPoint';
@@ -73,9 +83,9 @@ mixin UserMethodApi on ConstantNetworking {
           },
         ),
       );
-            if (kDebugMode) {
-              log("${response.statusMessage} ${response.statusCode}");
-            }
+      if (kDebugMode) {
+        log("${response.statusMessage} ${response.statusCode}");
+      }
       // Check if the request was successful (status code 200)
       if (response.statusCode == 200) {
         // Parse the response data and create a UserModel object
