@@ -35,7 +35,7 @@ class OtpScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const HomeScreen()),
                 (Route<dynamic> route) => false,
               );
-              ;
+              
             }
           },
           child: Scaffold(

@@ -5,6 +5,7 @@ import 'package:project_7/src/cubit/prfile_cubit/profile_cubit.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
+import 'package:project_7/src/screens/auth/login_screen.dart';
 import 'package:project_7/src/widgits/custom_circle_profile.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
@@ -54,6 +55,13 @@ class ProfileScreen extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Update was sucess")));
               }
+              if (state is LogoutState) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (Route<dynamic> route) => false,
+                );
+              }
             },
             child: Scaffold(
               backgroundColor: Colors.white,
@@ -90,6 +98,15 @@ class ProfileScreen extends StatelessWidget {
                         Icons.settings,
                         color: color.txtwhiteColor,
                       )),
+                  IconButton(
+                    onPressed: () {
+                      profileCubit.logout();
+                    },
+                    icon: Icon(
+                      Icons.logout_outlined,
+                      color: color.txtwhiteColor,
+                    ),
+                  ),
                 ],
                 title: Text(
                   "Profile",

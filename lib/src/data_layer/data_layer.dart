@@ -6,4 +6,11 @@ class DataLayer {
   AuthModel? auth;
   List<ProjectModel>? projects = [];
   String? email;
+
+  logoutFunction(){
+    user = null;
+    auth = null;
+  projects?.clear();
+  email = null;
+  }
 }

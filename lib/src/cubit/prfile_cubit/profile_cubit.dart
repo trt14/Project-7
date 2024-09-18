@@ -1,14 +1,11 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
-import 'package:project_7/src/cubit/otp_cubit/otp_cubit.dart';
 import 'package:project_7/src/data_layer/data_layer.dart';
 import 'package:project_7/src/models/user/link_model.dart';
-import 'package:project_7/src/models/user/user_model.dart';
 import 'package:project_7/src/networking/networking_api.dart';
 
 part 'profile_state.dart';
@@ -63,5 +60,11 @@ class ProfileCubit extends Cubit<ProfileState> {
       final error = exeprion.toString().replaceAll("FormatException: ", "");
       emit(FailedState(error: error));
     }
+  }
+
+  logout() {
+    emit(LoadingState());
+    get.logoutFunction();
+    emit(LogoutState());
   }
 }
