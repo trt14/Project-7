@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:project_7/src/cubit/prfile_cubit/profile_cubit.dart';
-import 'package:project_7/src/data_layer/data_layer.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
-import 'package:project_7/src/models/user/user_model.dart';
-import 'package:project_7/src/widgits/custom_alert.dart';
-import 'package:project_7/src/widgits/custom_card_project.dart';
 import 'package:project_7/src/widgits/custom_circle_profile.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
-import 'package:url_launcher/url_launcher.dart';
 // TODO: add flutter_svg to pubspec.yaml
 
 class ProfileScreen extends StatelessWidget {
