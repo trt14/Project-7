@@ -119,6 +119,7 @@ class ProfileScreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 ProfilePic(
+                                  color: color,
                                   img_url:
                                       profileCubit.get.user?.imageUrl ?? "sae",
                                 ),
