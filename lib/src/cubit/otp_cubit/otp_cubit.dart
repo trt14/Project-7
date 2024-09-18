@@ -3,13 +3,13 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
-import 'package:project_7/src/data_layer/data_layer.dart';
+import 'package:project_7/src/data_layer/user_data_layer.dart';
 import 'package:project_7/src/networking/networking_api.dart';
 
 part 'otp_state.dart';
 
 class OtpCubit extends Cubit<OtpState> {
-  final get = GetIt.I.get<DataLayer>();
+  final userDataLayer = GetIt.I.get<UserDataLayer>();
   final api = NetworkingApi();
 
   OtpCubit() : super(OtpInitial());
@@ -19,8 +19,11 @@ class OtpCubit extends Cubit<OtpState> {
 
     emit(LoadingState());
     try {
-      get.auth = await api.verifyMethod(email: get.email ?? "", otp: otp);
-         get.user = await api.getUserProfile(token: get.auth!.token!);
+      userDataLayer.auth =
+          await api.verifyMethod(email: userDataLayer.email ?? "", otp: otp);
+      //change to auth data layer
+      userDataLayer.user =
+          await api.getUserProfile(token: userDataLayer.auth!.token!);
 
       emit(SuccessState());
     } catch (exeprion) {

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:project_7/src/helper/colors.dart';
 
-class ProfilePic extends StatelessWidget {
-  ProfilePic({Key? key, required this.img_url, required this.color})
-      : super(key: key);
-  final String img_url;
+class CustomCircleProfile extends StatelessWidget {
+  const CustomCircleProfile(
+      {super.key, this.imgUrl, required this.color, this.onPressed});
+  final String? imgUrl;
   final Color color;
-
+  final Function()? onPressed;
   @override
   Widget build(BuildContext context) {
     Color color = Colors.white;
@@ -20,7 +20,7 @@ class ProfilePic extends StatelessWidget {
           CircleAvatar(
             // child: Icon(Icons.person),
             backgroundImage:
-                NetworkImage(img_url ?? "https://placehold.co/100x100"),
+                NetworkImage(imgUrl ?? "https://placehold.co/100x100"),
           ),
           Positioned(
             right: -20,
@@ -36,7 +36,7 @@ class ProfilePic extends StatelessWidget {
                   ),
                   backgroundColor: color.bgColor,
                 ),
-                onPressed: () {},
+                onPressed: onPressed,
                 child: Icon(
                   Icons.add_a_photo,
                   color: color.txtBlack45Color,

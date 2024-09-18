@@ -1,6 +1,10 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:project_7/src/cubit/prfile_cubit/profile_cubit.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/helper/functions.dart';
@@ -24,17 +28,17 @@ class ProfileScreen extends StatelessWidget {
         Color color = Colors.white;
 
         profileCubit.nameFristController.text =
-            profileCubit.get.user?.firstName ?? "";
+            profileCubit.userDataLayer.user?.firstName ?? "";
         profileCubit.nameLastController.text =
-            profileCubit.get.user?.lastName ?? "";
+            profileCubit.userDataLayer.user?.lastName ?? "";
         profileCubit.githubController.text =
-            profileCubit.get.user?.link?.github ?? "";
+            profileCubit.userDataLayer.user?.link?.github ?? "";
         profileCubit.linkedinController.text =
-            profileCubit.get.user?.link?.linkedin ?? "";
+            profileCubit.userDataLayer.user?.link?.linkedin ?? "";
         profileCubit.resumeController.text =
-            profileCubit.get.user?.link?.resume ?? "";
+            profileCubit.userDataLayer.user?.link?.resume ?? "";
         profileCubit.bindlinkController.text =
-            profileCubit.get.user?.link?.bindlink ?? "";
+            profileCubit.userDataLayer.user?.link?.bindlink ?? "";
         return SafeArea(
           child: BlocListener<ProfileCubit, ProfileState>(
             listener: (context, state) {
@@ -72,7 +76,8 @@ class ProfileScreen extends StatelessWidget {
                   IconButton(
                       onPressed: () {
                         Clipboard.setData(ClipboardData(
-                                text: profileCubit.get.user?.id ?? ""))
+                                text:
+                                    profileCubit.userDataLayer.user?.id ?? ""))
                             .then((value) {
                           if (context.mounted) {
                             showAlertSnackBar(
@@ -89,8 +94,6 @@ class ProfileScreen extends StatelessWidget {
                       )),
                   IconButton(
                       onPressed: () {
-                        //customAlert(context);
-                        // CustomLoading();
                         edit = !edit;
                         profileCubit.enableEidtPofile(edit: edit);
                       },
@@ -129,16 +132,39 @@ class ProfileScreen extends StatelessWidget {
                           child: Center(
                             child: Column(
                               children: [
-                                ProfilePic(
-                                  color: color,
-                                  img_url:
-                                      profileCubit.get.user?.imageUrl ?? "sae",
+                                BlocBuilder<ProfileCubit, ProfileState>(
+                                  builder: (context, state) {
+                                    if (state is SuccessState ||
+                                        state is FailedState ||
+                                        state is ProfileInitial) {
+                                      return CustomCircleProfile(
+                                          onPressed: () async {
+                                            final ImagePicker picker =
+                                                ImagePicker();
+                                            final XFile? imagePath =
+                                                await picker.pickImage(
+                                                    source:
+                                                        ImageSource.gallery);
+                                            if (imagePath != null) {
+                                              final imageAsByte =
+                                                  await File(imagePath.path)
+                                                      .readAsBytes();
+                                              await profileCubit.updateUserPic(
+                                                  image: imageAsByte);
+                                            }
+                                          },
+                                          color: color,
+                                          imgUrl: profileCubit
+                                              .userDataLayer.user?.imageUrl);
+                                    }
+                                    return const SizedBox();
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 15,
                                 ),
                                 Text(
-                                  "${profileCubit.get.user?.firstName} ${profileCubit.get.user?.lastName}",
+                                  "${profileCubit.userDataLayer.user?.firstName} ${profileCubit.userDataLayer.user?.lastName}",
                                   style: TextStyle(
                                       fontSize: 20,
                                       color: color.txtwhiteColor,
@@ -152,7 +178,7 @@ class ProfileScreen extends StatelessWidget {
                                       fontWeight: FontWeight.w500),
                                 ),
                                 Text(
-                                  profileCubit.get.user?.role ?? "",
+                                  profileCubit.userDataLayer.user?.role ?? "",
                                   style: TextStyle(
                                       fontSize: 12,
                                       color: color.holdingColor,
@@ -167,11 +193,12 @@ class ProfileScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              profileCubit.get.user?.link?.github != null
+                              profileCubit.userDataLayer.user?.link?.github !=
+                                      null
                                   ? GestureDetector(
                                       onTap: () {
                                         launchStringUrl(
-                                            "https://github.com/${profileCubit.get.user?.link?.github}");
+                                            "https://github.com/${profileCubit.userDataLayer.user?.link?.github}");
                                       },
                                       child: Image.asset(
                                         "assets/icons/github.png",
@@ -179,11 +206,12 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                     )
                                   : const SizedBox(),
-                              profileCubit.get.user?.link?.linkedin != null
+                              profileCubit.userDataLayer.user?.link?.linkedin !=
+                                      null
                                   ? GestureDetector(
                                       onTap: () {
                                         launchStringUrl(
-                                            "https://www.linkedin.com/in/${profileCubit.get.user?.link?.linkedin}");
+                                            "https://www.linkedin.com/in/${profileCubit.userDataLayer.user?.link?.linkedin}");
                                       },
                                       child: Image.asset(
                                         "assets/icons/linkedin.png",
@@ -191,11 +219,12 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                     )
                                   : const SizedBox(),
-                              profileCubit.get.user?.link?.bindlink != null
+                              profileCubit.userDataLayer.user?.link?.bindlink !=
+                                      null
                                   ? GestureDetector(
                                       onTap: () {
                                         launchStringUrl(
-                                            "https://bind.link/${profileCubit.get.user?.link?.bindlink}");
+                                            "https://bind.link/${profileCubit.userDataLayer.user?.link?.bindlink}");
                                       },
                                       child: Image.asset(
                                         "assets/icons/bindlink.png",
@@ -203,11 +232,12 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                     )
                                   : const SizedBox(),
-                              profileCubit.get.user?.link?.resume != null
+                              profileCubit.userDataLayer.user?.link?.resume !=
+                                      null
                                   ? GestureDetector(
                                       onTap: () {
                                         launchStringUrl(
-                                            "${profileCubit.get.user?.link?.resume}");
+                                            "${profileCubit.userDataLayer.user?.link?.resume}");
                                       },
                                       child: Image.asset(
                                         "assets/icons/resume.png",

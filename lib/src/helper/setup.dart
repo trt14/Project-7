@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'package:project_7/src/data_layer/data_layer.dart';
-Future<void> setup() async{
+import 'package:project_7/src/data_layer/user_data_layer.dart';
 
-  GetIt.I.registerSingleton<DataLayer>(DataLayer());
+Future<void> setup() async {
+  GetIt.I.registerSingleton<UserDataLayer>(UserDataLayer());
 }
