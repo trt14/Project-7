@@ -31,6 +31,10 @@ migrate_working_dir/
 .pub/
 /build/
 pubspec.lock
+/linux/
+/macos/
+/web/
+/windows/
 
 # Symbolication related
 app.*.symbols
