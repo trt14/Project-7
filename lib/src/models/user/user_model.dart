@@ -1,28 +1,21 @@
-import 'package:objectbox/objectbox.dart';
 import 'package:project_7/src/models/user/link_model.dart';
 
 import '../project/project_model.dart';
 
-@Entity()
 class UserModel {
-  @Id()
-  int? id; // ObjectBox requires an ID field for each entity
-
-  String userId; // Unique identifier for the user from the API
+  int id;
   String firstName;
   String lastName;
   String email;
   String role;
   String imageUrl;
   LinkModel? link;
-
   List<ProjectModel> projects;
   DateTime createdAt;
   DateTime updatedAt;
 
   UserModel({
-    this.id,
-    required this.userId,
+    required this.id,
     required this.firstName,
     required this.lastName,
     required this.email,
@@ -36,7 +29,7 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      userId: json['id'],
+      id: json['id'],
       firstName: json['first_name'],
       lastName: json['last_name'],
       email: json['email'],
@@ -54,7 +47,7 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': userId,
+      'id': id,
       'first_name': firstName,
       'last_name': lastName,
       'email': email,
