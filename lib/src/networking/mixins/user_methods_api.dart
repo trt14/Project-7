@@ -1,14 +1,20 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:project_7/src/models/user/user_model.dart';
 import 'package:project_7/src/networking/constant_networking.dart';
 
-mixin UserApi on ConstantNetworking {
+mixin UserMethodApi on ConstantNetworking {
   /*
   *
   * Method to fetch user profile information
   *
   * */
-  Future<UserModel> getUserProfile(String token) async {
+  Future<UserModel> getUserProfile({required String token}) async {
+    if (kDebugMode) {
+      log("Iam at getUserProfile");
+    }
     try {
       // Construct the API endpoint URL
       final url = '$baseURL$getProfileEndPoint';
@@ -22,12 +28,16 @@ mixin UserApi on ConstantNetworking {
           },
         ),
       );
+      if (kDebugMode) {
+        log("${response.statusMessage} ${response.statusCode}");
+      }
 
       // Check if the request was successful (status code 200)
       if (response.statusCode == 200) {
         // Parse the response data and create a UserModel object
-        final Map<String, dynamic> data = response.data['data'];
-        return UserModel.fromJson(data);
+        final Map<String, dynamic> user = response.data['data'];
+
+        return UserModel.fromJson(user);
       } else {
         // If the request was not successful, throw an exception
         throw Exception('Failed to fetch user profile');
@@ -44,7 +54,21 @@ mixin UserApi on ConstantNetworking {
   *
   * */
   Future<UserModel> updateUserProfile(
-      String token, Map<String, dynamic> data) async {
+      {required String token, required UserModel user}) async {
+    if (kDebugMode) {
+      log("Iam at UpdateUserProfile");
+    }
+    Map<String, dynamic> userJson = user.toJson();
+    userJson["accounts"] = userJson.remove("link");
+    userJson.remove('image_url');
+    userJson.remove('projects');
+    userJson.remove('email');
+    userJson.remove('updated_at');
+    userJson.remove('created_at');
+    userJson.remove('role');
+    userJson.remove('id');
+
+    log(userJson.toString());
     try {
       // Construct the API endpoint URL
       final url = '$baseURL$updateProfileEndPoint';
@@ -52,14 +76,16 @@ mixin UserApi on ConstantNetworking {
       // Send a PUT request to the API endpoint with the authentication token and the updated data
       final response = await dio.put(
         url,
-        data: data,
+        data: userJson,
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
           },
         ),
       );
-
+      if (kDebugMode) {
+        log("${response.statusMessage} ${response.statusCode}");
+      }
       // Check if the request was successful (status code 200)
       if (response.statusCode == 200) {
         // Parse the response data and create a UserModel object
