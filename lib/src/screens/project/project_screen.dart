@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_7/src/helper/check_logo_type.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
@@ -35,7 +36,7 @@ class ProjectScreen extends StatelessWidget {
                       height: context.getHeight(value: 0.4),
                     ),
                   ),
-                  userProject.rating! == 0
+                  userProject.rating! != 0
                       ? RatingBar.builder(
                           initialRating: (userProject.rating! / 2),
                           minRating: 0,
@@ -244,55 +245,7 @@ class ProjectScreen extends StatelessWidget {
                             url: userProject.linksProject![index].url,
                             img: getLogo(userProject.linksProject![index].type),
                             width: 25);
-                      })
-                      //  [
-
-                      //   CustomUrlIcon(
-                      //       img: "assets/icons/apk.png",
-                      //       url: "https://www.github.com/${userProject.linksProject[index].url}",
-                      //       width: 30,
-                      //     )
-                      //   GestureDetector(
-                      //     onTap: () {},
-                      //     child: Image.asset(
-                      //       "assets/icons/apk.png",
-                      //       width: 25,
-                      //     ),
-                      //   ),
-                      //   Image.asset(
-                      //     "assets/icons/app-store.png",
-                      //     width: 25,
-                      //   ),
-                      //   Image.asset(
-                      //     "assets/icons/playstore.png",
-                      //     width: 25,
-                      //   ),
-                      //   Image.asset(
-                      //     "assets/icons/figma.png",
-                      //     width: 25,
-                      //   ),
-                      //   Image.asset(
-                      //     "assets/icons/pinterest.png",
-                      //     width: 25,
-                      //   ),
-                      //   Image.asset(
-                      //     "assets/icons/github.png",
-                      //     width: 25,
-                      //   ),
-                      //   Image.asset(
-                      //     "assets/icons/video.png",
-                      //     width: 25,
-                      //   ),
-                      //   Image.asset(
-                      //     "assets/icons/connections.png",
-                      //     width: 25,
-                      //   ),
-                      //   Image.asset(
-                      //     "assets/icons/teaching.png",
-                      //     width: 25,
-                      //   )
-                      // ],
-                      )),
+                      }))),
             ],
           ),
         ),
@@ -366,40 +319,4 @@ Future<void> _dialogBuilder({
       );
     },
   );
-}
-
-String getLogo(String type) {
-  String logoUrl = "assets/icons/";
-  switch (type) {
-    case ("github"):
-      logoUrl += "github.png";
-      break;
-    case ("apk"):
-      logoUrl += "apk.png";
-      break;
-    case ("app-store"):
-      logoUrl += "app-store.png";
-      break;
-    case ("playstore"):
-      logoUrl += "playstore.png";
-      break;
-    case ("figma"):
-      logoUrl += "figma.png";
-      break;
-    case ("pinterest"):
-      logoUrl += "pinterest.png";
-      break;
-    case ("connections"):
-      logoUrl += "connections.png";
-      break;
-    case ("teaching"):
-      logoUrl += "teaching.png";
-      break;
-    case ("video"):
-      logoUrl += "video.png";
-      break;
-    default:
-      logoUrl += "connections.png";
-  }
-  return logoUrl;
 }
