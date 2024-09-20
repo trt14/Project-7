@@ -6,6 +6,8 @@ import 'package:project_7/src/models/user/user_model.dart';
 import 'package:project_7/src/networking/constant_networking.dart';
 
 mixin UserMethodApi on ConstantNetworking {
+
+
   /*
   *
   * Method to fetch user profile information
@@ -59,7 +61,7 @@ mixin UserMethodApi on ConstantNetworking {
       log("Iam at UpdateUserProfile");
     }
     Map<String, dynamic> userJson = user.toJson();
-    userJson.remove("link");
+   userJson["accounts"]= userJson.remove("link");
     userJson.remove('image_url');
     userJson.remove('projects');
     userJson.remove('email');
@@ -136,8 +138,8 @@ mixin UserMethodApi on ConstantNetworking {
     } on DioException catch (e) {
       log("this message in dioexption ${e.toString()}");
       // If there was an error while sending the request, throw an exception with the error message
- //     throw Exception("the file saized is big");
-     throw Exception(e.message);
+      //     throw Exception("the file saized is big");
+      throw Exception(e.message);
     }
   }
 }

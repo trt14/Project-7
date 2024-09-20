@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:project_7/src/helper/setup.dart';
 import 'package:project_7/src/screens/auth/login_screen.dart';
+import 'package:project_7/src/screens/auth/register_screen.dart';
 import 'package:project_7/src/screens/project/create_project_screen.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
 
@@ -22,6 +23,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: CreateProjectScreen());
+    return const MaterialApp(home: LoginScreen());
   }
 }

@@ -33,7 +33,7 @@ mixin AuthMethodApi on ConstantNetworking {
       }
 
       // Return the response
-      return response.statusMessage;
+      return response.statusCode;
     } on DioException catch (error) {
       // If a DioException occurs, throw a FormatException with the error message from the API response
       throw FormatException(error.response?.data["data"]);

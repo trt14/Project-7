@@ -14,7 +14,7 @@ part 'profile_state.dart';
 class ProfileCubit extends Cubit<ProfileState> {
   final userDataLayer = GetIt.I.get<UserDataLayer>();
   final api = NetworkingApi();
-  var user = GetIt.I.get<UserDataLayer>().user;
+
   TextEditingController nameFristController = TextEditingController();
   TextEditingController nameLastController = TextEditingController();
   TextEditingController githubController = TextEditingController();
@@ -35,25 +35,18 @@ class ProfileCubit extends Cubit<ProfileState> {
   editProfile() async {
     emit(LoadingState());
     try {
-      user?.firstName = nameFristController.text;
-      user?.lastName = nameLastController.text;
-      if (user != null) {
-        if (user!.link != null) {
-          user!.link = LinkModel();
-          user?.link?.bindlink = bindlinkController.text ?? "";
-          user?.link?.github = githubController.text ?? "";
-          user?.link?.linkedin = linkedinController.text ?? "";
-          user?.link?.resume = resumeController.text ?? "";
-        }
-      } else {
-        user?.link?.bindlink = bindlinkController.text ?? "";
-        user?.link?.github = githubController.text ?? "";
-        user?.link?.linkedin = linkedinController.text ?? "";
-        user?.link?.resume = resumeController.text ?? "";
-      }
+      userDataLayer.user?.firstName = nameFristController.text;
+      userDataLayer.user?.lastName = nameLastController.text;
+
+      userDataLayer.user?.link?.bindlink = bindlinkController.text;
+      userDataLayer.user?.link?.github = githubController.text;
+
+      userDataLayer.user?.link?.linkedin = linkedinController.text;
+      userDataLayer.user?.link?.resume = resumeController.text;
+
       //TODO: change it to auth data layer
       await api.updateUserProfile(
-          token: userDataLayer.auth!.token!, user: user!);
+          token: userDataLayer.auth!.token!, user: userDataLayer.user!);
       userDataLayer.user =
           await api.getUserProfile(token: userDataLayer.auth!.token!);
       emit(SuccessState());
