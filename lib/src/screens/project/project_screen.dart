@@ -25,10 +25,9 @@ class ProjectScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              userProject.imagesProject!.length != 0
+              userProject.imagesProject!.isNotEmpty
                   ? Center(
-                      child: Container(
-                          child: CarouselSlider(
+                      child: CarouselSlider(
                         options: CarouselOptions(
                           autoPlay: true,
                           aspectRatio: 2.0,
@@ -36,15 +35,13 @@ class ProjectScreen extends StatelessWidget {
                           enlargeStrategy: CenterPageEnlargeStrategy.height,
                         ),
                         items: userProject.imagesProject!
-                            .map((item) => Container(
-                                  child: Center(
-                                      child: Image.network(item.url,
-                                          fit: BoxFit.cover, width: 1000)),
-                                ))
+                            .map((item) => Center(
+                                child: Image.network(item.url,
+                                    fit: BoxFit.cover, width: 1000)))
                             .toList(),
-                      )),
+                      ),
                     )
-                  : SizedBox(
+                  : const SizedBox(
                       child: Center(child: Text("Photos not uploaded yet")),
                     ),
               const SizedBox(
@@ -210,32 +207,47 @@ class ProjectScreen extends StatelessWidget {
                     style: TextStyle(color: color.txtwhiteColor, fontSize: 25),
                   )),
               Container(
-                padding: const EdgeInsets.all(8),
-                width: context.getWidth(),
-                height: 100,
                 color: color.txtwhiteColor,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: userProject.membersProject?.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          _dialogBuilder(
-                              context: context,
-                              member: userProject.membersProject![index]);
-                        },
-                        child: SizedBox(
-                          width: context.getWidth(value: 0.5),
-                          child: CustomListTile(
-                            title: userProject.membersProject![index].firstName
-                                .toString(),
-                            description:
-                                userProject.membersProject![index].position,
-                            color: color,
-                          ),
-                        ),
-                      );
-                    }),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      width: context.getWidth(value: 80 / 100),
+                      height: 100,
+                      color: color.txtwhiteColor,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: userProject.membersProject?.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                _dialogBuilder(
+                                    context: context,
+                                    member: userProject.membersProject![index]);
+                              },
+                              child: SizedBox(
+                                width: context.getWidth(value: 0.5),
+                                child: CustomListTile(
+                                  title: userProject
+                                      .membersProject![index].firstName
+                                      .toString(),
+                                  description: userProject
+                                      .membersProject![index].position,
+                                  color: color,
+                                ),
+                              ),
+                            );
+                          }),
+                    ),
+                    IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.person_add,
+                          color: color.primaryColor,
+                        ))
+                  ],
+                ),
               ),
               Container(
                   padding: const EdgeInsets.all(8),
@@ -247,19 +259,33 @@ class ProjectScreen extends StatelessWidget {
                     style: TextStyle(color: color.txtwhiteColor, fontSize: 25),
                   )),
               Container(
-                  padding: const EdgeInsets.all(8),
-                  width: context.getWidth(),
-                  height: 100,
-                  color: color.bgColor,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(
-                          userProject.linksProject?.length ?? 0, (index) {
-                        return CustomUrlIcon(
-                            url: userProject.linksProject![index].url,
-                            img: getLogo(userProject.linksProject![index].type),
-                            width: 25);
-                      }))),
+                color: color.txtwhiteColor,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                        padding: const EdgeInsets.all(8),
+                        width: context.getWidth(value: 80 / 100),
+                        height: 100,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: List.generate(
+                                userProject.linksProject?.length ?? 0, (index) {
+                              return CustomUrlIcon(
+                                  url: userProject.linksProject![index].url,
+                                  img: getLogo(
+                                      userProject.linksProject![index].type),
+                                  width: 25);
+                            }))),
+                    IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.add_link_sharp,
+                          color: color.primaryColor,
+                        ))
+                  ],
+                ),
+              ),
             ],
           ),
         ),
