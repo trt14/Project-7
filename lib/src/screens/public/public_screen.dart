@@ -17,10 +17,12 @@ class PublicScreen extends StatelessWidget {
       child: Builder(builder: (context) {
         Color color = Colors.black;
         final publicCubit = context.read<PublicCubit>();
+
         loading() async {
           try {
             await Future.delayed(const Duration(seconds: 3));
             await publicCubit.loadPublicProject();
+      
           } catch (error) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(error.toString())));
@@ -96,6 +98,14 @@ class PublicScreen extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
+                   BlocBuilder<PublicCubit, PublicState>(
+                              builder: (context, state) {
+                                return BootCampFiltter(
+                                  bootCamp: publicCubit.bootCamp,
+                                );
+                              },
+                            ),
+                       
                       const Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -163,6 +173,31 @@ class PublicScreen extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+}
+
+class BootCampFiltter extends StatelessWidget {
+  const BootCampFiltter({
+    super.key,
+    required this.bootCamp,
+  });
+  final Set bootCamp;
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+          children: bootCamp.map((category) {
+        return Container(
+          margin: const EdgeInsets.all(19),
+          child: ChoiceChip(
+            checkmarkColor: Colors.red,
+            label: Text(category),
+            selected: false,
+          ),
+        );
+      }).toList()),
     );
   }
 }

@@ -13,8 +13,9 @@ class PublicCubit extends Cubit<PublicState> {
   final projectDataLayer = GetIt.I.get<ProjectDataLayer>();
   List<ProjectModel> publicProject =
       GetIt.I.get<ProjectDataLayer>().publicProjects ?? [];
-  final api = NetworkingApi();
+  Set<String> bootCamp = {};
 
+  final api = NetworkingApi();
   PublicCubit() : super(PublicInitial());
 
   Future loadPublicProject() async {
@@ -23,6 +24,11 @@ class PublicCubit extends Cubit<PublicState> {
     try {
       publicProject = await api.loadPublicProject();
       log("success");
+      if (publicProject.isNotEmpty) {
+        publicProject
+            .map((e) => bootCamp.add(e.bootcampName.toString()))
+            .toList();
+      }
       emit(SuccessState());
     } catch (exeprion) {
       log("iam at catch");
