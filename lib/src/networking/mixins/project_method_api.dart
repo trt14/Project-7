@@ -4,10 +4,28 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:project_7/src/helper/converter.dart';
+import 'package:project_7/src/models/project/init_project_model.dart';
 import 'package:project_7/src/models/project/project_model.dart';
 import 'package:project_7/src/networking/constant_networking.dart';
 
 mixin ProjectMethodApi on ConstantNetworking {
+  Future initProject({required InitProjectModel project}) async {
+    if (kDebugMode) {
+      log("Iam at initProject");
+    }
+    try {
+      final url = "$baseURL$createProjectEndPoint";
+      log(url);
+
+      final response = await dio.get(url);
+      return ProjectModel.fromJson(response.data["data"]).projectId;
+    } on DioException catch (error) {
+      throw FormatException(error.response?.data["data"]);
+    } catch (error) {
+      throw const FormatException("~there error with API");
+    }
+  }
+
   //method was tested
   Future getProject({required String id}) async {
     if (kDebugMode) {
