@@ -22,7 +22,6 @@ class PublicScreen extends StatelessWidget {
           try {
             await Future.delayed(const Duration(seconds: 3));
             await publicCubit.loadPublicProject();
-      
           } catch (error) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(error.toString())));
@@ -51,10 +50,20 @@ class PublicScreen extends StatelessWidget {
           },
           child: Scaffold(
             body: SafeArea(
+              bottom: false,
               child: SingleChildScrollView(
                 child: Center(
                   child: Column(
                     children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                                "Highlights")),
+                      ),
                       BlocBuilder<PublicCubit, PublicState>(
                         builder: (context, state) {
                           return CarouselSlider(
@@ -88,7 +97,7 @@ class PublicScreen extends StatelessWidget {
                               autoPlay: false,
                               enlargeCenterPage: true,
                               viewportFraction: 0.9,
-                              aspectRatio: 2.0,
+                              aspectRatio: 2,
                               initialPage: 3,
                             ),
                           );
@@ -98,14 +107,6 @@ class PublicScreen extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                   BlocBuilder<PublicCubit, PublicState>(
-                              builder: (context, state) {
-                                return BootCampFiltter(
-                                  bootCamp: publicCubit.bootCamp,
-                                );
-                              },
-                            ),
-                       
                       const Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -118,9 +119,18 @@ class PublicScreen extends StatelessWidget {
                       ),
                       BlocBuilder<PublicCubit, PublicState>(
                         builder: (context, state) {
-                          return Column(
-                            children: List.generate(
-                                publicCubit.publicProject.length, (index) {
+                          return BootCampFiltter(
+                            bootCamp: publicCubit.bootCamp,
+                          );
+                        },
+                      ),
+                      BlocBuilder<PublicCubit, PublicState>(
+                        builder: (context, state) {
+                          return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: publicCubit.publicProject.length,
+                            itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () {
                                   Navigator.push(
@@ -161,7 +171,7 @@ class PublicScreen extends StatelessWidget {
                                         ? true
                                         : false),
                               );
-                            }),
+                            },
                           );
                         },
                       )
