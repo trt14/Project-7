@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:project_7/src/helper/check_logo_type.dart';
 import 'package:project_7/src/helper/colors.dart';
@@ -24,37 +25,50 @@ class ProjectScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              userProject.imagesProject!.length != 0
+                  ? Center(
+                      child: Container(
+                          child: CarouselSlider(
+                        options: CarouselOptions(
+                          autoPlay: true,
+                          aspectRatio: 2.0,
+                          enlargeCenterPage: true,
+                          enlargeStrategy: CenterPageEnlargeStrategy.height,
+                        ),
+                        items: userProject.imagesProject!
+                            .map((item) => Container(
+                                  child: Center(
+                                      child: Image.network(item.url,
+                                          fit: BoxFit.cover, width: 1000)),
+                                ))
+                            .toList(),
+                      )),
+                    )
+                  : SizedBox(
+                      child: Center(child: Text("Photos not uploaded yet")),
+                    ),
               const SizedBox(
                 height: 30,
               ),
-              Row(
-                children: [
-                  Center(
-                    child: Image.asset(
-                      "assets/images/login.png",
-                      width: context.getWidth(value: 0.8),
-                      height: context.getHeight(value: 0.4),
-                    ),
-                  ),
-                  userProject.rating! != 0
-                      ? RatingBar.builder(
-                          initialRating: (userProject.rating! / 2),
-                          minRating: 0,
-                          direction: Axis.vertical,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemPadding:
-                              const EdgeInsets.symmetric(horizontal: 4.0),
-                          itemBuilder: (context, _) => Icon(
-                            Icons.assignment,
-                            color: color.primaryColor,
-                          ),
-                          onRatingUpdate: (rating) {
-                            print(rating);
-                          },
-                        )
-                      : const SizedBox()
-                ],
+              Center(
+                child: userProject.rating! != 0
+                    ? RatingBar.builder(
+                        initialRating: (userProject.rating! / 2),
+                        minRating: 0,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemPadding:
+                            const EdgeInsets.symmetric(horizontal: 4.0),
+                        itemBuilder: (context, _) => Icon(
+                          Icons.assignment,
+                          color: color.primaryColor,
+                        ),
+                        onRatingUpdate: (rating) {
+                          print(rating);
+                        },
+                      )
+                    : const SizedBox(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
