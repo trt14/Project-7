@@ -91,7 +91,8 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () async {
                       await dotenv.load();
                       if (emailController.text.isNotEmpty) {
-                        if (emailController.text == "z1asgnn40@mozmail.com") {
+                        if (emailController.text.trim() ==
+                            "z1asgnn40@mozmail.com") {
                           await loginCubit.debugLogin(
                               token: dotenv.get('user_token'));
                           if (context.mounted) {
@@ -100,15 +101,18 @@ class LoginScreen extends StatelessWidget {
                                 MaterialPageRoute(
                                     builder: (context) => const HomeScreen()));
                           }
-                        } else if (emailController.text != "debug@email.com") {
+                        } else if (emailController.text.trim() !=
+                            "debug@email.com") {
                           try {
                             await loginCubit.loginEvent(
                                 email: emailController.text.trim());
                           } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        "Error acorde/nmake sure have internet connection")));
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          "Error acorde/nmake sure have internet connection")));
+                            }
                           }
                         } else {
                           await loginCubit.debugLogin(
@@ -121,9 +125,11 @@ class LoginScreen extends StatelessWidget {
                           }
                         }
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text("Login feild is required")));
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Login feild is required")));
+                        }
                       }
                     }),
                 Row(
