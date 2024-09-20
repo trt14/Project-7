@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/home_cubit/home_cubit.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/helper/colors.dart';
+import 'package:project_7/src/screens/project/create_project_screen.dart';
+import 'package:project_7/src/screens/project/init_project.dart';
 import 'package:project_7/src/screens/user/profile_screen.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
 import 'package:project_7/src/widgits/custom_list_tile.dart';
@@ -16,10 +20,28 @@ class HomeScreen extends StatelessWidget {
       create: (context) => HomeCubit(),
       child: Builder(builder: (context) {
         Color color = Colors.black;
-
         final homeCubit = context.read<HomeCubit>();
+        log("${homeCubit.user?.role}");
+
         return SafeArea(
           child: Scaffold(
+            floatingActionButton: homeCubit.user?.role?.toLowerCase() != "user"
+                ? FloatingActionButton(
+                    backgroundColor: color.secondaryColor,
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const InitProject()))
+                          .then((value) {
+                        homeCubit.update();
+                      });
+                    })
+                : null,
             body: SingleChildScrollView(
               child: Column(
                 children: [
