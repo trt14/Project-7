@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
+import 'package:project_7/src/models/project/member_project_model.dart';
+import 'package:project_7/src/models/project/project_model.dart';
 import 'package:project_7/src/widgits/custom_circle_profile.dart';
 import 'package:project_7/src/widgits/custom_list_tile.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:project_7/src/widgits/custom_url_icon.dart';
 
 class ProjectScreen extends StatelessWidget {
-  const ProjectScreen({super.key});
+  const ProjectScreen({super.key, required this.userProject});
+  final ProjectModel userProject;
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +35,24 @@ class ProjectScreen extends StatelessWidget {
                       height: context.getHeight(value: 0.4),
                     ),
                   ),
-                  RatingBar.builder(
-                    initialRating: 5 / 2,
-                    minRating: 0,
-                    direction: Axis.vertical,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => Icon(
-                      Icons.assignment,
-                      color: color.primaryColor,
-                    ),
-                    onRatingUpdate: (rating) {
-                      print(rating);
-                    },
-                  ),
+                  userProject.rating! == 0
+                      ? RatingBar.builder(
+                          initialRating: (userProject.rating! / 2),
+                          minRating: 0,
+                          direction: Axis.vertical,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.assignment,
+                            color: color.primaryColor,
+                          ),
+                          onRatingUpdate: (rating) {
+                            print(rating);
+                          },
+                        )
+                      : const SizedBox()
                 ],
               ),
               Padding(
@@ -55,7 +62,7 @@ class ProjectScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        //ProfilePic(img_url: "", color: color),
+                        //ProfilePic(img_url: "", color: color,),
                         const SizedBox(
                           width: 20,
                         ),
@@ -65,13 +72,13 @@ class ProjectScreen extends StatelessWidget {
                           children: [
                             Text(
                               maxLines: 1,
-                              "Title of Project",
+                              userProject.projectName ?? "null",
                               style: TextStyle(
                                   color: color.primaryColor, fontSize: 20),
                             ),
                             Text(
                               maxLines: 1,
-                              "Bootcamp title",
+                              userProject.bootcampName ?? "null",
                               style: TextStyle(
                                   color: color.primaryColor, fontSize: 10),
                             ),
@@ -99,7 +106,7 @@ class ProjectScreen extends StatelessWidget {
                                   fontWeight: FontWeight.w500),
                             ),
                             Text(
-                              "22/12/1993",
+                              userProject.startDate ?? "null",
                               style: TextStyle(
                                   color: color.secondaryColor,
                                   fontSize: 12,
@@ -127,7 +134,7 @@ class ProjectScreen extends StatelessWidget {
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500),
                             ),
-                            Text("22/12/1993",
+                            Text(userProject.endDate ?? "null",
                                 style: TextStyle(
                                     color: color.secondaryColor,
                                     fontSize: 12,
@@ -154,7 +161,7 @@ class ProjectScreen extends StatelessWidget {
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500),
                             ),
-                            Text("22/12/1993",
+                            Text(userProject.presentationDate ?? "null",
                                 style: TextStyle(
                                     color: color.secondaryColor,
                                     fontSize: 12,
@@ -170,7 +177,7 @@ class ProjectScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   maxLines: 20,
-                  "This character description generator will generate a fairly random description of a belonging to a random race. However, some aspects of the descriptions will remain the same, this is done to keep the general structure the same, while still randomizing the important details.\nThe generator does take into account which race is randomly picked, and changes some of the details accordingly. For example, if the character is an elf, they will have a higher chance of looking good and clean, they will, of course, have an elvish name, and tend to be related to more elvish related towns and people.",
+                  userProject.projectDescription ?? "null",
                   style: TextStyle(color: color.txtBlack45Color, fontSize: 14),
                 ),
               ),
@@ -194,18 +201,21 @@ class ProjectScreen extends StatelessWidget {
                 color: color.txtwhiteColor,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: 6,
+                    itemCount: userProject.membersProject?.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
                           _dialogBuilder(
-                              context: context, name: "ali altarouty");
+                              context: context,
+                              member: userProject.membersProject![index]);
                         },
                         child: SizedBox(
                           width: context.getWidth(value: 0.5),
                           child: CustomListTile(
-                            title: "Ali Altarouty",
-                            description: "Position",
+                            title: userProject.membersProject![index].firstName
+                                .toString(),
+                            description:
+                                userProject.membersProject![index].position,
                             color: color,
                           ),
                         ),
@@ -227,46 +237,62 @@ class ProjectScreen extends StatelessWidget {
                   height: 100,
                   color: color.bgColor,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Image.asset(
-                        "assets/icons/apk.png",
-                        width: 25,
-                      ),
-                      Image.asset(
-                        "assets/icons/app-store.png",
-                        width: 25,
-                      ),
-                      Image.asset(
-                        "assets/icons/playstore.png",
-                        width: 25,
-                      ),
-                      Image.asset(
-                        "assets/icons/figma.png",
-                        width: 25,
-                      ),
-                      Image.asset(
-                        "assets/icons/pinterest.png",
-                        width: 25,
-                      ),
-                      Image.asset(
-                        "assets/icons/github.png",
-                        width: 25,
-                      ),
-                      Image.asset(
-                        "assets/icons/video.png",
-                        width: 25,
-                      ),
-                      Image.asset(
-                        "assets/icons/connections.png",
-                        width: 25,
-                      ),
-                      Image.asset(
-                        "assets/icons/teaching.png",
-                        width: 25,
-                      )
-                    ],
-                  )),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(
+                          userProject.linksProject?.length ?? 0, (index) {
+                        return CustomUrlIcon(
+                            url: userProject.linksProject![index].url,
+                            img: getLogo(userProject.linksProject![index].type),
+                            width: 25);
+                      })
+                      //  [
+
+                      //   CustomUrlIcon(
+                      //       img: "assets/icons/apk.png",
+                      //       url: "https://www.github.com/${userProject.linksProject[index].url}",
+                      //       width: 30,
+                      //     )
+                      //   GestureDetector(
+                      //     onTap: () {},
+                      //     child: Image.asset(
+                      //       "assets/icons/apk.png",
+                      //       width: 25,
+                      //     ),
+                      //   ),
+                      //   Image.asset(
+                      //     "assets/icons/app-store.png",
+                      //     width: 25,
+                      //   ),
+                      //   Image.asset(
+                      //     "assets/icons/playstore.png",
+                      //     width: 25,
+                      //   ),
+                      //   Image.asset(
+                      //     "assets/icons/figma.png",
+                      //     width: 25,
+                      //   ),
+                      //   Image.asset(
+                      //     "assets/icons/pinterest.png",
+                      //     width: 25,
+                      //   ),
+                      //   Image.asset(
+                      //     "assets/icons/github.png",
+                      //     width: 25,
+                      //   ),
+                      //   Image.asset(
+                      //     "assets/icons/video.png",
+                      //     width: 25,
+                      //   ),
+                      //   Image.asset(
+                      //     "assets/icons/connections.png",
+                      //     width: 25,
+                      //   ),
+                      //   Image.asset(
+                      //     "assets/icons/teaching.png",
+                      //     width: 25,
+                      //   )
+                      // ],
+                      )),
             ],
           ),
         ),
@@ -277,68 +303,61 @@ class ProjectScreen extends StatelessWidget {
 
 Future<void> _dialogBuilder({
   required BuildContext context,
-  required String name,
+  required MembersProjectModel member,
 }) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(name),
+        title: Text("${member.firstName} ${member.lastName} "),
         content: SizedBox(
           height: 100,
           child: Column(
             children: [
               Row(
                 children: [
-                  Icon(Icons.email),
-                  SizedBox(
+                  const Icon(Icons.email),
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text("tarooti14@gmail.com")
+                  Text("${member.email}")
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      launchStringUrl("https://google.com");
-                    },
-                    child: Image.asset(
-                      "assets/icons/github.png",
-                      width: 30,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      launchStringUrl("https://google.com");
-                    },
-                    child: Image.asset(
-                      "assets/icons/linkedin.png",
-                      width: 30,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      launchStringUrl("https://google.com");
-                    },
-                    child: Image.asset(
-                      "assets/icons/bindlink.png",
-                      width: 30,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      launchStringUrl("https://google.com");
-                    },
-                    child: Image.asset(
-                      "assets/icons/resume.png",
-                      width: 30,
-                    ),
-                  ),
+                  member.link?.github != null
+                      ? CustomUrlIcon(
+                          img: "assets/icons/github.png",
+                          url: "https://www.github.com/${member.link!.github}",
+                          width: 30,
+                        )
+                      : const SizedBox(),
+                  member.link?.linkedin != null
+                      ? CustomUrlIcon(
+                          img: "assets/icons/linkedin.png",
+                          url:
+                              "https://www.linkedin.com/${member.link!.linkedin}",
+                          width: 30,
+                        )
+                      : const SizedBox(),
+                  member.link?.bindlink != null
+                      ? CustomUrlIcon(
+                          img: "assets/icons/bindlink.png",
+                          url: "https://www.bind.link/${member.link!.bindlink}",
+                          width: 30,
+                        )
+                      : const SizedBox(),
+                  member.link?.resume != null
+                      ? CustomUrlIcon(
+                          img: "assets/icons/resume.png",
+                          url: "${member.link!.resume}",
+                          width: 30,
+                        )
+                      : const SizedBox()
                 ],
               ),
             ],
@@ -347,4 +366,40 @@ Future<void> _dialogBuilder({
       );
     },
   );
+}
+
+String getLogo(String type) {
+  String logoUrl = "assets/icons/";
+  switch (type) {
+    case ("github"):
+      logoUrl += "github.png";
+      break;
+    case ("apk"):
+      logoUrl += "apk.png";
+      break;
+    case ("app-store"):
+      logoUrl += "app-store.png";
+      break;
+    case ("playstore"):
+      logoUrl += "playstore.png";
+      break;
+    case ("figma"):
+      logoUrl += "figma.png";
+      break;
+    case ("pinterest"):
+      logoUrl += "pinterest.png";
+      break;
+    case ("connections"):
+      logoUrl += "connections.png";
+      break;
+    case ("teaching"):
+      logoUrl += "teaching.png";
+      break;
+    case ("video"):
+      logoUrl += "video.png";
+      break;
+    default:
+      logoUrl += "connections.png";
+  }
+  return logoUrl;
 }

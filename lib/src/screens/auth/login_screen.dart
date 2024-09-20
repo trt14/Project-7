@@ -89,11 +89,11 @@ class LoginScreen extends StatelessWidget {
                     text: "Login",
                     color: color.primaryColor,
                     onPressed: () async {
-                      // await dotenv.load();
+                      await dotenv.load();
                       if (emailController.text.isNotEmpty) {
                         if (emailController.text == "z1asgnn40@mozmail.com") {
-                          // await loginCubit.debugLogin(
-                          //     token: dotenv.get('user_token'));
+                          await loginCubit.debugLogin(
+                              token: dotenv.get('user_token'));
                           if (context.mounted) {
                             Navigator.pushReplacement(
                                 context,
@@ -111,8 +111,8 @@ class LoginScreen extends StatelessWidget {
                                         "Error acorde/nmake sure have internet connection")));
                           }
                         } else {
-                          // await loginCubit.debugLogin(
-                          //     token: dotenv.get('supervisor_token'));
+                          await loginCubit.debugLogin(
+                              token: dotenv.get('supervisor_token'));
                           if (context.mounted) {
                             Navigator.pushReplacement(
                                 context,
