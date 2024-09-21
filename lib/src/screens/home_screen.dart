@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/home_cubit/home_cubit.dart';
+import 'package:project_7/src/helper/converter.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
@@ -111,43 +112,81 @@ class HomeScreen extends StatelessWidget {
                   BlocBuilder<HomeCubit, HomeState>(
                     builder: (context, state) {
                       return Column(
-                        children:
-                            List.generate(homeCubit.projects.length, (index) {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ProjectScreen(
-                                            userProject:
-                                                homeCubit.projects[index],
-                                          )));
-                            },
-                            child: CustomCardProject(
-                                supervisorName: "",
-                                projectName:
-                                    "${homeCubit.projects[index].projectName}",
-                                projectDescription:
-                                    "${homeCubit.projects[index].projectDescription}",
-                                projectType:
-                                    "${homeCubit.projects[index].type}",
-                                projectStatus: homeCubit
-                                            .projects[index].presentationDate !=
-                                        null
-                                    ? "COMPLETED"
-                                    : "UNCOMPLETED",
-                                colorStatus: homeCubit
-                                            .projects[index].presentationDate !=
-                                        null
-                                    ? color.completedColor
-                                    : color.uncompletedColor,
-                                projectDaysleft: "20 days left",
-                                isSelectedTeamMember: homeCubit.projects[index]
-                                        .membersProject!.isNotEmpty
-                                    ? true
-                                    : false),
-                          );
-                        }),
+                        children: [
+                          SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                  children: List<Widget>.generate(
+                                      homeCubit.bootCamp.length, (int index) {
+                                print(homeCubit.bootCamp);
+                                return Container(
+                                  margin: const EdgeInsets.all(19),
+                                  child: ChoiceChip(
+                                    checkmarkColor: Colors.red,
+                                    label: Text(
+                                        homeCubit.bootCamp.elementAt(index)),
+                                    selected: false,
+                                    // onSelected: (bool selected) async {
+                                    //   value = selected ? index : null;
+                                    //   log(value.toString());
+                                    //   await publicCubit.filtter(value);
+                                    // },
+                                  ),
+                                );
+                              }).toList())),
+                          Column(
+                            children: List.generate(homeCubit.projects.length,
+                                (index) {
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ProjectScreen(
+                                                userProject:
+                                                    homeCubit.projects[index],
+                                              )));
+                                },
+                                child: CustomCardProject(
+                                    supervisorName: "",
+                                    projectName:
+                                        "${homeCubit.projects[index].projectName}",
+                                    projectDescription:
+                                        "${homeCubit.projects[index].projectDescription}",
+                                    projectType:
+                                        "${homeCubit.projects[index].type}",
+                                    projectStatus:
+                                        homeCubit.projects[index].presentationDate != null
+                                            ? "COMPLETED"
+                                            : "UNCOMPLETED",
+                                    colorStatus:
+                                        homeCubit.projects[index].presentationDate != null
+                                            ? color.completedColor
+                                            : color.uncompletedColor,
+                                    projectDaysleft: homeCubit.projects[index]
+                                                    .startDate !=
+                                                null &&
+                                            homeCubit.projects[index].endDate !=
+                                                null
+                                        ? getDaysDifference(
+                                                    homeCubit.projects[index]
+                                                        .startDate!,
+                                                    homeCubit.projects[index]
+                                                        .endDate!) !=
+                                                0
+                                            ? "${getDaysDifference(homeCubit.projects[index].startDate!, homeCubit.projects[index].endDate!)} days"
+                                            : "Over"
+                                        : "not yet",
+                                    isSelectedTeamMember: homeCubit
+                                            .projects[index]
+                                            .membersProject!
+                                            .isNotEmpty
+                                        ? true
+                                        : false),
+                              );
+                            }),
+                          ),
+                        ],
                       );
                     },
                   )

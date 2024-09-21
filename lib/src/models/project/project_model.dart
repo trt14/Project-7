@@ -25,6 +25,7 @@ class ProjectModel {
     this.imagesProject,
     this.linksProject,
     this.membersProject,
+    
   });
   late final String projectId;
   String? type;

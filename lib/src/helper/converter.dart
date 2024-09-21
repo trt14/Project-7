@@ -25,3 +25,10 @@ dataFromator(ProjectModel project) {
   project.presentationDate = newPersentationDate;
   return project;
 }
+
+int getDaysDifference(String startDate, String endDate) {
+  DateTime start = DateTime.parse(startDate);
+  DateTime end = DateTime.parse(endDate);
+
+  return end.difference(start).inDays;
+}
