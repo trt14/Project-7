@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/public_cubit/public_cubit.dart';
@@ -29,7 +31,7 @@ class PublicScreen extends StatelessWidget {
         }
 
         loading();
-
+        int? value = 0;
         return BlocListener<PublicCubit, PublicState>(
           listener: (context, state) async {
             if (state is LoadingState) {
@@ -119,60 +121,83 @@ class PublicScreen extends StatelessWidget {
                       ),
                       BlocBuilder<PublicCubit, PublicState>(
                         builder: (context, state) {
-                          return BootCampFiltter(
-                            bootCamp: publicCubit.bootCamp,
-                          );
+                          return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                  children: List<Widget>.generate(
+                                      publicCubit.bootCamp.length, (int index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(19),
+                                  child: ChoiceChip(
+                                    checkmarkColor: Colors.red,
+                                    label: Text(
+                                        publicCubit.bootCamp.elementAt(index)),
+                                    selected: value == index,
+                                    onSelected: (bool selected) async {
+                                      value = selected ? index : null;
+                                      log(value.toString());
+                                      await publicCubit.filtter(value);
+                                    },
+                                  ),
+                                );
+                              }).toList()));
                         },
                       ),
                       BlocBuilder<PublicCubit, PublicState>(
                         builder: (context, state) {
-                          return ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: publicCubit.publicProject.length,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProjectScreen(
-                                        userProject:
-                                            publicCubit.publicProject[index],
+                          if (state is SuccessState ||
+                              state is FailedState ||
+                              state is PublicInitial) {
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount:
+                                  publicCubit.publicProjectFillterd.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProjectScreen(
+                                          userProject: publicCubit
+                                              .publicProjectFillterd[index],
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                                child: CustomCardProject(
-                                    supervisorName: "",
-                                    projectName:
-                                        "${publicCubit.publicProject[index].projectName}",
-                                    projectDescription:
-                                        "${publicCubit.publicProject[index].projectDescription}",
-                                    projectType:
-                                        "${publicCubit.publicProject[index].type}",
-                                    projectStatus: publicCubit
-                                                .publicProject[index]
-                                                .presentationDate !=
-                                            null
-                                        ? "COMPLETED"
-                                        : "UNCOMPLETED",
-                                    colorStatus: publicCubit
-                                                .publicProject[index]
-                                                .presentationDate !=
-                                            null
-                                        ? color.completedColor
-                                        : color.uncompletedColor,
-                                    projectDaysleft: "20 days left",
-                                    isSelectedTeamMember: publicCubit
-                                            .publicProject[index]
-                                            .membersProject!
-                                            .isNotEmpty
-                                        ? true
-                                        : false),
-                              );
-                            },
-                          );
+                                    );
+                                  },
+                                  child: CustomCardProject(
+                                      supervisorName: "",
+                                      projectName:
+                                          "${publicCubit.publicProjectFillterd[index].projectName}",
+                                      projectDescription:
+                                          "${publicCubit.publicProjectFillterd[index].projectDescription}",
+                                      projectType:
+                                          "${publicCubit.publicProjectFillterd[index].type}",
+                                      projectStatus: publicCubit
+                                                  .publicProjectFillterd[index]
+                                                  .presentationDate !=
+                                              null
+                                          ? "COMPLETED"
+                                          : "UNCOMPLETED",
+                                      colorStatus: publicCubit
+                                                  .publicProjectFillterd[index]
+                                                  .presentationDate !=
+                                              null
+                                          ? color.completedColor
+                                          : color.uncompletedColor,
+                                      projectDaysleft: "20 days left",
+                                      isSelectedTeamMember: publicCubit
+                                              .publicProjectFillterd[index]
+                                              .membersProject!
+                                              .isNotEmpty
+                                          ? true
+                                          : false),
+                                );
+                              },
+                            );
+                          }
+                          return const SizedBox();
                         },
                       )
                     ],
@@ -183,31 +208,6 @@ class PublicScreen extends StatelessWidget {
           ),
         );
       }),
-    );
-  }
-}
-
-class BootCampFiltter extends StatelessWidget {
-  const BootCampFiltter({
-    super.key,
-    required this.bootCamp,
-  });
-  final Set bootCamp;
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-          children: bootCamp.map((category) {
-        return Container(
-          margin: const EdgeInsets.all(19),
-          child: ChoiceChip(
-            checkmarkColor: Colors.red,
-            label: Text(category),
-            selected: false,
-          ),
-        );
-      }).toList()),
     );
   }
 }

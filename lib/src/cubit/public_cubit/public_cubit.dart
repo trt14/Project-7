@@ -12,11 +12,34 @@ part 'public_state.dart';
 class PublicCubit extends Cubit<PublicState> {
   final projectDataLayer = GetIt.I.get<ProjectDataLayer>();
   List<ProjectModel> publicProject =
-      GetIt.I.get<ProjectDataLayer>().publicProjects ?? [];
+  GetIt.I.get<ProjectDataLayer>().publicProjects ?? [];
+  List<ProjectModel> publicProjectFillterd = [];
   Set<String> bootCamp = {};
 
   final api = NetworkingApi();
   PublicCubit() : super(PublicInitial());
+
+  filtter(int? value) {
+    emit(LoadingState());
+
+    if (value != null) {
+      log("Filtering by specific type ${bootCamp.elementAt(value).toString()}");
+
+      publicProjectFillterd = publicProject.where((element) {
+        return element.bootcampName.toString() ==
+            bootCamp.elementAt(value).toString();
+      }).toList();
+    } else {
+      log("No filter applied, showing all projects");
+      publicProjectFillterd = List.from(publicProject);
+    }
+
+    for (var project in publicProjectFillterd) {
+      log(project.projectName.toString());
+    }
+
+    emit(SuccessState());
+  }
 
   Future loadPublicProject() async {
     emit(LoadingState());
@@ -29,6 +52,7 @@ class PublicCubit extends Cubit<PublicState> {
             .map((e) => bootCamp.add(e.bootcampName.toString()))
             .toList();
       }
+      publicProjectFillterd = List.from(publicProject);
       emit(SuccessState());
     } catch (exeprion) {
       log("iam at catch");
