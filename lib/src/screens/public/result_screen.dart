@@ -4,8 +4,8 @@ import 'package:project_7/src/models/project/project_model.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
 
-class PublicScreen extends StatelessWidget {
-  const PublicScreen({super.key, required this.result});
+class ResultScreen extends StatelessWidget {
+  const ResultScreen({super.key, required this.result});
   final List<ProjectModel> result;
   @override
   Widget build(BuildContext context) {

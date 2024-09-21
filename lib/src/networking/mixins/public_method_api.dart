@@ -26,4 +26,39 @@ mixin PublicMethodApi on ConstantNetworking {
       throw const FormatException("~there error with API");
     }
   }
+
+  Future filterProject({
+    String? name,
+    String? to,
+    String? from,
+    String? bootcamp,
+    String? type,
+  }) async {
+    if (kDebugMode) {
+      log("Iam at filterProject");
+    }
+    final queryParams = {
+      'name': name,
+      'to': to,
+      'from': from,
+      'bootcamp': bootcamp,
+      'type': type, // Required
+    };
+    queryParams.removeWhere((key, value) => value == null || value == '');
+
+    try {
+      final url = "$baseURL$publicProjects";
+      final response = await dio.get(url, queryParameters: queryParams);
+      List data = response.data["data"]['projects'];
+      List<ProjectModel> list = [];
+      for (var element in data) {
+        list.add(ProjectModel.fromJson(element));
+      }
+      return list;
+    } on DioException catch (error) {
+      throw FormatException(error.response?.data["data"]);
+    } catch (error) {
+      throw const FormatException("~there error with API");
+    }
+  }
 }
