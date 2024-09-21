@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/public_cubit/public_cubit.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
+import 'package:project_7/src/screens/public/search_screen.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -57,6 +58,15 @@ class PublicScreen extends StatelessWidget {
                 child: Center(
                   child: Column(
                     children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SearchScreen()));
+                          },
+                          child: const Text("search")),
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Align(

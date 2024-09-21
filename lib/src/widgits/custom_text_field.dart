@@ -13,7 +13,8 @@ class CustomTextField extends StatelessWidget {
       this.inputFormatters,
       this.color,
       this.maxLines = 1,
-      this.errorText});
+      this.errorText,
+      this.readOnly = false});
   final String title;
   final TextEditingController? controller;
   final Widget? icon;
@@ -23,6 +24,7 @@ class CustomTextField extends StatelessWidget {
   final String? errorText;
   final int? maxLines;
   Color? color;
+  bool readOnly;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -40,6 +42,7 @@ class CustomTextField extends StatelessWidget {
                       color: color?.primaryColor, fontWeight: FontWeight.w500),
                 )),
             TextField(
+                readOnly: readOnly,
                 keyboardType: keyboardType,
                 inputFormatters: inputFormatters,
                 obscureText: isPassword!,

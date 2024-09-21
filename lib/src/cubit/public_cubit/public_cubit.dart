@@ -12,9 +12,10 @@ part 'public_state.dart';
 class PublicCubit extends Cubit<PublicState> {
   final projectDataLayer = GetIt.I.get<ProjectDataLayer>();
   List<ProjectModel> publicProject =
-  GetIt.I.get<ProjectDataLayer>().publicProjects ?? [];
+      GetIt.I.get<ProjectDataLayer>().publicProjects ?? [];
   List<ProjectModel> publicProjectFillterd = [];
-  Set<String> bootCamp = {};
+  Set<String> bootCamp = GetIt.I.get<ProjectDataLayer>().bootCamp;
+  Set<String> type = GetIt.I.get<ProjectDataLayer>().type;
 
   final api = NetworkingApi();
   PublicCubit() : super(PublicInitial());
@@ -51,6 +52,8 @@ class PublicCubit extends Cubit<PublicState> {
         publicProject
             .map((e) => bootCamp.add(e.bootcampName.toString()))
             .toList();
+
+        publicProject.map((e) => type.add(e.type.toString())).toList();
       }
       publicProjectFillterd = List.from(publicProject);
       emit(SuccessState());
