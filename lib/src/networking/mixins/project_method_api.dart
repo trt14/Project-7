@@ -9,16 +9,25 @@ import 'package:project_7/src/models/project/project_model.dart';
 import 'package:project_7/src/networking/constant_networking.dart';
 
 mixin ProjectMethodApi on ConstantNetworking {
-  Future initProject({required InitProjectModel project}) async {
+  Future initProject(
+      {required InitProjectModel project, required String token}) async {
     if (kDebugMode) {
       log("Iam at initProject");
     }
     try {
       final url = "$baseURL$createProjectEndPoint";
-      log(url);
+      log(project.toJson().toString());
 
-      final response = await dio.get(url);
-      return ProjectModel.fromJson(response.data["data"]).projectId;
+      final response = await dio.post(
+        url,
+        data: project.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      return response.statusCode;
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
     } catch (error) {
