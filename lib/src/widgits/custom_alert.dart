@@ -13,6 +13,6 @@ customAlert(BuildContext context) {
       Navigator.pop(context);
     },
     panaraDialogType: PanaraDialogType.normal,
-    barrierDismissible: false, 
+    barrierDismissible: false,
   );
 }
