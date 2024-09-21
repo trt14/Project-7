@@ -31,7 +31,7 @@ class PublicScreen extends StatelessWidget {
         }
 
         loading();
-        int? value = 0;
+        int? value;
         return BlocListener<PublicCubit, PublicState>(
           listener: (context, state) async {
             if (state is LoadingState) {
