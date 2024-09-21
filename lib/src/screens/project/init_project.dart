@@ -20,7 +20,11 @@ class InitProject extends StatelessWidget {
       create: (context) => InitProjectCubit(),
       child: Builder(builder: (context) {
         Color color = Colors.black;
-        String? date;
+        String? editDate;
+        String? startDate;
+        String? endDate;
+        String? presDate;
+
         bool edit = true;
         final initProjectCubit = context.read<InitProjectCubit>();
         return BlocListener<InitProjectCubit, InitProjectState>(
@@ -59,6 +63,80 @@ class InitProject extends StatelessWidget {
                     color: color,
                     controller: initProjectCubit.idController,
                   ),
+                  CustomTextField(
+                    title: "Project Name",
+                    color: color,
+                    controller: initProjectCubit.projectNameController,
+                  ),
+                  CustomTextField(
+                    title: "Project Description",
+                    color: color,
+                    controller: initProjectCubit.projectDescController,
+                    maxLines: 4,
+                  ),
+                  CustomTextField(
+                    title: "Bootcamp Name",
+                    color: color,
+                    controller: initProjectCubit.bootcampController,
+                  ),
+                  CustomTextField(
+                    title: "project type",
+                    color: color,
+                    controller: initProjectCubit.typeController,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                          onPressed: () async {
+                            DateTime? newDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime.now()
+                                  .add(const Duration(days: 365 * 5)),
+                            );
+                            if (newDate != null) {
+                              startDate =
+                                  DateFormat('dd/MM/yyyy').format(newDate);
+                              log("date :$startDate");
+                            }
+                          },
+                          child: const Text("Start Date")),
+                      TextButton(
+                          onPressed: () async {
+                            DateTime? newDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime.now()
+                                  .add(const Duration(days: 365 * 5)),
+                            );
+                            if (newDate != null) {
+                              endDate =
+                                  DateFormat('dd/MM/yyyy').format(newDate);
+                              log("date :$endDate");
+                            }
+                          },
+                          child: const Text("End Date")),
+                      TextButton(
+                          onPressed: () async {
+                            DateTime? newDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime.now()
+                                  .add(const Duration(days: 365 * 5)),
+                            );
+                            if (newDate != null) {
+                              presDate =
+                                  DateFormat('dd/MM/yyyy').format(newDate);
+                              log("date :$presDate");
+                            }
+                          },
+                          child: const Text("Presintation Date")),
+                    ],
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -88,8 +166,8 @@ class InitProject extends StatelessWidget {
                                 .add(const Duration(days: 365 * 5)),
                           );
                           if (newDate != null) {
-                            date = DateFormat('dd/MM/yyyy').format(newDate);
-                            log("date :$date");
+                            editDate = DateFormat('dd/MM/yyyy').format(newDate);
+                            log("date :$editDate");
                           }
                         },
                         child: const Text("End edit of edit")),
@@ -100,13 +178,16 @@ class InitProject extends StatelessWidget {
                       text: "Create Project",
                       color: color.primaryColor,
                       onPressed: () {
-                        initProjectCubit.initProjectEvetn(InitProjectModel(
-                            edit: edit.toString(),
-                            timeEndEdit: date ?? "",
-                            userId: initProjectCubit.idController.text));
+                        initProjectCubit.initProjectEvetn(
+                            InitProjectModel(
+                                edit: edit.toString(),
+                                timeEndEdit: editDate ?? "",
+                                userId: initProjectCubit.idController.text),
+                            startDate!,
+                            endDate!);
                       },
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

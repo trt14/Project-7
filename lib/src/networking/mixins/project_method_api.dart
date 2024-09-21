@@ -27,7 +27,7 @@ mixin ProjectMethodApi on ConstantNetworking {
           },
         ),
       );
-      return response.statusCode;
+      return response;
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
     } catch (error) {
@@ -87,14 +87,19 @@ mixin ProjectMethodApi on ConstantNetworking {
   // method was tested
   Future updateProject(
       {required ProjectModel project, required String token}) async {
+    await Future.delayed(Duration(seconds: 3));
+
     if (kDebugMode) {
       log("Iam at editProject");
     }
     try {
       final url = "$baseURL$editProjectBaseEndPoint/${project.projectId}";
+      print(url);
+      print(project.startDate);
       String? startDate = project.startDate;
       String? endDate = project.endDate;
       String? presentationDate = project.presentationDate;
+
       project = dataFromator(project);
       final response = await dio.put(
         url,
