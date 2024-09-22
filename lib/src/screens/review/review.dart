@@ -33,6 +33,8 @@ class Review extends StatelessWidget {
                     SnackBar(content: Text(state.error.toString())));
               }
               if (state is SuccessState) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Rveiwe completed")));
                 Navigator.pop(context);
 
                 Navigator.pop(context);
@@ -46,8 +48,9 @@ class Review extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.asset("assets/images/feedback.png"),
-                      const Text("Idea"),
+                      const Text("Idea:"),
                       RatingBar(
+                        alignment: Alignment.center,
                         filledIcon: Icons.star,
                         emptyIcon: Icons.star_border,
                         onRatingChanged: (value) =>
@@ -55,8 +58,9 @@ class Review extends StatelessWidget {
                         initialRating: 0,
                         maxRating: 5,
                       ),
-                      const Text("Design"),
+                      const Text("Design:"),
                       RatingBar(
+                        alignment: Alignment.center,
                         filledIcon: Icons.star,
                         emptyIcon: Icons.star_border,
                         onRatingChanged: (value) =>
@@ -64,16 +68,18 @@ class Review extends StatelessWidget {
                         initialRating: 0,
                         maxRating: 5,
                       ),
-                      const Text("Tools"),
+                      const Text("Tools:"),
                       RatingBar(
+                        alignment: Alignment.center,
                         filledIcon: Icons.star,
                         emptyIcon: Icons.star_border,
                         onRatingChanged: (value) => reviewCubit.tools.toInt,
                         initialRating: 0,
                         maxRating: 5,
                       ),
-                      const Text("Practices"),
+                      const Text("Practices:"),
                       RatingBar(
+                        alignment: Alignment.center,
                         filledIcon: Icons.star,
                         emptyIcon: Icons.star_border,
                         onRatingChanged: (value) =>
@@ -81,8 +87,9 @@ class Review extends StatelessWidget {
                         initialRating: 0,
                         maxRating: 5,
                       ),
-                      const Text("Presentation"),
+                      const Text("Presentation:"),
                       RatingBar(
+                        alignment: Alignment.center,
                         filledIcon: Icons.star,
                         emptyIcon: Icons.star_border,
                         onRatingChanged: (value) =>
@@ -90,8 +97,9 @@ class Review extends StatelessWidget {
                         initialRating: 0,
                         maxRating: 5,
                       ),
-                      const Text("Investment"),
+                      const Text("Investment:"),
                       RatingBar(
+                        alignment: Alignment.center,
                         filledIcon: Icons.star,
                         emptyIcon: Icons.star_border,
                         onRatingChanged: (value) =>
@@ -101,7 +109,7 @@ class Review extends StatelessWidget {
                       ),
                       CustomTextField(
                         controller: reviewCubit.notesController,
-                        title: "addtional notes",
+                        title: "addtional notes:",
                         maxLines: 5,
                         color: Colors.white,
                       ),
