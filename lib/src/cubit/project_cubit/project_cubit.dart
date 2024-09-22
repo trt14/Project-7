@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:project_7/src/data_layer/user_data_layer.dart';
+import 'package:project_7/src/models/project/image_project_model.dart';
 import 'package:project_7/src/models/project/member_project_model.dart';
 import 'package:project_7/src/models/project/project_model.dart';
 import 'package:project_7/src/networking/networking_api.dart';
@@ -15,8 +16,13 @@ class ProjectCubit extends Cubit<ProjectState> {
   final userDataLayer = GetIt.I.get<UserDataLayer>();
   final api = NetworkingApi();
   List<MembersProjectModel> storageMemberList = [];
+  //member controller
   TextEditingController memberIdController = TextEditingController();
   TextEditingController positionController = TextEditingController();
+  //links Controller
+  TextEditingController typeController = TextEditingController();
+  TextEditingController urlController = TextEditingController();
+
   ProjectCubit() : super(ProjectInitial());
 
   addMemberEvent({required ProjectModel project}) async {
@@ -40,11 +46,46 @@ class ProjectCubit extends Cubit<ProjectState> {
           await api.getUserProfile(token: userDataLayer.auth!.token!);
       log(userDataLayer.user!.toJson().toString());
       emit(SuccessState());
+      storageMemberList.clear();
+      positionController.clear();
+      memberIdController.clear();
       return userDataLayer.user!.projects!
-          .where((element) => element.projectId == project.projectId).first;
+          .where((element) => element.projectId == project.projectId)
+          .first;
     } catch (exeprion) {
       project.membersProject!
           .removeWhere((memeber) => memeber.id == memberIdController.text);
+      log("iam at catch");
+      log(exeprion.toString());
+      log("befire emit faildstate");
+
+      final error = exeprion.toString().replaceAll("FormatException: ", "");
+      emit(FailedState(error: error));
+    }
+  }
+
+  addLink({required ProjectModel project}) async {
+    await Future.delayed(Duration.zero);
+    emit(LoadingState());
+    try {
+      LinksProjectModel link = LinksProjectModel(
+          type: typeController.text.trim(), url: urlController.text.trim());
+      project.linksProject?.add(link);
+      final response = await api.addProjectLink(
+          link: project.linksProject!,
+          token: userDataLayer.auth!.token!,
+          id: project.projectId);
+      if (response == 200) {
+        typeController.clear();
+        urlController.clear();
+
+        emit(SuccessState());
+
+        return userDataLayer.user!.projects!
+            .where((element) => element.projectId == project.projectId)
+            .first;
+      }
+    } catch (exeprion) {
       log("iam at catch");
       log(exeprion.toString());
       log("befire emit faildstate");

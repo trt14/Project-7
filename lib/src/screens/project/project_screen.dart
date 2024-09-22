@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -295,15 +297,20 @@ class ProjectScreen extends StatelessWidget {
                                   userProject.userId
                               ? IconButton(
                                   onPressed: () async {
-                                    addNewMembers(context,
-                                        memberIdController:
-                                            projectCubit.memberIdController,
-                                        positionController:
-                                            projectCubit.positionController,
-                                        onPressed: () async {
-                                      userProject = await projectCubit
-                                          .addMemberEvent(project: userProject);
-                                    });
+                                    try {
+                                      addNewMembers(context,
+                                          memberIdController:
+                                              projectCubit.memberIdController,
+                                          positionController:
+                                              projectCubit.positionController,
+                                          onPressed: () async {
+                                        userProject =
+                                            await projectCubit.addMemberEvent(
+                                                project: userProject);
+                                      });
+                                    } catch (e) {
+                                      log(e.toString());
+                                    }
                                   },
                                   icon: Icon(
                                     Icons.person_add,
@@ -332,22 +339,47 @@ class ProjectScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(8),
                             width: context.getWidth(value: 80 / 100),
                             height: 100,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: List.generate(
-                                userProject.linksProject?.length ?? 0,
-                                (index) {
-                                  return CustomUrlIcon(
-                                      url: userProject.linksProject![index].url,
-                                      img: getLogo(userProject
-                                          .linksProject![index].type),
-                                      width: 25);
-                                },
-                              ),
+                            child: BlocBuilder<ProjectCubit, ProjectState>(
+                              builder: (context, state) {
+                                if (state is SuccessState ||
+                                    state is ProjectInitial ||
+                                    state is FailedState) {
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: List.generate(
+                                      userProject.linksProject?.length ?? 0,
+                                      (index) {
+                                        return CustomUrlIcon(
+                                            url: userProject
+                                                .linksProject![index].url,
+                                            img: getLogo(userProject
+                                                .linksProject![index].type),
+                                            width: 25);
+                                      },
+                                    ),
+                                  );
+                                }
+                                return const SizedBox();
+                              },
                             ),
                           ),
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                try {
+                                  addLinkModel(context,
+                                      typeController:
+                                          projectCubit.typeController,
+                                      urlController: projectCubit.urlController,
+                                      onPressed: () async {
+                                    userProject = await projectCubit.addLink(
+                                      project: userProject,
+                                    );
+                                  });
+                                } catch (e) {
+                                  log(e.toString());
+                                }
+                              },
                               icon: Icon(
                                 Icons.add_link_sharp,
                                 color: color.primaryColor,
@@ -458,6 +490,47 @@ Future<void> addNewMembers(
                   title: "Position",
                   color: Colors.red,
                   controller: positionController,
+                ),
+                CustomElevatedBTN(
+                  text: "add",
+                  color: Colors.blue,
+                  onPressed: onPressed,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Future<void> addLinkModel(
+  BuildContext context, {
+  required Function() onPressed,
+  required TextEditingController typeController,
+  required TextEditingController urlController,
+}) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Add new member'),
+        content: SizedBox(
+          height: 200,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                CustomTextField(
+                  title: "type",
+                  color: Colors.red,
+                  controller: typeController,
+                ),
+                CustomTextField(
+                  title: "url",
+                  color: Colors.red,
+                  controller: urlController,
+                  keyboardType: TextInputType.url,
                 ),
                 CustomElevatedBTN(
                   text: "add",

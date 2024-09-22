@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:project_7/src/helper/converter.dart';
+import 'package:project_7/src/models/project/image_project_model.dart';
 import 'package:project_7/src/models/project/init_project_model.dart';
 import 'package:project_7/src/models/project/project_model.dart';
 import 'package:project_7/src/networking/constant_networking.dart';
