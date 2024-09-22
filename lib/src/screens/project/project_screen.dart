@@ -291,22 +291,25 @@ class ProjectScreen extends StatelessWidget {
                               },
                             ),
                           ),
-                          IconButton(
-                              onPressed: () async {
-                                addNewMembers(context,
-                                    memberIdController:
-                                        projectCubit.memberIdController,
-                                    positionController:
-                                        projectCubit.positionController,
-                                    onPressed: () async {
-                                  userProject = await projectCubit
-                                      .addMemberEvent(project: userProject);
-                                });
-                              },
-                              icon: Icon(
-                                Icons.person_add,
-                                color: color.primaryColor,
-                              ))
+                          projectCubit.userDataLayer.user?.id ==
+                                  userProject.userId
+                              ? IconButton(
+                                  onPressed: () async {
+                                    addNewMembers(context,
+                                        memberIdController:
+                                            projectCubit.memberIdController,
+                                        positionController:
+                                            projectCubit.positionController,
+                                        onPressed: () async {
+                                      userProject = await projectCubit
+                                          .addMemberEvent(project: userProject);
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.person_add,
+                                    color: color.primaryColor,
+                                  ))
+                              : const SizedBox()
                         ],
                       ),
                     ),
