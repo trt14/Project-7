@@ -27,6 +27,7 @@ class ProjectScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Color color = Colors.black;
     return SafeArea(
+      bottom: false,
       child: BlocProvider(
         create: (context) => ProjectCubit(),
         child: Builder(builder: (context) {
