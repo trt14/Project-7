@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:project_7/src/cubit/project_cubit/project_cubit.dart';
 import 'package:project_7/src/helper/check_logo_type.dart';
 import 'package:project_7/src/helper/colors.dart';
@@ -110,7 +111,6 @@ class ProjectScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              //ProfilePic(img_url: "", color: color,),
                               const SizedBox(
                                 width: 20,
                               ),
@@ -391,57 +391,116 @@ class ProjectScreen extends StatelessWidget {
                     const SizedBox(
                       height: 50,
                     ),
-                    userProject.presentationUrl != null ||
-                            userProject.presentationUrl != ""
-                        ? BlocBuilder<ProjectCubit, ProjectState>(
-                            builder: (context, state) {
-                              if (state is SuccessState ||
-                                  state is ProjectInitial ||
-                                  state is FailedState) {
-                                return Center(
-                                  child: CustomElevatedBTN(
-                                    text: "Open Persentation file",
-                                    color: color,
-                                    onPressed: () {
-                                      try {
-                                        launchStringUrl(userProject
-                                            .presentationUrl
-                                            .toString());
-                                      } catch (e) {
-                                        log(e.toString());
-                                      }
-                                    },
-                                  ),
-                                );
-                              }
-                              return const SizedBox();
-                            },
-                          )
-                        : const SizedBox(),
-                    Center(
-                      child: CustomElevatedBTN(
-                        text: "Upload file",
-                        color: color,
-                        onPressed: () async {
-                          try {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles();
+                    Row(
+                      children: [
+                        userProject.presentationUrl != null ||
+                                userProject.presentationUrl != ""
+                            ? BlocBuilder<ProjectCubit, ProjectState>(
+                                builder: (context, state) {
+                                  if (state is SuccessState ||
+                                      state is ProjectInitial ||
+                                      state is FailedState) {
+                                    return Center(
+                                      child: CustomElevatedBTN(
+                                        text: "Open Persentation file",
+                                        color: color,
+                                        onPressed: () {
+                                          try {
+                                            launchStringUrl(userProject
+                                                .presentationUrl
+                                                .toString());
+                                          } catch (e) {
+                                            log(e.toString());
+                                          }
+                                        },
+                                      ),
+                                    );
+                                  }
+                                  return const SizedBox();
+                                },
+                              )
+                            : const SizedBox(),
+                        Center(
+                          child: CustomElevatedBTN(
+                            text: "Upload file",
+                            color: color,
+                            onPressed: () async {
+                              try {
+                                FilePickerResult? result =
+                                    await FilePicker.platform.pickFiles();
 
-                            if (result != null) {
-                              File file = File(result.files.single.path!);
-                              final fileAsByte = file.readAsBytesSync();
-                              userProject =
-                                  await projectCubit.uploadPresentation(
-                                      project: userProject, file: fileAsByte);
-                              log('File picked: ${file.path}');
-                            } else {
-                              log('No file selected');
-                            }
-                          } catch (error) {
-                            log('Error picking file: $error');
-                          }
-                        },
-                      ),
+                                if (result != null) {
+                                  File file = File(result.files.single.path!);
+                                  final fileAsByte = file.readAsBytesSync();
+                                  userProject =
+                                      await projectCubit.uploadPresentation(
+                                          project: userProject,
+                                          file: fileAsByte);
+                                  log('File picked: ${file.path}');
+                                } else {
+                                  log('No file selected');
+                                }
+                              } catch (error) {
+                                log('Error picking file: $error');
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Center(
+                          child: CustomElevatedBTN(
+                            text: "Upload image",
+                            color: color,
+                            onPressed: () async {
+                                            try {
+                                FilePickerResult? result =
+                                    await FilePicker.platform.pickFiles();
+
+                                if (result != null) {
+                                  File file = File(result.files.single.path!);
+                                  final fileAsByte = file.readAsBytesSync();
+                                  // userProject =
+                                  //     await projectCubit.uploadPresentation(
+                                  //         project: userProject,
+                                  //         file: fileAsByte);
+                                  log('File picked: ${file.path}');
+                                } else {
+                                  log('No file selected');
+                                }
+                              } catch (error) {
+                                log('Error picking file: $error');
+                              }
+                            },
+                          ),
+                        ),
+                        Center(
+                          child: CustomElevatedBTN(
+                            text: "Upload logo",
+                            color: color,
+                            onPressed: () async {
+                              final ImagePicker picker = ImagePicker();
+                              final XFile? imagePath = await picker.pickImage(
+                                  source: ImageSource.gallery);
+                              if (imagePath != null) {
+                                final imageAsByte =
+                                    await File(imagePath.path).readAsBytes();
+                                projectCubit.uploadLogo(
+                                    id: userProject.projectId,
+                                    image: imageAsByte);
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30,
                     ),
                   ],
                 ),

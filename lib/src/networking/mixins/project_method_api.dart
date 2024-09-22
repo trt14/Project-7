@@ -62,14 +62,18 @@ mixin ProjectMethodApi on ConstantNetworking {
   }
 
   // method was not tested
-  Future updateProjectLogo({required String id, required File image}) async {
-    final imageByt = image.readAsBytes();
+  Future updateProjectLogo(
+      {required String id, required Uint8List image,required String token}) async {
     if (kDebugMode) {
       log("Iam at updateProjectLogo");
     }
     try {
       final url = "$baseURL$editProjectLogoEndPoint/$id";
-      final response = await dio.put(url, data: imageByt);
+      final response = await dio.put(url, data: {"logo": image},options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),);
       if (kDebugMode) {
         log("${response.statusMessage} ${response.statusCode}");
       }
@@ -130,7 +134,6 @@ mixin ProjectMethodApi on ConstantNetworking {
   }
 
 //Edit Project Presentation
-//was not tested
   Future editProjectPresentationFile(
       {required String token,
       required String id,
@@ -152,7 +155,6 @@ mixin ProjectMethodApi on ConstantNetworking {
       if (response.statusCode == 200) {
         return ProjectModel.fromJson(response.data["data"]);
       }
-      
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
     } catch (error) {

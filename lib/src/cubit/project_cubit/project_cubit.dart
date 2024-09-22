@@ -118,4 +118,36 @@ class ProjectCubit extends Cubit<ProjectState> {
       emit(FailedState(error: error));
     }
   }
+
+  Future uploadImage({required Uint8List file}) async {
+    emit(LoadingState());
+    try {} catch (exeprion) {
+      log("iam at catch");
+      log(exeprion.toString());
+      log("befire emit faildstate");
+
+      final error = exeprion.toString().replaceAll("FormatException: ", "");
+      emit(FailedState(error: error));
+    }
+  }
+
+  Future uploadLogo({required String id, required Uint8List image}) async {
+    emit(LoadingState());
+    log("iam at uploadLogo");
+    try {
+      await api.updateProjectLogo(
+          id: id, image: image, token: userDataLayer.auth!.token!);
+      userDataLayer.user =
+          await api.getUserProfile(token: userDataLayer.auth!.token!);
+      emit(SuccessState());
+      log("success");
+    } catch (exeprion) {
+      log("iam at catch");
+      log(exeprion.toString());
+      log("befire emit faildstate");
+
+      final error = exeprion.toString().replaceAll("FormatException: ", "");
+      emit(FailedState(error: error));
+    }
+  }
 }
