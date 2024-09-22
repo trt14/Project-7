@@ -57,7 +57,7 @@ class ProjectCubit extends Cubit<ProjectState> {
         positionController.clear();
         memberIdController.clear();
       } else {
-        emit(FailedState(error: "this member in the team"));
+        emit(FailedState(error: "This member already in the team"));
       }
     } catch (exeprion) {
       project.membersProject!

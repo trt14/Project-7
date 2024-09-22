@@ -166,7 +166,7 @@ class ProjectScreen extends StatelessWidget {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    userProject.startDate ?? ":TBD",
+                                    userProject.startDate ?? "TBD",
                                     style: TextStyle(
                                         color: color.secondaryColor,
                                         fontSize: 12,
