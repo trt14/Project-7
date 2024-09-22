@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/project_cubit/project_cubit.dart';
@@ -10,8 +12,6 @@ import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/models/project/member_project_model.dart';
 import 'package:project_7/src/models/project/project_model.dart';
-import 'package:project_7/src/widgits/custom_alert.dart';
-import 'package:project_7/src/widgits/custom_circle_profile.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_list_tile.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -48,7 +48,6 @@ class ProjectScreen extends StatelessWidget {
               }
               if (state is SuccessState) {
                 Navigator.pop(context);
-                Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Update was sucess")));
               }
@@ -76,9 +75,9 @@ class ProjectScreen extends StatelessWidget {
                                   .toList(),
                             ),
                           )
-                        : const SizedBox(
-                            child:
-                                Center(child: Text("Photos not uploaded yet")),
+                        : SizedBox(
+                            child: Image.asset("assets/images/Designer(1).png",
+                                fit: BoxFit.cover),
                           ),
                     const SizedBox(
                       height: 30,
@@ -120,14 +119,14 @@ class ProjectScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     maxLines: 1,
-                                    userProject.projectName ?? "TBD",
+                                    userProject.projectName ?? "Name:TBD",
                                     style: TextStyle(
                                         color: color.primaryColor,
                                         fontSize: 20),
                                   ),
                                   Text(
                                     maxLines: 1,
-                                    userProject.bootcampName ?? "TBD",
+                                    userProject.bootcampName ?? "BootCamp:TBD",
                                     style: TextStyle(
                                         color: color.primaryColor,
                                         fontSize: 10),
@@ -156,7 +155,7 @@ class ProjectScreen extends StatelessWidget {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    userProject.startDate ?? "TBD",
+                                    userProject.startDate ?? ":TBD",
                                     style: TextStyle(
                                         color: color.secondaryColor,
                                         fontSize: 12,
@@ -227,7 +226,8 @@ class ProjectScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         maxLines: 20,
-                        userProject.projectDescription ?? "TBD",
+                        userProject.projectDescription ??
+                            "projectDescription: TBD",
                         style: TextStyle(
                             color: color.txtBlack45Color, fontSize: 14),
                       ),
@@ -365,26 +365,81 @@ class ProjectScreen extends StatelessWidget {
                             ),
                           ),
                           IconButton(
-                              onPressed: () async {
-                                try {
-                                  addLinkModel(context,
-                                      typeController:
-                                          projectCubit.typeController,
-                                      urlController: projectCubit.urlController,
-                                      onPressed: () async {
-                                    userProject = await projectCubit.addLink(
-                                      project: userProject,
-                                    );
-                                  });
-                                } catch (e) {
-                                  log(e.toString());
-                                }
-                              },
-                              icon: Icon(
-                                Icons.add_link_sharp,
-                                color: color.primaryColor,
-                              ))
+                            onPressed: () async {
+                              try {
+                                addLinkModel(context,
+                                    typeController: projectCubit.typeController,
+                                    urlController: projectCubit.urlController,
+                                    onPressed: () async {
+                                  userProject = await projectCubit.addLink(
+                                    project: userProject,
+                                  );
+                                });
+                              } catch (e) {
+                                log(e.toString());
+                              }
+                            },
+                            icon: Icon(
+                              Icons.add_link_sharp,
+                              color: color.primaryColor,
+                            ),
+                          )
                         ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    userProject.presentationUrl != null ||
+                            userProject.presentationUrl != ""
+                        ? BlocBuilder<ProjectCubit, ProjectState>(
+                            builder: (context, state) {
+                              if (state is SuccessState ||
+                                  state is ProjectInitial ||
+                                  state is FailedState) {
+                                return Center(
+                                  child: CustomElevatedBTN(
+                                    text: "Open Persentation file",
+                                    color: color,
+                                    onPressed: () {
+                                      try {
+                                        launchStringUrl(userProject
+                                            .presentationUrl
+                                            .toString());
+                                      } catch (e) {
+                                        log(e.toString());
+                                      }
+                                    },
+                                  ),
+                                );
+                              }
+                              return const SizedBox();
+                            },
+                          )
+                        : const SizedBox(),
+                    Center(
+                      child: CustomElevatedBTN(
+                        text: "Upload file",
+                        color: color,
+                        onPressed: () async {
+                          try {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles();
+
+                            if (result != null) {
+                              File file = File(result.files.single.path!);
+                              final fileAsByte = file.readAsBytesSync();
+                              userProject =
+                                  await projectCubit.uploadPresentation(
+                                      project: userProject, file: fileAsByte);
+                              log('File picked: ${file.path}');
+                            } else {
+                              log('No file selected');
+                            }
+                          } catch (error) {
+                            log('Error picking file: $error');
+                          }
+                        },
                       ),
                     ),
                   ],

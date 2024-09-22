@@ -134,7 +134,7 @@ mixin ProjectMethodApi on ConstantNetworking {
   Future editProjectPresentationFile(
       {required String token,
       required String id,
-      required File projectFile}) async {
+      required Uint8List projectFile}) async {
     if (kDebugMode) {
       log("Iam at editProjectPresentationFile");
     }
@@ -142,17 +142,21 @@ mixin ProjectMethodApi on ConstantNetworking {
       final url = "$baseURL$editProjectPresentationEndPoint/$id";
       final response = await dio.put(
         url,
-        data: {"presentation_file": projectFile.readAsBytes()},
+        data: {"presentation_file": projectFile},
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
           },
         ),
       );
-      if (response.statusCode == 200) return response.data["data"];
+      if (response.statusCode == 200) {
+        return ProjectModel.fromJson(response.data["data"]);
+      }
+      
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
     } catch (error) {
+      log(error.toString());
       throw const FormatException("~there error with API");
     }
   }
@@ -174,7 +178,7 @@ mixin ProjectMethodApi on ConstantNetworking {
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
     } catch (error) {
-      throw const FormatException("~there error with API");
+      throw const FormatException("~there error");
     }
   }
 }

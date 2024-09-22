@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -85,6 +86,29 @@ class ProjectCubit extends Cubit<ProjectState> {
             .where((element) => element.projectId == project.projectId)
             .first;
       }
+    } catch (exeprion) {
+      log("iam at catch");
+      log(exeprion.toString());
+      log("befire emit faildstate");
+
+      final error = exeprion.toString().replaceAll("FormatException: ", "");
+      emit(FailedState(error: error));
+    }
+  }
+
+  Future uploadPresentation(
+      {required ProjectModel project, required Uint8List file}) async {
+    log("iam at uploadPresentation");
+    emit(LoadingState());
+
+    try {
+      project = await api.editProjectPresentationFile(
+          id: project.projectId,
+          projectFile: file,
+          token: userDataLayer.auth!.token!);
+
+      emit(SuccessState());
+      return project;
     } catch (exeprion) {
       log("iam at catch");
       log(exeprion.toString());

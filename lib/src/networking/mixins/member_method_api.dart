@@ -81,5 +81,7 @@ mixin MemberMethodApi on ConstantNetworking {
       // If any other exception occurs, throw a generic FormatException
       throw const FormatException("~there error with API");
     }
+
   }
+
 }
