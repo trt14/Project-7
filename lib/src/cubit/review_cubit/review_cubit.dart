@@ -27,17 +27,18 @@ class ReviewCubit extends Cubit<ReviewState> {
 
     try {
       Map<String, dynamic> userReview = {
-        "idea": idea,
-        "design": design,
-        "tools": tools,
-        "practices": practices,
-        "presentation": presentation,
-        "investment": investment,
+        "idea": idea * 2,
+        "design": design * 2,
+        "tools": tools * 2,
+        "practices": practices * 2,
+        "presentation": presentation * 2,
+        "investment": investment * 2,
         "note": notesController.text
       };
       await api.reviewProject(
           id: id, userReview: userReview, token: userDataLayer.auth!.token!);
       emit(SuccessState());
+      log("review is done");
     } catch (exeprion) {
       log("iam at catch");
       log(exeprion.toString());

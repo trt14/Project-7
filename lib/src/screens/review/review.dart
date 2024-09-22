@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +9,7 @@ import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
 
 class Review extends StatelessWidget {
-  const Review({super.key,required this.projectId});
+  const Review({super.key, required this.projectId});
   final String projectId;
   @override
   Widget build(BuildContext context) {
@@ -107,7 +109,13 @@ class Review extends StatelessWidget {
                         child: CustomElevatedBTN(
                           text: "Submit review",
                           color: Colors.white,
-                          onPressed: () async {},
+                          onPressed: () async {
+                            try {
+                              reviewCubit.submitRewview(id: projectId);
+                            } catch (e) {
+                              log(e.toString());
+                            }
+                          },
                         ),
                       ),
                     ],

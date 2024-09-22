@@ -81,27 +81,29 @@ class ProjectScreen extends StatelessWidget {
                       color: color.txtwhiteColor,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => Center(
-                          child: SizedBox(
-                            child: Card(
-                              child: QrImageView(
-                                data: userProject.projectId,
-                                version: QrVersions.auto,
+                  userProject.allowRating!
+                      ? IconButton(
+                          onPressed: () {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => Center(
+                                child: SizedBox(
+                                  child: Card(
+                                    child: QrImageView(
+                                      data: userProject.projectId,
+                                      version: QrVersions.auto,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.qr_code,
+                            color: Colors.white,
                           ),
-                        ),
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.qr_code,
-                      color: Colors.white,
-                    ),
-                  ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
               body: SingleChildScrollView(
