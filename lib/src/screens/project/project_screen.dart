@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_7/src/cubit/project_cubit/project_cubit.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
 import 'package:project_7/src/widgits/custom_url_icon.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ProjectScreen extends StatelessWidget {
   ProjectScreen({super.key, required this.userProject});
@@ -56,6 +58,53 @@ class ProjectScreen extends StatelessWidget {
               }
             },
             child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: color.secondaryColor,
+                automaticallyImplyLeading: false,
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      Clipboard.setData(
+                              ClipboardData(text: userProject.projectId))
+                          .then((value) {
+                        if (context.mounted) {
+                          showAlertSnackBar(
+                              color: color,
+                              context: context,
+                              title: "Project ID has been copied.",
+                              colorStatus: color.completedColor);
+                        }
+                      });
+                    },
+                    icon: Icon(
+                      Icons.copy,
+                      color: color.txtwhiteColor,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => Center(
+                          child: SizedBox(
+                            child: Card(
+                              child: QrImageView(
+                                data: userProject.projectId,
+                                version: QrVersions.auto,
+                                size: 200.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.qr_code,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
               body: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
