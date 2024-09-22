@@ -33,26 +33,32 @@ class ProjectCubit extends Cubit<ProjectState> {
 
     try {
       storageMemberList = List.from(project.membersProject!);
-      storageMemberList.add(
-        MembersProjectModel(
-            position: positionController.text, id: memberIdController.text),
-      );
-      // Call the function to post data
-      final response = await api.addMember(
-          projectID: project.projectId.toString(),
-          userInput: storageMemberList,
-          token: userDataLayer.auth!.token!);
-      log(response.toString());
-      userDataLayer.user =
-          await api.getUserProfile(token: userDataLayer.auth!.token!);
-      log(userDataLayer.user!.toJson().toString());
-      emit(SuccessState());
-      storageMemberList.clear();
-      positionController.clear();
-      memberIdController.clear();
-      return userDataLayer.user!.projects!
-          .where((element) => element.projectId == project.projectId)
-          .first;
+      bool check = storageMemberList
+          .any((member) => member.id == memberIdController.text.trim());
+      if (!check) {
+        storageMemberList.add(
+          MembersProjectModel(
+              position: positionController.text.trim(),
+              id: memberIdController.text.trim()),
+        );
+
+        final response = await api.addMember(
+            projectID: project.projectId.toString(),
+            userInput: storageMemberList,
+            token: userDataLayer.auth!.token!);
+        log(response.toString());
+        if (response == 200) {
+          userDataLayer.user =
+              await api.getUserProfile(token: userDataLayer.auth!.token!);
+        }
+        log(userDataLayer.user!.toJson().toString());
+        emit(SuccessState());
+        storageMemberList.clear();
+        positionController.clear();
+        memberIdController.clear();
+      } else {
+        emit(FailedState(error: "this member in the team"));
+      }
     } catch (exeprion) {
       project.membersProject!
           .removeWhere((memeber) => memeber.id == memberIdController.text);
@@ -63,6 +69,9 @@ class ProjectCubit extends Cubit<ProjectState> {
       final error = exeprion.toString().replaceAll("FormatException: ", "");
       emit(FailedState(error: error));
     }
+    return userDataLayer.user!.projects!
+        .where((element) => element.projectId == project.projectId)
+        .first;
   }
 
   addLink({required ProjectModel project}) async {
@@ -81,10 +90,6 @@ class ProjectCubit extends Cubit<ProjectState> {
         urlController.clear();
 
         emit(SuccessState());
-
-        return userDataLayer.user!.projects!
-            .where((element) => element.projectId == project.projectId)
-            .first;
       }
     } catch (exeprion) {
       log("iam at catch");
@@ -94,19 +99,20 @@ class ProjectCubit extends Cubit<ProjectState> {
       final error = exeprion.toString().replaceAll("FormatException: ", "");
       emit(FailedState(error: error));
     }
+    return userDataLayer.user!.projects!
+        .where((element) => element.projectId == project.projectId)
+        .first;
   }
 
   Future uploadPresentation(
       {required ProjectModel project, required Uint8List file}) async {
     log("iam at uploadPresentation");
     emit(LoadingState());
-
     try {
       project = await api.editProjectPresentationFile(
           id: project.projectId,
           projectFile: file,
           token: userDataLayer.auth!.token!);
-
       emit(SuccessState());
       return project;
     } catch (exeprion) {
