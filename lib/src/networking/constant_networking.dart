@@ -38,4 +38,5 @@ abstract class ConstantNetworking {
   // Administration Endpoints
   final String changeUserRoleEndPoint = "/v1/admin/change/role/user"; // PUT
   final String publicProjects = "/v1/projects";
+  final String userReivew = "/v1/user/rating/project";
 }

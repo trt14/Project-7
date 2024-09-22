@@ -6,8 +6,6 @@ import 'package:project_7/src/models/user/user_model.dart';
 import 'package:project_7/src/networking/constant_networking.dart';
 
 mixin UserMethodApi on ConstantNetworking {
-
-
   /*
   *
   * Method to fetch user profile information
@@ -61,7 +59,7 @@ mixin UserMethodApi on ConstantNetworking {
       log("Iam at UpdateUserProfile");
     }
     Map<String, dynamic> userJson = user.toJson();
-   userJson["accounts"]= userJson.remove("link");
+    userJson["accounts"] = userJson.remove("link");
     userJson.remove('image_url');
     userJson.remove('projects');
     userJson.remove('email');
@@ -140,6 +138,35 @@ mixin UserMethodApi on ConstantNetworking {
       // If there was an error while sending the request, throw an exception with the error message
       //     throw Exception("the file saized is big");
       throw Exception(e.message);
+    }
+  }
+
+  Future reviewProject(
+      {required String id,
+      required Map<String, dynamic> userReview,
+      required String token}) async {
+    log("Iam at ReviewProject ");
+
+    try {
+      final url = "$baseURL$userReivew/$id";
+      final response = await dio.post(
+        url,
+        data: userReview,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        return response.statusCode;
+      }
+    } on DioException catch (error) {
+      // If a DioException occurs, throw a FormatException with the error message from the API response
+      throw FormatException(error.response?.data["data"]);
+    } catch (error) {
+      // If any other exception occurs, throw a generic FormatException
+      throw const FormatException("~there error with API");
     }
   }
 }

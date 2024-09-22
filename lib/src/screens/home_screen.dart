@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/home_cubit/home_cubit.dart';
 import 'package:project_7/src/helper/converter.dart';
+import 'package:project_7/src/helper/qr_code_scanner.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
-import 'package:project_7/src/screens/project/create_project_screen.dart';
 import 'package:project_7/src/screens/project/init_project.dart';
+import 'package:project_7/src/screens/review/review.dart';
 import 'package:project_7/src/screens/user/profile_screen.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
 import 'package:project_7/src/widgits/custom_list_tile.dart';
@@ -27,23 +28,52 @@ class HomeScreen extends StatelessWidget {
 
         return SafeArea(
           child: Scaffold(
-            floatingActionButton: homeCubit.user?.role?.toLowerCase() != "user"
-                ? FloatingActionButton(
-                    backgroundColor: color.secondaryColor,
-                    child: const Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
+            floatingActionButton: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                homeCubit.user?.role?.toLowerCase() != "user"
+                    ? FloatingActionButton(
+                        backgroundColor: color.secondaryColor,
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const InitProject()))
-                          .then((value) {
-                        homeCubit.update();
-                      });
-                    })
-                : null,
+                                  builder: (context) =>
+                                      const InitProject())).then((value) {
+                            homeCubit.update();
+                          });
+                        })
+                    : const SizedBox(),
+                FloatingActionButton(
+                    backgroundColor: color.secondaryColor,
+                    child: const Icon(
+                      Icons.camera,
+                      color: Colors.white,
+                    ),
+                    onPressed: () async {
+                      try {
+                         String result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => QrCodeScanner(),
+                          ),
+                        );
+
+                        log("this message in home screen $result");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Review(projectId: result,)));
+                      } catch (e) {
+                        log(e.toString());
+                      }
+                    }),
+              ],
+            ),
             body: SingleChildScrollView(
               child: Column(
                 children: [
