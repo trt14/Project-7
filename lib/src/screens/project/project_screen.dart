@@ -91,7 +91,6 @@ class ProjectScreen extends StatelessWidget {
                               child: QrImageView(
                                 data: userProject.projectId,
                                 version: QrVersions.auto,
-                                size: 200.0,
                               ),
                             ),
                           ),
