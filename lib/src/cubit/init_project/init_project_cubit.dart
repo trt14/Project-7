@@ -21,8 +21,30 @@ class InitProjectCubit extends Cubit<InitProjectState> {
   bool edit = true;
   bool rate = true;
   bool isPublic = true;
+  late String editDate = "";
+  late String startDate = "";
+  late String endDate = "";
+  late String presDate = "";
   final userDataLayer = GetIt.I.get<UserDataLayer>();
-
+  final List<String> options = [
+    'app',
+    'website',
+    'vr',
+    'ar',
+    'ai',
+    'ml',
+    'ui/ux',
+    'gaming',
+    'unity',
+    'cyber',
+    'software',
+    'automation',
+    'robotic',
+    'api',
+    'analytics',
+    'iot',
+    'cloud'
+  ];
   final api = NetworkingApi();
   InitProjectCubit() : super(InitProjectInitial());
 
@@ -30,31 +52,46 @@ class InitProjectCubit extends Cubit<InitProjectState> {
     emit(ChangeStatus(isTrue: value));
   }
 
-  Future<String> initProjectEvetn(
-      {required InitProjectModel project,
-      required String startDate,
-      required String endDate,
-      required String presDate}) async {
+  Future<String> initProjectEvetn({
+    required InitProjectModel project,
+  }) async {
     await Future.delayed(Duration.zero);
     emit(LoadingState());
     ProjectModel newProject;
     try {
-      log("Iam at initProjectEvetn");
-      Response<dynamic> response = await api.initProject(
-          project: project, token: userDataLayer.auth!.token!);
-      newProject = ProjectModel.fromJson(response.data["data"]);
-      newProject.startDate = startDate;
-      newProject.endDate = endDate;
-      newProject.presentationDate = presDate;
-
-      if (response.statusCode == 200) {
-        emit(NotificationSteps(msg: "The first step is done"));
-        print(newProject.projectId);
-        seconedStepProjectEvetn(newProject);
+      if (idController.text.isEmpty ||
+          bootcampController.text.isEmpty ||
+          typeController.text.isEmpty ||
+          projectNameController.text.isEmpty ||
+          projectDescController.text.isEmpty) {
+        emit(FailedState(error: "Please fill the fields"));
+      } else if (!options.contains(typeController.text.toLowerCase())) {
+        emit(FailedState(
+            error: "Please chosse the coorect one ( app,website,vr,cloud)"));
+      } else if (editDate.isEmpty ||
+          endDate.isEmpty ||
+          startDate.isEmpty ||
+          presDate.isEmpty) {
+        emit(FailedState(error: "PLease choose a date"));
       } else {
-        emit(FailedState(error: "Invalid response code: $response.statusCode"));
+        log("Iam at initProjectEvetn");
+        Response<dynamic> response = await api.initProject(
+            project: project, token: userDataLayer.auth!.token!);
+        newProject = ProjectModel.fromJson(response.data["data"]);
+        newProject.startDate = startDate;
+        newProject.endDate = endDate;
+        newProject.presentationDate = presDate;
+
+        if (response.statusCode == 200) {
+          emit(NotificationSteps(msg: "The first step is done"));
+          print(newProject.projectId);
+          seconedStepProjectEvetn(newProject);
+        } else {
+          emit(FailedState(
+              error: "Invalid response code: $response.statusCode"));
+        }
+        return newProject.projectId;
       }
-      return newProject.projectId;
     } catch (exeprion) {
       log("iam at catch");
       log(exeprion.toString());

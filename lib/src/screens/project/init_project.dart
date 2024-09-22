@@ -21,10 +21,6 @@ class InitProject extends StatelessWidget {
       create: (context) => InitProjectCubit(),
       child: Builder(builder: (context) {
         Color color = Colors.black;
-        String? editDate;
-        String? startDate;
-        String? endDate;
-        String? presDate;
 
         final initProjectCubit = context.read<InitProjectCubit>();
         return BlocListener<InitProjectCubit, InitProjectState>(
@@ -107,9 +103,9 @@ class InitProject extends StatelessWidget {
                                   .add(const Duration(days: 365 * 5)),
                             );
                             if (newDate != null) {
-                              startDate =
+                              initProjectCubit.startDate =
                                   DateFormat('dd/MM/yyyy').format(newDate);
-                              log("date :$startDate");
+                              log("date :${initProjectCubit.startDate}");
                             }
                           },
                           child: const Text("Start Date")),
@@ -123,9 +119,9 @@ class InitProject extends StatelessWidget {
                                   .add(const Duration(days: 365 * 5)),
                             );
                             if (newDate != null) {
-                              endDate =
+                              initProjectCubit.endDate =
                                   DateFormat('dd/MM/yyyy').format(newDate);
-                              log("date :$endDate");
+                              log("date :${initProjectCubit.endDate}");
                             }
                           },
                           child: const Text("End Date")),
@@ -139,9 +135,9 @@ class InitProject extends StatelessWidget {
                                   .add(const Duration(days: 365 * 5)),
                             );
                             if (newDate != null) {
-                              presDate =
+                              initProjectCubit.presDate =
                                   DateFormat('dd/MM/yyyy').format(newDate);
-                              log("date :$presDate");
+                              log("date :${initProjectCubit.presDate}");
                             }
                           },
                           child: const Text("Presintation Date")),
@@ -231,8 +227,9 @@ class InitProject extends StatelessWidget {
                                 .add(const Duration(days: 365 * 5)),
                           );
                           if (newDate != null) {
-                            editDate = DateFormat('dd/MM/yyyy').format(newDate);
-                            log("date :$editDate");
+                            initProjectCubit.editDate =
+                                DateFormat('dd/MM/yyyy').format(newDate);
+                            log("date :${initProjectCubit.editDate}");
                           }
                         },
                         child: const Text("End edit of edit")),
@@ -243,13 +240,16 @@ class InitProject extends StatelessWidget {
                       text: "Create Project",
                       color: color.primaryColor,
                       onPressed: () {
+                        // if (initProjectCubit.editDate.isEmpty ||
+                        //     initProjectCubit.endDate.isEmpty ||
+                        //     initProjectCubit.startDate.isEmpty ||
+                        //     initProjectCubit.presDate.isEmpty) {
+                        //   print("hiii");
+                        // } else {
                         initProjectCubit.initProjectEvetn(
-                            startDate: startDate!,
-                            endDate: endDate!,
-                            presDate: presDate!,
                             project: InitProjectModel(
                                 edit: initProjectCubit.edit.toString(),
-                                timeEndEdit: editDate ?? "",
+                                timeEndEdit: initProjectCubit.editDate ?? "",
                                 userId: initProjectCubit.idController.text));
                       },
                     ),
