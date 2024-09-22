@@ -118,14 +118,14 @@ class ProjectScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     maxLines: 1,
-                                    userProject.projectName ?? "null",
+                                    userProject.projectName ?? "TBD",
                                     style: TextStyle(
                                         color: color.primaryColor,
                                         fontSize: 20),
                                   ),
                                   Text(
                                     maxLines: 1,
-                                    userProject.bootcampName ?? "null",
+                                    userProject.bootcampName ?? "TBD",
                                     style: TextStyle(
                                         color: color.primaryColor,
                                         fontSize: 10),
@@ -154,7 +154,7 @@ class ProjectScreen extends StatelessWidget {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    userProject.startDate ?? "null",
+                                    userProject.startDate ?? "TBD",
                                     style: TextStyle(
                                         color: color.secondaryColor,
                                         fontSize: 12,
@@ -182,7 +182,7 @@ class ProjectScreen extends StatelessWidget {
                                         fontSize: 12,
                                         fontWeight: FontWeight.w500),
                                   ),
-                                  Text(userProject.endDate ?? "null",
+                                  Text(userProject.endDate ?? "TBD",
                                       style: TextStyle(
                                           color: color.secondaryColor,
                                           fontSize: 12,
@@ -209,7 +209,7 @@ class ProjectScreen extends StatelessWidget {
                                         fontSize: 12,
                                         fontWeight: FontWeight.w500),
                                   ),
-                                  Text(userProject.presentationDate ?? "null",
+                                  Text(userProject.presentationDate ?? "TBD",
                                       style: TextStyle(
                                           color: color.secondaryColor,
                                           fontSize: 12,
@@ -225,7 +225,7 @@ class ProjectScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         maxLines: 20,
-                        userProject.projectDescription ?? "null",
+                        userProject.projectDescription ?? "TBD",
                         style: TextStyle(
                             color: color.txtBlack45Color, fontSize: 14),
                       ),
