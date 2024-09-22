@@ -119,9 +119,15 @@ class ProjectCubit extends Cubit<ProjectState> {
     }
   }
 
-  Future uploadImage({required Uint8List file}) async {
+  Future uploadImage(
+      {required List<Uint8List> images, required String id}) async {
     emit(LoadingState());
-    try {} catch (exeprion) {
+    try {
+      ProjectModel project = await api.editProjectImage(
+          id: id, images: images, token: userDataLayer.auth!.token!);
+      emit(SuccessState());
+      return project;
+    } catch (exeprion) {
       log("iam at catch");
       log(exeprion.toString());
       log("befire emit faildstate");

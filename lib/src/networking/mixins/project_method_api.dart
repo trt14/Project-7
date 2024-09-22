@@ -61,19 +61,24 @@ mixin ProjectMethodApi on ConstantNetworking {
     }
   }
 
-  // method was not tested
   Future updateProjectLogo(
-      {required String id, required Uint8List image,required String token}) async {
+      {required String id,
+      required Uint8List image,
+      required String token}) async {
     if (kDebugMode) {
       log("Iam at updateProjectLogo");
     }
     try {
       final url = "$baseURL$editProjectLogoEndPoint/$id";
-      final response = await dio.put(url, data: {"logo": image},options: Options(
+      final response = await dio.put(
+        url,
+        data: {"logo": image},
+        options: Options(
           headers: {
             'Authorization': 'Bearer $token',
           },
-        ),);
+        ),
+      );
       if (kDebugMode) {
         log("${response.statusMessage} ${response.statusCode}");
       }
@@ -165,18 +170,29 @@ mixin ProjectMethodApi on ConstantNetworking {
 
 //not tested
   Future editProjectImage(
-      {required String id, required List<File> imageFiles}) async {
+      {required String id,
+      required List<Uint8List> images,
+      required String token}) async {
     if (kDebugMode) {
       log("Iam at editProjectImage");
     }
-    List formatedImage = [];
-    for (var element in imageFiles) {
-      formatedImage.add(element.readAsBytes());
-    }
+
     try {
       final url = "$baseURL$editProjectImagesEndPoint/$id";
-      final response = await dio.put(url, data: {"images": formatedImage});
-      if (response.statusCode == 200) return response.statusCode;
+      final response = await dio.put(
+        url,
+        data: {
+          "images": images,
+        },
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        return ProjectModel.fromJson(response.data["data"]);
+      }
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
     } catch (error) {

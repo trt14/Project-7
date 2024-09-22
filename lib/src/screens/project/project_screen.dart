@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:file_picker/file_picker.dart';
@@ -60,27 +61,36 @@ class ProjectScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    userProject.imagesProject!.isNotEmpty
-                        ? Center(
-                            child: CarouselSlider(
-                              options: CarouselOptions(
-                                autoPlay: true,
-                                aspectRatio: 2.0,
-                                enlargeCenterPage: true,
-                                enlargeStrategy:
-                                    CenterPageEnlargeStrategy.height,
-                              ),
-                              items: userProject.imagesProject!
-                                  .map((item) => Center(
-                                      child: Image.network(item.url,
-                                          fit: BoxFit.cover, width: 1000)))
-                                  .toList(),
-                            ),
-                          )
-                        : SizedBox(
-                            child: Image.asset("assets/images/Designer(1).png",
-                                fit: BoxFit.cover),
-                          ),
+                    BlocBuilder<ProjectCubit, ProjectState>(
+                        builder: (context, state) {
+                      if (state is SuccessState ||
+                          state is ProjectInitial ||
+                          state is FailedState) {
+                        return userProject.imagesProject!.isNotEmpty
+                            ? Center(
+                                child: CarouselSlider(
+                                  options: CarouselOptions(
+                                    autoPlay: true,
+                                    aspectRatio: 2.0,
+                                    enlargeCenterPage: true,
+                                    enlargeStrategy:
+                                        CenterPageEnlargeStrategy.height,
+                                  ),
+                                  items: userProject.imagesProject!
+                                      .map((item) => Center(
+                                          child: Image.network(item.url,
+                                              fit: BoxFit.cover, width: 1000)))
+                                      .toList(),
+                                ),
+                              )
+                            : SizedBox(
+                                child: Image.asset(
+                                    "assets/images/Designer(1).png",
+                                    fit: BoxFit.cover),
+                              );
+                      }
+                      return const SizedBox();
+                    }),
                     const SizedBox(
                       height: 30,
                     ),
@@ -458,23 +468,32 @@ class ProjectScreen extends StatelessWidget {
                             text: "Upload image",
                             color: color,
                             onPressed: () async {
-                                            try {
+                              List<Uint8List> images = [];
+                              try {
                                 FilePickerResult? result =
-                                    await FilePicker.platform.pickFiles();
+                                    await FilePicker.platform.pickFiles(
+                                  allowMultiple: true,
+                                  type: FileType.custom,
+                                  allowedExtensions: [
+                                    'jpg',
+                                    'jpeg',
+                                    'png',
+                                  ],
+                                );
 
                                 if (result != null) {
-                                  File file = File(result.files.single.path!);
-                                  final fileAsByte = file.readAsBytesSync();
-                                  // userProject =
-                                  //     await projectCubit.uploadPresentation(
-                                  //         project: userProject,
-                                  //         file: fileAsByte);
-                                  log('File picked: ${file.path}');
+                                  for (PlatformFile file in result.files) {
+                                    File selectedFile = File(file.path!);
+                                    images.add(selectedFile.readAsBytesSync());
+                                  }
+                                  userProject = await projectCubit.uploadImage(
+                                      images: images,
+                                      id: userProject.projectId);
                                 } else {
-                                  log('No file selected');
+                                  log('No files selected');
                                 }
                               } catch (error) {
-                                log('Error picking file: $error');
+                                log('Error picking files: $error');
                               }
                             },
                           ),
