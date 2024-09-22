@@ -13,7 +13,7 @@ class CustomCardProject extends StatelessWidget {
       required this.colorStatus,
       required this.projectDaysleft,
       required this.isSelectedTeamMember,
-      this.countTeam});
+      this.countTeam,  this.url});
   final String supervisorName;
   final String projectName;
   final String projectDescription;
@@ -23,7 +23,7 @@ class CustomCardProject extends StatelessWidget {
   final String projectDaysleft;
   final bool isSelectedTeamMember;
   final int? countTeam;
-
+  final String? url;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -63,7 +63,7 @@ class CustomCardProject extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.web),
+                        url !=null || url != "" ? CircleAvatar(child: Image.network(url!))  : const Icon(Icons.web),
                             Text(
                               projectName,
                               style: const TextStyle(
