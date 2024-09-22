@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     onPressed: () async {
                       try {
-                        final result = await Navigator.push(
+                         String result = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => QrCodeScanner(),
@@ -67,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const Review()));
+                                builder: (context) => Review(projectId: result,)));
                       } catch (e) {
                         log(e.toString());
                       }

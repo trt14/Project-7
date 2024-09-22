@@ -3,11 +3,12 @@ import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/review_cubit/review_cubit.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
+import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
 
 class Review extends StatelessWidget {
-  const Review({super.key});
-
+  const Review({super.key,required this.projectId});
+  final String projectId;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -17,7 +18,23 @@ class Review extends StatelessWidget {
         return Scaffold(
           body: BlocListener<ReviewCubit, ReviewState>(
             listener: (context, state) {
-              // TODO: implement listener
+              if (state is LoadingState) {
+                showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        SizedBox(child: customLoading(context)));
+              }
+
+              if (state is FailedState) {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(state.error.toString())));
+              }
+              if (state is SuccessState) {
+                Navigator.pop(context);
+
+                Navigator.pop(context);
+              }
             },
             child: SafeArea(
               child: Padding(
