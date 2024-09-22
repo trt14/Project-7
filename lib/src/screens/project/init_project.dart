@@ -7,6 +7,7 @@ import 'package:project_7/src/cubit/init_project/init_project_cubit.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/models/project/init_project_model.dart';
+import 'package:project_7/src/screens/home_screen.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
@@ -25,7 +26,6 @@ class InitProject extends StatelessWidget {
         String? endDate;
         String? presDate;
 
-        bool edit = true;
         final initProjectCubit = context.read<InitProjectCubit>();
         return BlocListener<InitProjectCubit, InitProjectState>(
           listener: (context, state) {
@@ -41,10 +41,20 @@ class InitProject extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.error.toString())));
             }
-            if (state is SuccessState) {
+
+            if (state is NotificationSteps) {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("init project was success")));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.msg),
+                backgroundColor: Colors.green,
+              ));
+            }
+
+            if (state is SuccessState) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              );
             }
           },
           child: Scaffold(
@@ -142,14 +152,69 @@ class InitProject extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text("Allow memeber to Edit:"),
+                        const Text("Allow user to Edit:"),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Switch(
-                              value: edit,
-                              onChanged: (bool value) {
-                                edit = value;
-                              }),
+                          child:
+                              BlocBuilder<InitProjectCubit, InitProjectState>(
+                            builder: (context, state) {
+                              return Switch(
+                                  value: initProjectCubit.edit,
+                                  onChanged: (bool value) {
+                                    initProjectCubit.edit = value;
+                                    initProjectCubit
+                                        .toggleSwitch(initProjectCubit.edit);
+                                  });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Allow user to Rating:"),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child:
+                              BlocBuilder<InitProjectCubit, InitProjectState>(
+                            builder: (context, state) {
+                              return Switch(
+                                  value: initProjectCubit.rate,
+                                  onChanged: (bool value) {
+                                    initProjectCubit.rate = value;
+                                    initProjectCubit
+                                        .toggleSwitch(initProjectCubit.rate);
+                                  });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Public :"),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child:
+                              BlocBuilder<InitProjectCubit, InitProjectState>(
+                            builder: (context, state) {
+                              return Switch(
+                                  value: initProjectCubit.isPublic,
+                                  onChanged: (bool value) {
+                                    initProjectCubit.isPublic = value;
+                                    initProjectCubit.toggleSwitch(
+                                        initProjectCubit.isPublic);
+                                  });
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -179,12 +244,13 @@ class InitProject extends StatelessWidget {
                       color: color.primaryColor,
                       onPressed: () {
                         initProjectCubit.initProjectEvetn(
-                            InitProjectModel(
-                                edit: edit.toString(),
+                            startDate: startDate!,
+                            endDate: endDate!,
+                            presDate: presDate!,
+                            project: InitProjectModel(
+                                edit: initProjectCubit.edit.toString(),
                                 timeEndEdit: editDate ?? "",
-                                userId: initProjectCubit.idController.text),
-                            startDate!,
-                            endDate!);
+                                userId: initProjectCubit.idController.text));
                       },
                     ),
                   ),

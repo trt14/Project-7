@@ -30,6 +30,7 @@ abstract class ConstantNetworking {
   final String deleteProjectEndPoint =
       "/v1/supervisor/delete/project"; // DELETE
   final String getProjectEndPoint = "/v1/get/project"; // GET
+  final String changeProjectStatus = "/v1/supervisor/change/status"; // PUT
 
   // Search Projects Endpoints
   final String searchProjectsEndPoint = "/v1/search/projects"; // GET

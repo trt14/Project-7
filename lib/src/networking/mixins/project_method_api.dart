@@ -87,20 +87,18 @@ mixin ProjectMethodApi on ConstantNetworking {
   // method was tested
   Future updateProject(
       {required ProjectModel project, required String token}) async {
-    await Future.delayed(Duration(seconds: 3));
-
     if (kDebugMode) {
       log("Iam at editProject");
     }
     try {
       final url = "$baseURL$editProjectBaseEndPoint/${project.projectId}";
       print(url);
-      print(project.startDate);
+      print(project.toJson());
       String? startDate = project.startDate;
       String? endDate = project.endDate;
       String? presentationDate = project.presentationDate;
 
-      project = dataFromator(project);
+      //project = dataFromator(project);
       final response = await dio.put(
         url,
         data: project.toJson(),
@@ -117,13 +115,14 @@ mixin ProjectMethodApi on ConstantNetworking {
         log("${response.statusMessage} ${response.statusCode}");
       }
       if (response.statusCode == 200) {
-        return response.statusCode;
+        return response;
       } else {
         throw Exception('Failed to update project infromation');
       }
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
     } catch (error) {
+      log(error.toString());
       throw const FormatException("~there error with API");
     }
   }
@@ -170,6 +169,37 @@ mixin ProjectMethodApi on ConstantNetworking {
       final url = "$baseURL$editProjectImagesEndPoint/$id";
       final response = await dio.put(url, data: {"images": formatedImage});
       if (response.statusCode == 200) return response.statusCode;
+    } on DioException catch (error) {
+      throw FormatException(error.response?.data["data"]);
+    } catch (error) {
+      throw const FormatException("~there error with API");
+    }
+  }
+
+  //not tested
+  Future updateProjectStatus({required ProjectModel project, token}) async {
+    if (kDebugMode) {
+      log("Iam at editProjectState");
+    }
+    try {
+      final url = "$baseURL$changeProjectStatus/${project.projectId}";
+      print(url);
+      dataFromator(project);
+      final response = await dio.put(
+        url,
+        data: {
+          "time_end_edit": project.timeEndEdit,
+          "edit": project.allowEdit,
+          "rating": project.allowRating,
+          "public": project.isPublic
+        },
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      if (response.statusCode == 200) return response;
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
     } catch (error) {

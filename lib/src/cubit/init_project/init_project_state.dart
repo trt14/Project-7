@@ -11,7 +11,17 @@ final class LoadingState extends InitProjectState {}
 
 final class SuccessState extends InitProjectState {}
 
+final class NotificationSteps extends InitProjectState {
+  final String msg;
+  NotificationSteps({required this.msg});
+}
+
 final class FailedState extends InitProjectState {
   final String error;
   FailedState({required this.error});
+}
+
+final class ChangeStatus extends InitProjectState {
+  final bool isTrue;
+  ChangeStatus({required this.isTrue});
 }
