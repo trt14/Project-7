@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:project_7/src/models/project/member_project_model.dart';
 import 'package:project_7/src/networking/constant_networking.dart';
@@ -27,7 +29,7 @@ mixin MemberMethodApi on ConstantNetworking {
         listMember.add(json);
       }
 
-      print(listMember);
+      log(listMember.toString());
 
       final response = await dio.put(
         url,
