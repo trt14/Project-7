@@ -107,8 +107,14 @@ mixin ProjectMethodApi on ConstantNetworking {
       String? startDate = project.startDate;
       String? endDate = project.endDate;
       String? presentationDate = project.presentationDate;
-
-      //project = dataFromator(project);
+      String? endTimeEdit = project.timeEndEdit;
+      if (project.startDate!.contains("-") ||
+          project.presentationDate!.contains("-") ||
+          project.endDate!.contains("-") ||
+          project.timeEndEdit!.contains("-")) {
+        project = dataFromator(project);
+      }
+      print(project.startDate);
       final response = await dio.put(
         url,
         data: project.toJson(),
@@ -121,6 +127,8 @@ mixin ProjectMethodApi on ConstantNetworking {
       project.startDate = startDate;
       project.endDate = endDate;
       project.presentationDate = presentationDate;
+      project.timeEndEdit = endTimeEdit;
+
       if (kDebugMode) {
         log("${response.statusMessage} ${response.statusCode}");
       }

@@ -36,6 +36,11 @@ class ProjectScreen extends StatelessWidget {
         create: (context) => ProjectCubit(),
         child: Builder(builder: (context) {
           final projectCubit = context.read<ProjectCubit>();
+          projectCubit.editProjectNameController.text =
+              userProject.projectName.toString();
+
+          projectCubit.editProjectDescrController.text =
+              userProject.projectDescription.toString();
 
           return BlocListener<ProjectCubit, ProjectState>(
             listener: (context, state) {
@@ -53,6 +58,8 @@ class ProjectScreen extends StatelessWidget {
               }
               if (state is SuccessState) {
                 Navigator.pop(context);
+                Navigator.pop(context);
+
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Update was sucess")));
               }
@@ -62,6 +69,54 @@ class ProjectScreen extends StatelessWidget {
                 backgroundColor: color.secondaryColor,
                 automaticallyImplyLeading: false,
                 actions: [
+                  IconButton(
+                    onPressed: () {
+                      showModalBottomSheet<void>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            height: context.getHeight(value: 0.5),
+                            color: color.bgColor,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(
+                                    "Edit Project",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  CustomTextField(
+                                    title: "Project Name",
+                                    color: color,
+                                    controller:
+                                        projectCubit.editProjectNameController,
+                                  ),
+                                  CustomTextField(
+                                    title: "Project Description",
+                                    color: color,
+                                    controller:
+                                        projectCubit.editProjectDescrController,
+                                  ),
+                                  ElevatedButton(
+                                      child: const Text('Edit'),
+                                      onPressed: () async {
+                                        userProject = await projectCubit
+                                            .editProjectNameAndDescription(
+                                                project: userProject);
+                                      }),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    icon: Icon(
+                      Icons.settings,
+                      color: color.txtwhiteColor,
+                    ),
+                  ),
                   IconButton(
                     onPressed: () {
                       Clipboard.setData(
@@ -172,29 +227,44 @@ class ProjectScreen extends StatelessWidget {
                               const SizedBox(
                                 width: 20,
                               ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    maxLines: 1,
-                                    userProject.projectName ?? "Name:TBD",
-                                    style: TextStyle(
-                                        color: color.primaryColor,
-                                        fontSize: 20),
-                                  ),
-                                  Text(
-                                    maxLines: 1,
-                                    userProject.bootcampName ?? "BootCamp:TBD",
-                                    style: TextStyle(
-                                        color: color.primaryColor,
-                                        fontSize: 10),
-                                  ),
-                                ],
+                              BlocBuilder<ProjectCubit, ProjectState>(
+                                builder: (context, state) {
+                                  if (state is SuccessState ||
+                                      state is ProjectInitial ||
+                                      state is FailedState) {
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          maxLines: 1,
+                                          userProject.projectName ?? "Name:TBD",
+                                          style: TextStyle(
+                                              color: color.primaryColor,
+                                              fontSize: 20),
+                                        ),
+                                        Text(
+                                          maxLines: 1,
+                                          userProject.bootcampName ??
+                                              "BootCamp:TBD",
+                                          style: TextStyle(
+                                              color: color.primaryColor,
+                                              fontSize: 10),
+                                        ),
+                                      ],
+                                    );
+                                  }
+
+                                  return const SizedBox();
+                                },
                               ),
                             ],
                           ),
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
@@ -207,7 +277,7 @@ class ProjectScreen extends StatelessWidget {
                                     width: 5,
                                   ),
                                   Text(
-                                    "Start Date :",
+                                    "Start Date: ",
                                     style: TextStyle(
                                         color: color.secondaryColor,
                                         fontSize: 12,
@@ -236,7 +306,7 @@ class ProjectScreen extends StatelessWidget {
                                     width: 5,
                                   ),
                                   Text(
-                                    "End Date  :",
+                                    "End Date: ",
                                     style: TextStyle(
                                         color: color.secondaryColor,
                                         fontSize: 12,
@@ -263,7 +333,7 @@ class ProjectScreen extends StatelessWidget {
                                     width: 5,
                                   ),
                                   Text(
-                                    "Presintation Date  :",
+                                    "Presintation Date: ",
                                     style: TextStyle(
                                         color: color.secondaryColor,
                                         fontSize: 12,
@@ -290,10 +360,6 @@ class ProjectScreen extends StatelessWidget {
                         style: TextStyle(
                             color: color.txtBlack45Color, fontSize: 14),
                       ),
-                    ),
-                    Divider(
-                      thickness: 0.5,
-                      color: color.txtBlack45Color,
                     ),
                     Container(
                         padding: const EdgeInsets.all(8),
@@ -353,7 +419,9 @@ class ProjectScreen extends StatelessWidget {
                             ),
                           ),
                           projectCubit.userDataLayer.user?.id ==
-                                  userProject.userId
+                                      userProject.userId ||
+                                  projectCubit.userDataLayer.user!.role !=
+                                      "user"
                               ? IconButton(
                                   onPressed: () async {
                                     try {
@@ -404,17 +472,19 @@ class ProjectScreen extends StatelessWidget {
                                     state is ProjectInitial ||
                                     state is FailedState) {
                                   return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: List.generate(
                                       userProject.linksProject?.length ?? 0,
                                       (index) {
-                                        return CustomUrlIcon(
-                                            url: userProject
-                                                .linksProject![index].url,
-                                            img: getLogo(userProject
-                                                .linksProject![index].type),
-                                            width: 25);
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: CustomUrlIcon(
+                                              url: userProject
+                                                  .linksProject![index].url,
+                                              img: getLogo(userProject
+                                                  .linksProject![index].type),
+                                              width: 25),
+                                        );
                                       },
                                     ),
                                   );
