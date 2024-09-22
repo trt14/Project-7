@@ -140,19 +140,25 @@ class HomeScreen extends StatelessWidget {
                               return InkWell(
                                 onTap: () {
                                   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ProjectScreen(
-                                                userProject:
-                                                    homeCubit.projects[index],
-                                              )));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProjectScreen(
+                                        userProject: homeCubit.projects[index],
+                                      ),
+                                    ),
+                                  ).then((value) {
+                                    homeCubit.update();
+                                  });
                                 },
                                 child: CustomCardProject(
+                                    url:
+                                        homeCubit.projects[index].logoUrl ?? "",
                                     supervisorName: "",
-                                    projectName:
-                                        "${homeCubit.projects[index].projectName}",
+                                    projectName: homeCubit.projects[index].projectName ??
+                                        "TBD",
                                     projectDescription:
-                                        "${homeCubit.projects[index].projectDescription}",
+                                        homeCubit.projects[index].projectDescription ??
+                                            "TBD",
                                     projectType:
                                         "${homeCubit.projects[index].type}",
                                     projectStatus:
@@ -163,16 +169,10 @@ class HomeScreen extends StatelessWidget {
                                         homeCubit.projects[index].presentationDate != null
                                             ? color.completedColor
                                             : color.uncompletedColor,
-                                    projectDaysleft: homeCubit.projects[index]
-                                                    .startDate !=
-                                                null &&
+                                    projectDaysleft: homeCubit.projects[index].startDate != null &&
                                             homeCubit.projects[index].endDate !=
                                                 null
-                                        ? getDaysDifference(
-                                                    homeCubit.projects[index]
-                                                        .startDate!,
-                                                    homeCubit.projects[index]
-                                                        .endDate!) !=
+                                        ? getDaysDifference(homeCubit.projects[index].startDate!, homeCubit.projects[index].endDate!) !=
                                                 0
                                             ? "${getDaysDifference(homeCubit.projects[index].startDate!, homeCubit.projects[index].endDate!)} days"
                                             : "Over"

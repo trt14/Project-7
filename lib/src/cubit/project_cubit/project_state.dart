@@ -5,8 +5,11 @@ sealed class ProjectState {}
 
 final class ProjectInitial extends ProjectState {}
 
-final class LoadingMemberProjectState extends ProjectState {}
+final class LoadingState extends ProjectState {}
 
-final class SuccessMemberProjectState extends ProjectState {}
+final class SuccessState extends ProjectState {}
 
-final class ErrorMemberProjectState extends ProjectState {}
+final class FailedState extends ProjectState {
+  final String error;
+  FailedState({required this.error});
+}
