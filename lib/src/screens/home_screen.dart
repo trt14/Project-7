@@ -7,11 +7,12 @@ import 'package:project_7/src/helper/converter.dart';
 import 'package:project_7/src/helper/qr_code_scanner.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/helper/colors.dart';
+import 'package:project_7/src/screens/admin/assign_supervisor.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
 import 'package:project_7/src/screens/project/init_project.dart';
-import 'package:project_7/src/screens/review/review_screen.dart';
 import 'package:project_7/src/screens/user/profile_screen.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
+import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_list_tile.dart';
 import 'package:project_7/src/widgits/custom_notification_project.dart';
 
@@ -25,28 +26,30 @@ class HomeScreen extends StatelessWidget {
         Color color = Colors.black;
         final homeCubit = context.read<HomeCubit>();
         log("${homeCubit.user?.role}");
-
         return SafeArea(
           child: Scaffold(
             floatingActionButton: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 homeCubit.user?.role?.toLowerCase() != "user"
-                    ? FloatingActionButton(
-                        backgroundColor: color.secondaryColor,
-                        child: const Icon(
-                          Icons.add,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const InitProject())).then((value) {
-                            homeCubit.update();
-                          });
-                        })
+                    ? Container(
+                        margin: const EdgeInsets.only(left: 20),
+                        child: FloatingActionButton(
+                            backgroundColor: color.secondaryColor,
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const InitProject())).then((value) {
+                                homeCubit.update();
+                              });
+                            }),
+                      )
                     : const SizedBox(),
                 FloatingActionButton(
                     backgroundColor: color.secondaryColor,
@@ -56,10 +59,12 @@ class HomeScreen extends StatelessWidget {
                     ),
                     onPressed: () async {
                       try {
-                         String result = await Navigator.push(
+                        String result = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => QrCodeScanner(),
+                            builder: (context) => QrCodeScanner(
+                              nav: 0,
+                            ),
                           ),
                         );
 
@@ -74,55 +79,70 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                      width: context.getWidth(),
-                      padding: const EdgeInsets.only(top: 8, left: 8),
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
+                    width: context.getWidth(),
+                    padding: const EdgeInsets.only(top: 8, left: 8),
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: Text(
+                            "Welcome back 👋 ",
+                            style: TextStyle(
+                                color: color.txtBlackColor,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 16),
-                            child: Text(
-                              "Welcome back 👋 ",
-                              style: TextStyle(
-                                  color: color.txtBlackColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ProfileScreen()))
-                                  .then((value) => homeCubit.update());
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ProfileScreen()))
+                                .then((value) => homeCubit.update());
+                          },
+                          child: BlocBuilder<HomeCubit, HomeState>(
+                            builder: (context, state) {
+                              return CustomListTile(
+                                color: color,
+                                title:
+                                    "${homeCubit.user?.firstName} ${homeCubit.user?.lastName}",
+                                description: "${homeCubit.user?.role}",
+                                widget: Icon(
+                                  Icons.person_2_outlined,
+                                  color: color.primaryColor,
+                                ),
+                              );
                             },
-                            child: BlocBuilder<HomeCubit, HomeState>(
-                              builder: (context, state) {
-                                return CustomListTile(
-                                  color: color,
-                                  title:
-                                      "${homeCubit.user?.firstName} ${homeCubit.user?.lastName}",
-                                  description: "${homeCubit.user?.role}",
-                                  widget: Icon(
-                                    Icons.person_2_outlined,
-                                    color: color.primaryColor,
-                                  ),
-                                );
-                              },
-                            ),
-                          )
-                        ],
-                      )),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
+                  homeCubit.user!.role == "admin"
+                      ? CustomElevatedBTN(
+                          text: "Assing supervisor",
+                          color: Colors.black,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AssignSupervisor(),
+                              ),
+                            );
+                          },
+                        )
+                      : const SizedBox(),
                   Center(
                       child: CustomNotificationProject(
                           color: color,
