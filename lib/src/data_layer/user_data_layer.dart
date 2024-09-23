@@ -5,13 +5,13 @@ import 'package:project_7/src/models/user/user_model.dart';
 class UserDataLayer {
   UserModel? user;
   AuthModel? auth;
-  List<ProjectModel>? projects = [];
+  // List<ProjectModel>? projects = user.projects ?? [];
   String? email;
 
   logoutFunction() {
     user = null;
     auth = null;
-    projects?.clear();
+    // projects?.clear();
     email = null;
   }
 }

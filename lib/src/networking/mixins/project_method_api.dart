@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:project_7/src/helper/converter.dart';
 import 'package:project_7/src/models/project/init_project_model.dart';
 import 'package:project_7/src/models/project/project_model.dart';
@@ -16,6 +17,17 @@ mixin ProjectMethodApi on ConstantNetworking {
     try {
       final url = "$baseURL$createProjectEndPoint";
       log(project.toJson().toString());
+      if (project.timeEndEdit!.contains("-")) {
+        log("I'm at if condition for initProject");
+        DateTime timeEditDate = DateTime.parse(project.timeEndEdit!);
+
+        String newTimeEditDate = DateFormat('dd/MM/yyyy').format(timeEditDate);
+        log(newTimeEditDate.toString());
+        project.timeEndEdit = newTimeEditDate;
+      } else {
+        log("I'm here at initProject");
+      }
+      log(project.timeEndEdit.toString());
 
       final response = await dio.post(
         url,
@@ -30,6 +42,7 @@ mixin ProjectMethodApi on ConstantNetworking {
     } on DioException catch (error) {
       throw FormatException(error.response?.data["data"]);
     } catch (error) {
+      log(error.toString());
       throw const FormatException("~there error with API");
     }
   }

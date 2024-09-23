@@ -5,8 +5,8 @@ class InitProjectModel {
     required this.edit,
   });
   late final String userId;
-  late final String timeEndEdit;
-  late final String edit;
+  String? timeEndEdit;
+  String? edit;
 
   InitProjectModel.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];

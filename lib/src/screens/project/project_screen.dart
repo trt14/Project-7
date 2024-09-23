@@ -66,7 +66,6 @@ class ProjectScreen extends StatelessWidget {
               }
               if (state is SuccessState) {
                 Navigator.pop(context);
-                Navigator.pop(context);
                 showAlertSnackBar(
                     color: color,
                     context: context,
@@ -105,7 +104,7 @@ class ProjectScreen extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) =>
                                 EditProjectScreen(userProject: userProject)),
-                      );
+                      ).then((value) => projectCubit.update());
                     },
                     icon: Icon(
                       Icons.settings,
@@ -139,7 +138,7 @@ class ProjectScreen extends StatelessWidget {
                               builder: (BuildContext context) => Center(
                                 child: SizedBox(
                                   child: Card(
-                                    child: QrImageView(            
+                                    child: QrImageView(
                                       data: userProject.projectId,
                                       version: QrVersions.auto,
                                     ),
@@ -163,33 +162,28 @@ class ProjectScreen extends StatelessWidget {
                   children: [
                     BlocBuilder<ProjectCubit, ProjectState>(
                         builder: (context, state) {
-                      if (state is SuccessState ||
-                          state is ProjectInitial ||
-                          state is FailedState) {
-                        return userProject.imagesProject!.isNotEmpty
-                            ? Center(
-                                child: CarouselSlider(
-                                  options: CarouselOptions(
-                                    autoPlay: true,
-                                    aspectRatio: 2.0,
-                                    enlargeCenterPage: true,
-                                    enlargeStrategy:
-                                        CenterPageEnlargeStrategy.height,
-                                  ),
-                                  items: userProject.imagesProject!
-                                      .map((item) => Center(
-                                          child: Image.network(item.url,
-                                              fit: BoxFit.cover, width: 1000)))
-                                      .toList(),
+                      return userProject.imagesProject!.isNotEmpty
+                          ? Center(
+                              child: CarouselSlider(
+                                options: CarouselOptions(
+                                  autoPlay: true,
+                                  aspectRatio: 2.0,
+                                  enlargeCenterPage: true,
+                                  enlargeStrategy:
+                                      CenterPageEnlargeStrategy.height,
                                 ),
-                              )
-                            : SizedBox(
-                                child: Image.asset(
-                                    "assets/images/Designer(1).png",
-                                    fit: BoxFit.cover),
-                              );
-                      }
-                      return const SizedBox();
+                                items: userProject.imagesProject!
+                                    .map((item) => Center(
+                                        child: Image.network(item.url,
+                                            fit: BoxFit.cover, width: 1000)))
+                                    .toList(),
+                              ),
+                            )
+                          : SizedBox(
+                              child: Image.asset(
+                                  "assets/images/Designer(1).png",
+                                  fit: BoxFit.cover),
+                            );
                     }),
                     const SizedBox(
                       height: 30,
@@ -214,149 +208,154 @@ class ProjectScreen extends StatelessWidget {
                             )
                           : const SizedBox(),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              BlocBuilder<ProjectCubit, ProjectState>(
-                                builder: (context, state) {
-                                  if (state is SuccessState ||
-                                      state is ProjectInitial ||
-                                      state is FailedState) {
-                                    return Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          maxLines: 1,
-                                          userProject.projectName ?? "Name:TBD",
-                                          style: TextStyle(
-                                              color: color.primaryColor,
-                                              fontSize: 20),
-                                        ),
-                                        Text(
-                                          maxLines: 1,
-                                          userProject.bootcampName ??
-                                              "BootCamp:TBD",
-                                          style: TextStyle(
-                                              color: color.primaryColor,
-                                              fontSize: 10),
-                                        ),
-                                      ],
-                                    );
-                                  }
-
-                                  return const SizedBox();
-                                },
-                              ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
+                    BlocBuilder<ProjectCubit, ProjectState>(
+                      builder: (context, state) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Icon(
-                                    Icons.circle_outlined,
-                                    size: 15,
-                                    color: color.secondaryColor,
+                                  Row(
+                                    children: [
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            maxLines: 1,
+                                            userProject.projectName ??
+                                                "Name:TBD",
+                                            style: TextStyle(
+                                                color: color.primaryColor,
+                                                fontSize: 20),
+                                          ),
+                                          Text(
+                                            maxLines: 1,
+                                            userProject.bootcampName ??
+                                                "BootCamp:TBD",
+                                            style: TextStyle(
+                                                color: color.primaryColor,
+                                                fontSize: 10),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "Start Date: ",
-                                    style: TextStyle(
-                                        color: color.secondaryColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Text(
-                                    userProject.startDate ?? "TBD",
-                                    style: TextStyle(
-                                        color: color.secondaryColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.circle_outlined,
+                                            size: 15,
+                                            color: color.secondaryColor,
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            "Start Date: ",
+                                            style: TextStyle(
+                                                color: color.secondaryColor,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          Text(
+                                            userProject.startDate ?? "TBD",
+                                            style: TextStyle(
+                                                color: color.secondaryColor,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.circle_outlined,
+                                            size: 15,
+                                            color: color.secondaryColor,
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            "End Date: ",
+                                            style: TextStyle(
+                                                color: color.secondaryColor,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          Text(userProject.endDate ?? "TBD",
+                                              style: TextStyle(
+                                                  color: color.secondaryColor,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500)),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.circle_outlined,
+                                            size: 15,
+                                            color: color.secondaryColor,
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            "Presintation Date: ",
+                                            style: TextStyle(
+                                                color: color.secondaryColor,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          Text(
+                                              userProject.presentationDate ??
+                                                  "TBD",
+                                              style: TextStyle(
+                                                  color: color.secondaryColor,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500)),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                              const SizedBox(
-                                height: 10,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                maxLines: 20,
+                                userProject.projectDescription ??
+                                    "projectDescription: TBD",
+                                style: TextStyle(
+                                    color: color.txtBlack45Color, fontSize: 14),
                               ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.circle_outlined,
-                                    size: 15,
-                                    color: color.secondaryColor,
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "End Date: ",
-                                    style: TextStyle(
-                                        color: color.secondaryColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Text(userProject.endDate ?? "TBD",
-                                      style: TextStyle(
-                                          color: color.secondaryColor,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500)),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.circle_outlined,
-                                    size: 15,
-                                    color: color.secondaryColor,
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "Presintation Date: ",
-                                    style: TextStyle(
-                                        color: color.secondaryColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Text(userProject.presentationDate ?? "TBD",
-                                      style: TextStyle(
-                                          color: color.secondaryColor,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500)),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        maxLines: 20,
-                        userProject.projectDescription ??
-                            "projectDescription: TBD",
-                        style: TextStyle(
-                            color: color.txtBlack45Color, fontSize: 14),
-                      ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                     Container(
                         padding: const EdgeInsets.all(8),
@@ -380,38 +379,33 @@ class ProjectScreen extends StatelessWidget {
                             color: color.txtwhiteColor,
                             child: BlocBuilder<ProjectCubit, ProjectState>(
                               builder: (context, state) {
-                                if (state is SuccessState ||
-                                    state is ProjectInitial ||
-                                    state is FailedState) {
-                                  return ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          userProject.membersProject?.length,
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            _dialogBuilder(
-                                                context: context,
-                                                member: userProject
-                                                    .membersProject![index]);
-                                          },
-                                          child: SizedBox(
-                                            width: context.getWidth(value: 0.5),
-                                            child: CustomListTile(
-                                              title: userProject
-                                                  .membersProject![index]
-                                                  .firstName
-                                                  .toString(),
-                                              description: userProject
-                                                  .membersProject![index]
-                                                  .position,
-                                              color: color,
-                                            ),
+                                return ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount:
+                                        userProject.membersProject?.length,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          _dialogBuilder(
+                                              context: context,
+                                              member: userProject
+                                                  .membersProject![index]);
+                                        },
+                                        child: SizedBox(
+                                          width: context.getWidth(value: 0.5),
+                                          child: CustomListTile(
+                                            title: userProject
+                                                .membersProject![index]
+                                                .firstName
+                                                .toString(),
+                                            description: userProject
+                                                .membersProject![index]
+                                                .position,
+                                            color: color,
                                           ),
-                                        );
-                                      });
-                                }
-                                return const SizedBox();
+                                        ),
+                                      );
+                                    });
                               },
                             ),
                           ),
@@ -465,28 +459,23 @@ class ProjectScreen extends StatelessWidget {
                             height: 100,
                             child: BlocBuilder<ProjectCubit, ProjectState>(
                               builder: (context, state) {
-                                if (state is SuccessState ||
-                                    state is ProjectInitial ||
-                                    state is FailedState) {
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: List.generate(
-                                      userProject.linksProject?.length ?? 0,
-                                      (index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: CustomUrlIcon(
-                                              url: userProject
-                                                  .linksProject![index].url,
-                                              img: getLogo(userProject
-                                                  .linksProject![index].type),
-                                              width: 25),
-                                        );
-                                      },
-                                    ),
-                                  );
-                                }
-                                return const SizedBox();
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: List.generate(
+                                    userProject.linksProject?.length ?? 0,
+                                    (index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: CustomUrlIcon(
+                                            url: userProject
+                                                .linksProject![index].url,
+                                            img: getLogo(userProject
+                                                .linksProject![index].type),
+                                            width: 25),
+                                      );
+                                    },
+                                  ),
+                                );
                               },
                             ),
                           ),
@@ -522,26 +511,21 @@ class ProjectScreen extends StatelessWidget {
                                 userProject.presentationUrl != ""
                             ? BlocBuilder<ProjectCubit, ProjectState>(
                                 builder: (context, state) {
-                                  if (state is SuccessState ||
-                                      state is ProjectInitial ||
-                                      state is FailedState) {
-                                    return Center(
-                                      child: CustomElevatedBTN(
-                                        text: "Open Persentation file",
-                                        color: color,
-                                        onPressed: () {
-                                          try {
-                                            launchStringUrl(userProject
-                                                .presentationUrl
-                                                .toString());
-                                          } catch (e) {
-                                            log(e.toString());
-                                          }
-                                        },
-                                      ),
-                                    );
-                                  }
-                                  return const SizedBox();
+                                  return Center(
+                                    child: CustomElevatedBTN(
+                                      text: "Open Persentation file",
+                                      color: color,
+                                      onPressed: () {
+                                        try {
+                                          launchStringUrl(userProject
+                                              .presentationUrl
+                                              .toString());
+                                        } catch (e) {
+                                          log(e.toString());
+                                        }
+                                      },
+                                    ),
+                                  );
                                 },
                               )
                             : const SizedBox(),

@@ -21,10 +21,10 @@ class InitProjectCubit extends Cubit<InitProjectState> {
   bool edit = true;
   bool rate = true;
   bool isPublic = true;
-  late String editDate = "";
-  late String startDate = "";
-  late String endDate = "";
-  late String presDate = "";
+  String editDate = "";
+  String startDate = "";
+  String endDate = "";
+  String presDate = "";
   final userDataLayer = GetIt.I.get<UserDataLayer>();
   final List<String> options = [
     'app',
@@ -85,6 +85,7 @@ class InitProjectCubit extends Cubit<InitProjectState> {
         newProject.startDate = startDate;
         newProject.endDate = endDate;
         newProject.presentationDate = presDate;
+        newProject.timeEndEdit = editDate;
 
         if (response.statusCode == 200) {
           emit(NotificationSteps(msg: "The first step is done"));

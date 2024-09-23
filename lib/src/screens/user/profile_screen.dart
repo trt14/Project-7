@@ -62,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
                     color: color,
                     context: context,
                     title: "Update was sucess :)",
-                    colorStatus: color.uncompletedColor);
+                    colorStatus: color.completedColor);
               }
               if (state is LogoutState) {
                 Navigator.pushAndRemoveUntil(
