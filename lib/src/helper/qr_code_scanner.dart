@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:project_7/src/screens/review/review_screen.dart';
 
 class QrCodeScanner extends StatelessWidget {
   QrCodeScanner({super.key});
@@ -16,14 +17,15 @@ class QrCodeScanner extends StatelessWidget {
           final barcode = barcodes.first;
 
           if (barcode.rawValue != null) {
-            await controller
-                .stop()
-                .then((value) => controller.dispose())
-                .then((value) => Navigator.of(context).pop(barcode.rawValue));
+            await controller.stop().then((value) => controller.dispose()).then(
+                (value) => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReviewScreen(
+                            projectId: barcode.rawValue.toString()))));
           }
         },
       ),
     );
   }
 }
-  

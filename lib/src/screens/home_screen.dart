@@ -9,7 +9,7 @@ import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
 import 'package:project_7/src/screens/project/init_project.dart';
-import 'package:project_7/src/screens/review/review.dart';
+import 'package:project_7/src/screens/review/review_screen.dart';
 import 'package:project_7/src/screens/user/profile_screen.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
 import 'package:project_7/src/widgits/custom_list_tile.dart';
@@ -64,10 +64,6 @@ class HomeScreen extends StatelessWidget {
                         );
 
                         log("this message in home screen $result");
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Review(projectId: result,)));
                       } catch (e) {
                         log(e.toString());
                       }
