@@ -15,3 +15,15 @@ final class FailedState extends ProjectState {
 }
 
 final class ShowDateState extends ProjectState {}
+
+final class ShowDetailsToUpdateState extends ProjectState {}
+
+final class NotificationSteps extends ProjectState {
+  final String msg;
+  NotificationSteps({required this.msg});
+}
+
+final class ChangeStatus extends ProjectState {
+  final bool isTrue;
+  ChangeStatus({required this.isTrue});
+}

@@ -16,6 +16,7 @@ import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/models/project/member_project_model.dart';
 import 'package:project_7/src/models/project/project_model.dart';
+import 'package:project_7/src/screens/project/edit_project_screen.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_list_tile.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -79,114 +80,11 @@ class ProjectScreen extends StatelessWidget {
                 actions: [
                   IconButton(
                     onPressed: () {
-                      showModalBottomSheet<void>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Container(
-                            height: context.getHeight(value: 0.5),
-                            color: color.bgColor,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Text(
-                                    "Edit Project",
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                  CustomTextField(
-                                    title: "Project Name",
-                                    color: color,
-                                    controller:
-                                        projectCubit.editProjectNameController,
-                                  ),
-                                  CustomTextField(
-                                    title: "Project Description",
-                                    color: color,
-                                    controller:
-                                        projectCubit.editProjectDescrController,
-                                  ),
-                                  projectCubit.userDataLayer.user!.role !=
-                                          "user"
-                                      ? Row(
-                                          children: [
-                                            TextButton(
-                                                onPressed: () async {
-                                                  DateTime? newDate =
-                                                      await showDatePicker(
-                                                    context: context,
-                                                    initialDate:
-                                                        initialStartDate,
-                                                    firstDate: initialStartDate,
-                                                    lastDate: DateTime.now()
-                                                        .add(const Duration(
-                                                            days: 365 * 5)),
-                                                  );
-                                                  if (newDate != null) {
-                                                    userProject.startDate =
-                                                        DateFormat('yyyy-MM-dd')
-                                                            .format(newDate);
-                                                    log("date :${userProject.startDate}");
-                                                  }
-                                                },
-                                                child:
-                                                    const Text("Start Date")),
-                                            TextButton(
-                                                onPressed: () async {
-                                                  DateTime? newDate =
-                                                      await showDatePicker(
-                                                    context: context,
-                                                    initialDate: initialEndDate,
-                                                    firstDate: initialEndDate,
-                                                    lastDate: DateTime.now()
-                                                        .add(const Duration(
-                                                            days: 365 * 5)),
-                                                  );
-                                                  if (newDate != null) {
-                                                    userProject.endDate =
-                                                        DateFormat('yyyy-MM-dd')
-                                                            .format(newDate);
-                                                    log("date :${userProject.endDate}");
-                                                  }
-                                                },
-                                                child: const Text("End Date")),
-                                            TextButton(
-                                                onPressed: () async {
-                                                  DateTime? newDate =
-                                                      await showDatePicker(
-                                                    context: context,
-                                                    initialDate:
-                                                        initialPresDate,
-                                                    firstDate: initialPresDate,
-                                                    lastDate: DateTime.now()
-                                                        .add(const Duration(
-                                                            days: 365 * 5)),
-                                                  );
-                                                  if (newDate != null) {
-                                                    userProject
-                                                            .presentationDate =
-                                                        DateFormat('yyyy-MM-dd')
-                                                            .format(newDate);
-                                                    log("date :${userProject.presentationDate}");
-                                                  }
-                                                },
-                                                child: const Text(
-                                                    "Preseintation Date")),
-                                          ],
-                                        )
-                                      : const SizedBox(),
-                                  ElevatedButton(
-                                      child: const Text('Edit'),
-                                      onPressed: () async {
-                                        userProject = await projectCubit
-                                            .editProjectNameAndDescription(
-                                                project: userProject);
-                                      }),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                EditProjectScreen(userProject: userProject)),
                       );
                     },
                     icon: Icon(

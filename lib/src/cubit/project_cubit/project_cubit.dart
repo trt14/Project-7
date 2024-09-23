@@ -26,15 +26,28 @@ class ProjectCubit extends Cubit<ProjectState> {
   TextEditingController urlController = TextEditingController();
   TextEditingController editProjectNameController = TextEditingController();
   TextEditingController editProjectDescrController = TextEditingController();
+  TextEditingController editProjectBootcampController = TextEditingController();
+  TextEditingController editProjectTypeController = TextEditingController();
+  bool edit = true;
+  bool rate = true;
+  bool isPublic = true;
+
   late String editDate = "";
   late String startDate = "";
   late String endDate = "";
   late String presDate = "";
 
   ProjectCubit() : super(ProjectInitial());
+  void toggleSwitch(bool value) {
+    emit(ChangeStatus(isTrue: value));
+  }
 
-  void showDate() {
+  showDate() {
     emit(ShowDateState());
+  }
+
+  showDetails() {
+    emit(ShowDetailsToUpdateState());
   }
 
   addMemberEvent({required ProjectModel project}) async {
@@ -93,6 +106,15 @@ class ProjectCubit extends Cubit<ProjectState> {
       log("Iam at editProject");
       project.projectName = editProjectNameController.text;
       project.projectDescription = editProjectDescrController.text;
+      project.bootcampName = editProjectBootcampController.text;
+      project.type = editProjectTypeController.text;
+      project.startDate = startDate;
+      project.endDate = endDate;
+      project.presentationDate = presDate;
+      project.timeEndEdit = editDate;
+      project.isPublic = isPublic;
+      project.allowEdit = edit;
+      project.allowRating = rate;
 
       print(project.toJson());
 
