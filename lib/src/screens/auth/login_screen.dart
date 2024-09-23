@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/cubit/login_cubit/login_cubit.dart';
 import 'package:project_7/src/screens/auth/otp_screen.dart';
@@ -12,6 +13,8 @@ import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+// Done SnackBar
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -36,8 +39,11 @@ class LoginScreen extends StatelessWidget {
 
             if (state is FailedState) {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error.toString())));
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: state.error.toString(),
+                  colorStatus: color.uncompletedColor);
             }
             if (state is SuccessState) {
               Navigator.pop(context);
@@ -109,10 +115,12 @@ class LoginScreen extends StatelessWidget {
                                 email: emailController.text.trim());
                           } catch (e) {
                             if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          "Error acorde/nmake sure have internet connection")));
+                              showAlertSnackBar(
+                                  color: color,
+                                  context: context,
+                                  title:
+                                      "Error acorde/nmake sure have internet connection",
+                                  colorStatus: color.uncompletedColor);
                             }
                           }
                         } else {
@@ -127,9 +135,11 @@ class LoginScreen extends StatelessWidget {
                         }
                       } else {
                         if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Login feild is required")));
+                          showAlertSnackBar(
+                              color: color,
+                              context: context,
+                              title: "Login feild is required",
+                              colorStatus: color.uncompletedColor);
                         }
                       }
                     }),

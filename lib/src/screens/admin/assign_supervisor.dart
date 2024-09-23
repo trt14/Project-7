@@ -3,16 +3,20 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/assing_supervisor_cubit/assgin_supervisor_cubit.dart';
+import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/qr_code_scanner.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
+import 'package:project_7/src/helper/colors.dart';
 
 class AssignSupervisor extends StatelessWidget {
   const AssignSupervisor({super.key});
   @override
   Widget build(BuildContext context) {
+    Color color = Colors.black;
+
     return BlocProvider(
       create: (context) => AssginSupervisorCubit(),
       child: Builder(builder: (context) {
@@ -29,14 +33,19 @@ class AssignSupervisor extends StatelessWidget {
 
             if (state is FailedState) {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error.toString())));
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: state.error.toString(),
+                  colorStatus: color.uncompletedColor);
             }
             if (state is SuccessState) {
               Navigator.pop(context);
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("change role was sucess")));
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: "change role was sucess :)",
+                  colorStatus: color.uncompletedColor);
             }
           },
           child: Scaffold(
@@ -115,10 +124,11 @@ class AssignSupervisor extends StatelessWidget {
                                   assingCubit.idController.text.isNotEmpty) {
                                 await assingCubit.updateRole(index: value!);
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            "the id and role is required")));
+                                showAlertSnackBar(
+                                    color: color,
+                                    context: context,
+                                    title: "the id and role is required",
+                                    colorStatus: color.uncompletedColor);
                               }
                             } catch (e) {
                               log(e.toString());

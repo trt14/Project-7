@@ -4,6 +4,8 @@ import 'package:project_7/src/models/project/project_model.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
 
+
+
 class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key, required this.result});
   final List<ProjectModel> result;

@@ -12,6 +12,8 @@ import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:project_7/src/widgits/highlights.dart';
 
+// Done Snackbar
+
 class PublicScreen extends StatelessWidget {
   const PublicScreen({super.key});
   @override

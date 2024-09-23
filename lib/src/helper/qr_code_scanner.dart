@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:project_7/src/screens/admin/assign_supervisor.dart';
 import 'package:project_7/src/screens/review/review_screen.dart';
 
 class QrCodeScanner extends StatelessWidget {
@@ -31,7 +30,8 @@ class QrCodeScanner extends StatelessWidget {
               await controller
                   .stop()
                   .then((value) => controller.dispose())
-                  .then((value) => Navigator.of(context).pop(barcode.rawValue.toString()));
+                  .then((value) =>
+                      Navigator.of(context).pop(barcode.rawValue.toString()));
             }
           }
         },
