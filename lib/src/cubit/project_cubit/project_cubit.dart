@@ -46,10 +46,6 @@ class ProjectCubit extends Cubit<ProjectState> {
     emit(ShowDateState());
   }
 
-  showDetails() {
-    emit(ShowDetailsToUpdateState());
-  }
-
   addMemberEvent({required ProjectModel project}) async {
     await Future.delayed(Duration.zero);
 
@@ -224,6 +220,27 @@ class ProjectCubit extends Cubit<ProjectState> {
       log("befire emit faildstate");
 
       final error = exeprion.toString().replaceAll("FormatException: ", "");
+      emit(FailedState(error: error));
+    }
+  }
+
+  Future deleteProject({required ProjectModel project}) async {
+    emit(LoadingState());
+    log("I am at delete project");
+    try {
+      await api.deleteProject(
+          project: project, token: userDataLayer.auth!.token!);
+      userDataLayer.user =
+          await api.getUserProfile(token: userDataLayer.auth!.token!);
+
+      emit(SuccessState());
+      log("success");
+    } catch (e) {
+      log("iam at catch");
+      log(e.toString());
+      log("befire emit faildstate");
+
+      final error = e.toString().replaceAll("FormatException: ", "");
       emit(FailedState(error: error));
     }
   }

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:project_7/src/cubit/project_cubit/project_cubit.dart';
 import 'package:project_7/src/helper/check_logo_type.dart';
 import 'package:project_7/src/helper/colors.dart';
@@ -32,12 +31,6 @@ class ProjectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color color = Colors.black;
-    DateTime initialStartDate =
-        DateTime.parse(userProject.startDate ?? DateTime.now().toString());
-    DateTime initialEndDate =
-        DateTime.parse(userProject.endDate ?? DateTime.now().toString());
-    DateTime initialPresDate = DateTime.parse(userProject.presentationDate ??
-        DateTime.now().toString()); // Convert string to DateTime
 
     return SafeArea(
       bottom: false,
@@ -78,6 +71,15 @@ class ProjectScreen extends StatelessWidget {
                 backgroundColor: color.secondaryColor,
                 automaticallyImplyLeading: false,
                 actions: [
+                  IconButton(
+                    onPressed: () {
+                      projectCubit.deleteProject(project: userProject);
+                    },
+                    icon: Icon(
+                      Icons.remove,
+                      color: color.txtwhiteColor,
+                    ),
+                  ),
                   IconButton(
                     onPressed: () {
                       Navigator.push(

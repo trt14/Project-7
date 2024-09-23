@@ -237,4 +237,29 @@ mixin ProjectMethodApi on ConstantNetworking {
       throw const FormatException("~there error with API");
     }
   }
+
+  Future deleteProject(
+      {required ProjectModel project, required String token}) async {
+    if (kDebugMode) {
+      log("Iam at delete project api");
+    }
+    try {
+      final url = "$baseURL$deleteProjectEndPoint/${project.projectId}";
+      print(url);
+      final response = await dio.delete(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      if (response.statusCode == 200) return response;
+    } on DioException catch (error) {
+      throw FormatException(error.response?.data["data"]);
+    } catch (error) {
+      log(error.toString());
+      throw const FormatException("~there error with API");
+    }
+  }
 }

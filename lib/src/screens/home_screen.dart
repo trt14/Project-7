@@ -168,6 +168,9 @@ class HomeScreen extends StatelessWidget {
                             children: List.generate(homeCubit.projects.length,
                                 (index) {
                               return InkWell(
+                                onLongPress: (){
+                                  
+                                },
                                 onTap: () {
                                   Navigator.push(
                                     context,
