@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:project_7/src/cubit/init_project/init_project_cubit.dart';
 import 'package:project_7/src/helper/colors.dart';
+import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/models/project/init_project_model.dart';
 import 'package:project_7/src/screens/home_screen.dart';
@@ -300,19 +301,18 @@ class InitProject extends StatelessWidget {
                             DateTime.parse(initProjectCubit.presDate);
 
                         if (endDateAsDate.isBefore(startDateAsDate)) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text(
-                                "The start date should be before end date"),
-                            backgroundColor: Colors.red,
-                          ));
+                          showAlertSnackBar(
+                              color: color,
+                              context: context,
+                              title: "The start date should be before end date",
+                              colorStatus: color.uncompletedColor);
                         } else if (preDateAsDate.isBefore(endDateAsDate)) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text(
-                                "The presintation date should be after end date"),
-                            backgroundColor: Colors.red,
-                          ));
+                          showAlertSnackBar(
+                              color: color,
+                              context: context,
+                              title:
+                                  "The presintation date should be after end date",
+                              colorStatus: color.uncompletedColor);
                         } else {
                           initProjectCubit.initProjectEvetn(
                               project: InitProjectModel(
