@@ -11,9 +11,7 @@ part 'public_state.dart';
 
 class PublicCubit extends Cubit<PublicState> {
   final projectDataLayer = GetIt.I.get<ProjectDataLayer>();
-  List<ProjectModel> publicProject =
-      GetIt.I.get<ProjectDataLayer>().publicProjects ?? [];
-  List<ProjectModel> publicProjectFillterd = [];
+
   Set<String> bootCamp = GetIt.I.get<ProjectDataLayer>().bootCamp;
   Set<String> type = GetIt.I.get<ProjectDataLayer>().type;
 
@@ -26,16 +24,18 @@ class PublicCubit extends Cubit<PublicState> {
     if (value != null) {
       log("Filtering by specific type ${bootCamp.elementAt(value).toString()}");
 
-      publicProjectFillterd = publicProject.where((element) {
+      GetIt.I.get<ProjectDataLayer>().publicProjectFillterd =
+          GetIt.I.get<ProjectDataLayer>().publicProjects.where((element) {
         return element.bootcampName.toString() ==
             bootCamp.elementAt(value).toString();
       }).toList();
     } else {
       log("No filter applied, showing all projects");
-      publicProjectFillterd = List.from(publicProject);
+      GetIt.I.get<ProjectDataLayer>().publicProjectFillterd =
+          List.from(GetIt.I.get<ProjectDataLayer>().publicProjects);
     }
 
-    for (var project in publicProjectFillterd) {
+    for (var project in GetIt.I.get<ProjectDataLayer>().publicProjectFillterd) {
       log(project.projectName.toString());
     }
 
@@ -43,19 +43,36 @@ class PublicCubit extends Cubit<PublicState> {
   }
 
   Future loadPublicProject() async {
-    emit(LoadingState());
     await Future.delayed(const Duration(seconds: 3));
-    try {
-      publicProject = await api.loadPublicProject();
-      log("success");
-      if (publicProject.isNotEmpty) {
-        publicProject
-            .map((e) => bootCamp.add(e.bootcampName.toString()))
-            .toList();
 
-        publicProject.map((e) => type.add(e.type.toString())).toList();
+    emit(LoadingState());
+    try {
+      log("check if public storage is empty");
+      print(GetIt.I.get<ProjectDataLayer>().publicProjects.isEmpty.toString());
+      log(GetIt.I.get<ProjectDataLayer>().publicProjects.isEmpty.toString());
+
+      if (GetIt.I.get<ProjectDataLayer>().publicProjects.isEmpty) {
+        log("iam will load data from api");
+        GetIt.I.get<ProjectDataLayer>().publicProjects =
+            await api.loadPublicProject();
+        log("success");
+        if (GetIt.I.get<ProjectDataLayer>().publicProjects.isNotEmpty) {
+          GetIt.I
+              .get<ProjectDataLayer>()
+              .publicProjects
+              .map((e) => bootCamp.add(e.bootcampName.toString()))
+              .toList();
+
+          GetIt.I
+              .get<ProjectDataLayer>()
+              .publicProjects
+              .map((e) => type.add(e.type.toString()))
+              .toList();
+        }
+
+        GetIt.I.get<ProjectDataLayer>().publicProjectFillterd =
+            List.from(GetIt.I.get<ProjectDataLayer>().publicProjects);
       }
-      publicProjectFillterd = List.from(publicProject);
       emit(SuccessState());
     } catch (exeprion) {
       log("iam at catch");
