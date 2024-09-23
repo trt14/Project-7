@@ -6,89 +6,127 @@ import 'package:project_7/src/cubit/assing_supervisor_cubit/assgin_supervisor_cu
 import 'package:project_7/src/helper/qr_code_scanner.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
+import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
 
 class AssignSupervisor extends StatelessWidget {
   const AssignSupervisor({super.key});
   @override
   Widget build(BuildContext context) {
-    TextEditingController idController = TextEditingController();
     return BlocProvider(
       create: (context) => AssginSupervisorCubit(),
       child: Builder(builder: (context) {
         final assingCubit = context.read<AssginSupervisorCubit>();
         int? value;
-        return Scaffold(
-          body: SafeArea(
-            bottom: false,
-            child: Center(
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: context.getWidth(value: .8),
-                            child: CustomTextField(
-                              title: "userId",
-                              color: Colors.white,
-                              controller: idController,
+        return BlocListener<AssginSupervisorCubit, AssginSupervisorState>(
+          listener: (context, state) {
+            if (state is LoadingState) {
+              showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) =>
+                      SizedBox(child: customLoading(context)));
+            }
+
+            if (state is FailedState) {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.error.toString())));
+            }
+            if (state is SuccessState) {
+              Navigator.pop(context);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("change role was sucess")));
+            }
+          },
+          child: Scaffold(
+            body: SafeArea(
+              bottom: false,
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: context.getWidth(value: .8),
+                              child: CustomTextField(
+                                title: "userId",
+                                color: Colors.white,
+                                controller: assingCubit.idController,
+                              ),
                             ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.camera),
-                            onPressed: () async {
-                              try {
-                                idController.text = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => QrCodeScanner(
-                                      nav: 1,
-                                    ),
-                                  ),
-                                );
-                              } catch (e) {
-                                log(e.toString());
-                              }
-                            },
-                          )
-                        ],
-                      ),
-                      BlocBuilder<AssginSupervisorCubit, AssginSupervisorState>(
-                        builder: (context, state) {
-                          return SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                Row(
-                                  children: List.generate(
-                                      assingCubit.role.length, (int index) {
-                                    return Container(
-                                      margin: const EdgeInsets.all(19),
-                                      child: ChoiceChip(
-                                        checkmarkColor: Colors.red,
-                                        label: Text(assingCubit.role[index]),
-                                        selected: value == index,
-                                        onSelected: (bool selected) async {
-                                          value = selected ? index : null;
-                                          await assingCubit.selectRole();
-                                        },
+                            IconButton(
+                              icon: const Icon(Icons.camera),
+                              onPressed: () async {
+                                try {
+                                  assingCubit.idController.text =
+                                      await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => QrCodeScanner(
+                                        nav: 1,
                                       ),
-                                    );
-                                  }),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                      CustomElevatedBTN(
-                        text: "Assign",
-                        color: Colors.black,
-                        onPressed: () {},
-                      )
-                    ],
+                                    ),
+                                  );
+                                } catch (e) {
+                                  log(e.toString());
+                                }
+                              },
+                            )
+                          ],
+                        ),
+                        BlocBuilder<AssginSupervisorCubit,
+                            AssginSupervisorState>(
+                          builder: (context, state) {
+                            return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  Row(
+                                    children: List.generate(
+                                        assingCubit.role.length, (int index) {
+                                      return Container(
+                                        margin: const EdgeInsets.all(19),
+                                        child: ChoiceChip(
+                                          checkmarkColor: Colors.red,
+                                          label: Text(assingCubit.role[index]),
+                                          selected: value == index,
+                                          onSelected: (bool selected) async {
+                                            value = selected ? index : null;
+                                            await assingCubit.selectRole();
+                                          },
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        CustomElevatedBTN(
+                          text: "Assign",
+                          color: Colors.black,
+                          onPressed: () async {
+                            try {
+                              if (value != null &&
+                                  assingCubit.idController.text.isNotEmpty) {
+                                await assingCubit.updateRole(index: value!);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "the id and role is required")));
+                              }
+                            } catch (e) {
+                              log(e.toString());
+                            }
+                          },
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -99,40 +137,3 @@ class AssignSupervisor extends StatelessWidget {
     );
   }
 }
-
-/*
-               Container(
-                            margin: const EdgeInsets.all(19),
-                            child: ChoiceChip(
-                              checkmarkColor: Colors.red,
-                              label: const Text("user"),
-                              selected: true,
-                              onSelected: (bool selected) async {
-                                // value = selected ? index : null;
-                              },
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.all(19),
-                            child: ChoiceChip(
-                              checkmarkColor: Colors.red,
-                              label: const Text("Supervior"),
-                              selected: true,
-                              onSelected: (bool selected) async {
-                                // value = selected ? index : null;
-                              },
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.all(19),
-                            child: ChoiceChip(
-                              checkmarkColor: Colors.red,
-                              label: const Text("Admin"),
-                              selected: true,
-                              onSelected: (bool selected) async {
-                                // value = selected ? index : null;
-                              },
-                            ),
-                          ),
-
-*/
