@@ -17,12 +17,21 @@ dataFromator(ProjectModel project) {
   String newEndedDate = DateFormat('dd/MM/yyyy').format(endDateTime);
   project.endDate = newEndedDate;
 
+  // end time edit date
+  String? editTimeEdit = project.timeEndEdit;
+
+  DateTime editTimeEditTime = DateTime.parse(editTimeEdit!);
+
+  String newEndEditTime = DateFormat('dd/MM/yyyy').format(editTimeEditTime);
+  project.timeEndEdit = newEndEditTime;
+
   //persentaion date
   String? persentation = project.presentationDate;
   DateTime persentationDate = DateTime.parse(persentation!);
   String newPersentationDate =
       DateFormat('dd/MM/yyyy').format(persentationDate);
   project.presentationDate = newPersentationDate;
+  print(project.toJson());
   return project;
 }
 

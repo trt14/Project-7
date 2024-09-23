@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:project_7/src/cubit/init_project/init_project_cubit.dart';
 import 'package:project_7/src/helper/colors.dart';
+import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/models/project/init_project_model.dart';
+import 'package:project_7/src/screens/home_screen.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
@@ -20,12 +22,7 @@ class InitProject extends StatelessWidget {
       create: (context) => InitProjectCubit(),
       child: Builder(builder: (context) {
         Color color = Colors.black;
-        String? editDate;
-        String? startDate;
-        String? endDate;
-        String? presDate;
 
-        bool edit = true;
         final initProjectCubit = context.read<InitProjectCubit>();
         return BlocListener<InitProjectCubit, InitProjectState>(
           listener: (context, state) {
@@ -41,10 +38,20 @@ class InitProject extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.error.toString())));
             }
-            if (state is SuccessState) {
+
+            if (state is NotificationSteps) {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("init project was success")));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.msg),
+                backgroundColor: Colors.green,
+              ));
+            }
+
+            if (state is SuccessState) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              );
             }
           },
           child: Scaffold(
@@ -87,54 +94,93 @@ class InitProject extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      TextButton(
-                          onPressed: () async {
-                            DateTime? newDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime.now()
-                                  .add(const Duration(days: 365 * 5)),
-                            );
-                            if (newDate != null) {
-                              startDate =
-                                  DateFormat('dd/MM/yyyy').format(newDate);
-                              log("date :$startDate");
-                            }
-                          },
-                          child: const Text("Start Date")),
-                      TextButton(
-                          onPressed: () async {
-                            DateTime? newDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime.now()
-                                  .add(const Duration(days: 365 * 5)),
-                            );
-                            if (newDate != null) {
-                              endDate =
-                                  DateFormat('dd/MM/yyyy').format(newDate);
-                              log("date :$endDate");
-                            }
-                          },
-                          child: const Text("End Date")),
-                      TextButton(
-                          onPressed: () async {
-                            DateTime? newDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime.now()
-                                  .add(const Duration(days: 365 * 5)),
-                            );
-                            if (newDate != null) {
-                              presDate =
-                                  DateFormat('dd/MM/yyyy').format(newDate);
-                              log("date :$presDate");
-                            }
-                          },
-                          child: const Text("Presintation Date")),
+                      Column(
+                        children: [
+                          BlocBuilder<InitProjectCubit, InitProjectState>(
+                            builder: (context, state) {
+                              if (state is ShowDateState) {
+                                return Text(initProjectCubit.startDate);
+                              }
+                              return const Text("");
+                            },
+                          ),
+                          TextButton(
+                              onPressed: () async {
+                                DateTime? newDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime.now()
+                                      .add(const Duration(days: 365 * 5)),
+                                );
+                                if (newDate != null) {
+                                  initProjectCubit.startDate =
+                                      DateFormat('yyyy-MM-dd').format(newDate);
+                                  log("date :${initProjectCubit.startDate}");
+                                  initProjectCubit.showDate();
+                                }
+                              },
+                              child: const Text("Start Date")),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          BlocBuilder<InitProjectCubit, InitProjectState>(
+                            builder: (context, state) {
+                              if (state is ShowDateState) {
+                                return Text(initProjectCubit.endDate);
+                              }
+                              return const Text("");
+                            },
+                          ),
+                          TextButton(
+                              onPressed: () async {
+                                DateTime? newDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime.now()
+                                      .add(const Duration(days: 365 * 5)),
+                                );
+                                if (newDate != null) {
+                                  initProjectCubit.endDate =
+                                      DateFormat('yyyy-MM-dd').format(newDate);
+                                  log("date :${initProjectCubit.endDate}");
+                                  initProjectCubit.showDate();
+                                }
+                              },
+                              child: const Text("End Date")),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          BlocBuilder<InitProjectCubit, InitProjectState>(
+                            builder: (context, state) {
+                              if (state is ShowDateState) {
+                                return Text(initProjectCubit.presDate);
+                              }
+                              return const Text("");
+                            },
+                          ),
+                          TextButton(
+                              onPressed: () async {
+                                DateTime? newDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime.now()
+                                      .add(const Duration(days: 365 * 5)),
+                                );
+                                if (newDate != null) {
+                                  initProjectCubit.presDate =
+                                      DateFormat('yyyy-MM-dd').format(newDate);
+                                  log("date :${initProjectCubit.presDate}");
+                                  initProjectCubit.showDate();
+                                }
+                              },
+                              child: const Text("Presintation Date")),
+                        ],
+                      ),
                     ],
                   ),
                   Padding(
@@ -142,35 +188,104 @@ class InitProject extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text("Allow memeber to Edit:"),
+                        const Text("Allow user to Edit:"),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Switch(
-                              value: edit,
-                              onChanged: (bool value) {
-                                edit = value;
-                              }),
+                          child:
+                              BlocBuilder<InitProjectCubit, InitProjectState>(
+                            builder: (context, state) {
+                              return Switch(
+                                  value: initProjectCubit.edit,
+                                  onChanged: (bool value) {
+                                    initProjectCubit.edit = value;
+                                    initProjectCubit
+                                        .toggleSwitch(initProjectCubit.edit);
+                                  });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Allow user to Rating:"),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child:
+                              BlocBuilder<InitProjectCubit, InitProjectState>(
+                            builder: (context, state) {
+                              return Switch(
+                                  value: initProjectCubit.rate,
+                                  onChanged: (bool value) {
+                                    initProjectCubit.rate = value;
+                                    initProjectCubit
+                                        .toggleSwitch(initProjectCubit.rate);
+                                  });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Public :"),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child:
+                              BlocBuilder<InitProjectCubit, InitProjectState>(
+                            builder: (context, state) {
+                              return Switch(
+                                  value: initProjectCubit.isPublic,
+                                  onChanged: (bool value) {
+                                    initProjectCubit.isPublic = value;
+                                    initProjectCubit.toggleSwitch(
+                                        initProjectCubit.isPublic);
+                                  });
+                            },
+                          ),
                         ),
                       ],
                     ),
                   ),
                   Align(
                     alignment: Alignment.center,
-                    child: TextButton(
-                        onPressed: () async {
-                          DateTime? newDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime.now()
-                                .add(const Duration(days: 365 * 5)),
-                          );
-                          if (newDate != null) {
-                            editDate = DateFormat('dd/MM/yyyy').format(newDate);
-                            log("date :$editDate");
-                          }
-                        },
-                        child: const Text("End edit of edit")),
+                    child: Column(
+                      children: [
+                        BlocBuilder<InitProjectCubit, InitProjectState>(
+                          builder: (context, state) {
+                            if (state is ShowDateState) {
+                              return Text(initProjectCubit.editDate);
+                            }
+                            return const Text("");
+                          },
+                        ),
+                        TextButton(
+                            onPressed: () async {
+                              DateTime? newDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime.now()
+                                    .add(const Duration(days: 365 * 5)),
+                              );
+                              if (newDate != null) {
+                                initProjectCubit.editDate =
+                                    DateFormat('yyyy-MM-dd').format(newDate);
+                                log("date :${initProjectCubit.editDate}");
+                                initProjectCubit.showDate();
+                              }
+                            },
+                            child: const Text("End edit of edit")),
+                      ],
+                    ),
                   ),
                   Align(
                     alignment: Alignment.center,
@@ -178,13 +293,33 @@ class InitProject extends StatelessWidget {
                       text: "Create Project",
                       color: color.primaryColor,
                       onPressed: () {
-                        initProjectCubit.initProjectEvetn(
-                            InitProjectModel(
-                                edit: edit.toString(),
-                                timeEndEdit: editDate ?? "",
-                                userId: initProjectCubit.idController.text),
-                            startDate!,
-                            endDate!);
+                        DateTime startDateAsDate =
+                            DateTime.parse(initProjectCubit.startDate);
+                        DateTime endDateAsDate =
+                            DateTime.parse(initProjectCubit.endDate);
+                        DateTime preDateAsDate =
+                            DateTime.parse(initProjectCubit.presDate);
+
+                        if (endDateAsDate.isBefore(startDateAsDate)) {
+                          showAlertSnackBar(
+                              color: color,
+                              context: context,
+                              title: "The start date should be before end date",
+                              colorStatus: color.uncompletedColor);
+                        } else if (preDateAsDate.isBefore(endDateAsDate)) {
+                          showAlertSnackBar(
+                              color: color,
+                              context: context,
+                              title:
+                                  "The presintation date should be after end date",
+                              colorStatus: color.uncompletedColor);
+                        } else {
+                          initProjectCubit.initProjectEvetn(
+                              project: InitProjectModel(
+                                  edit: initProjectCubit.edit.toString(),
+                                  timeEndEdit: initProjectCubit.editDate,
+                                  userId: initProjectCubit.idController.text));
+                        }
                       },
                     ),
                   ),

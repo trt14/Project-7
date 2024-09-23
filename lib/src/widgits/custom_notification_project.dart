@@ -26,6 +26,7 @@ class CustomNotificationProject extends StatelessWidget {
           ),
           Text(
             text,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(color: color.primaryColor),
           ),
         ],

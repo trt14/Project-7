@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/home_cubit/home_cubit.dart';
 import 'package:project_7/src/helper/converter.dart';
+import 'package:project_7/src/helper/qr_code_scanner.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/helper/colors.dart';
+import 'package:project_7/src/screens/admin/assign_supervisor.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
-import 'package:project_7/src/screens/project/create_project_screen.dart';
 import 'package:project_7/src/screens/project/init_project.dart';
 import 'package:project_7/src/screens/user/profile_screen.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
+import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_list_tile.dart';
 import 'package:project_7/src/widgits/custom_notification_project.dart';
 
@@ -24,79 +26,129 @@ class HomeScreen extends StatelessWidget {
         Color color = Colors.black;
         final homeCubit = context.read<HomeCubit>();
         log("${homeCubit.user?.role}");
-
         return SafeArea(
           child: Scaffold(
-            floatingActionButton: homeCubit.user?.role?.toLowerCase() != "user"
-                ? FloatingActionButton(
+            floatingActionButton: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                homeCubit.user?.role?.toLowerCase() != "user"
+                    ? Container(
+                        margin: const EdgeInsets.only(left: 20),
+                        child: FloatingActionButton(
+                            backgroundColor: color.secondaryColor,
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const InitProject())).then((value) {
+                                homeCubit.update();
+                              });
+                            }),
+                      )
+                    : const SizedBox(),
+                FloatingActionButton(
                     backgroundColor: color.secondaryColor,
                     child: const Icon(
-                      Icons.add,
+                      Icons.camera,
                       color: Colors.white,
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const InitProject()))
-                          .then((value) {
-                        homeCubit.update();
-                      });
-                    })
-                : null,
+                    onPressed: () async {
+                      try {
+                        String result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => QrCodeScanner(
+                              nav: 0,
+                            ),
+                          ),
+                        );
+
+                        log("this message in home screen $result");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Review(
+                                      projectId: result,
+                                    )));
+                      } catch (e) {
+                        log(e.toString());
+                      }
+                    }),
+              ],
+            ),
             body: SingleChildScrollView(
               child: Column(
                 children: [
                   Container(
-                      width: context.getWidth(),
-                      padding: const EdgeInsets.only(top: 8, left: 8),
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
+                    width: context.getWidth(),
+                    padding: const EdgeInsets.only(top: 8, left: 8),
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: Text(
+                            "Welcome back 👋 ",
+                            style: TextStyle(
+                                color: color.txtBlackColor,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 16),
-                            child: Text(
-                              "Welcome back 👋 ",
-                              style: TextStyle(
-                                  color: color.txtBlackColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ProfileScreen()))
-                                  .then((value) => homeCubit.update());
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ProfileScreen()))
+                                .then((value) => homeCubit.update());
+                          },
+                          child: BlocBuilder<HomeCubit, HomeState>(
+                            builder: (context, state) {
+                              return CustomListTile(
+                                color: color,
+                                title:
+                                    "${homeCubit.user?.firstName} ${homeCubit.user?.lastName}",
+                                description: "${homeCubit.user?.role}",
+                                widget: Icon(
+                                  Icons.person_2_outlined,
+                                  color: color.primaryColor,
+                                ),
+                              );
                             },
-                            child: BlocBuilder<HomeCubit, HomeState>(
-                              builder: (context, state) {
-                                return CustomListTile(
-                                  color: color,
-                                  title:
-                                      "${homeCubit.user?.firstName} ${homeCubit.user?.lastName}",
-                                  description: "${homeCubit.user?.role}",
-                                  widget: Icon(
-                                    Icons.person_2_outlined,
-                                    color: color.primaryColor,
-                                  ),
-                                );
-                              },
-                            ),
-                          )
-                        ],
-                      )),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
+                  homeCubit.user!.role == "admin"
+                      ? CustomElevatedBTN(
+                          text: "Assing supervisor",
+                          color: Colors.black,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AssignSupervisor(),
+                              ),
+                            );
+                          },
+                        )
+                      : const SizedBox(),
                   Center(
                       child: CustomNotificationProject(
                           color: color,
@@ -126,11 +178,6 @@ class HomeScreen extends StatelessWidget {
                                     label: Text(
                                         homeCubit.bootCamp.elementAt(index)),
                                     selected: false,
-                                    // onSelected: (bool selected) async {
-                                    //   value = selected ? index : null;
-                                    //   log(value.toString());
-                                    //   await publicCubit.filtter(value);
-                                    // },
                                   ),
                                 );
                               }).toList())),
@@ -138,21 +185,32 @@ class HomeScreen extends StatelessWidget {
                             children: List.generate(homeCubit.projects.length,
                                 (index) {
                               return InkWell(
+                                onLongPress: () {},
                                 onTap: () {
                                   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ProjectScreen(
-                                                userProject:
-                                                    homeCubit.projects[index],
-                                              )));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProjectScreen(
+                                        userProject: homeCubit.projects[index],
+                                      ),
+                                    ),
+                                  ).then((value) {
+                                    homeCubit.update();
+                                  });
                                 },
                                 child: CustomCardProject(
+                                    countTeam: homeCubit
+                                        .projects[index].membersProject!.length,
+                                    url: homeCubit.projects[index].logoUrl ??
+                                        "https://cdn.tuwaiq.edu.sa/landing/images/logo/logo-h.png",
                                     supervisorName: "",
                                     projectName:
-                                        "${homeCubit.projects[index].projectName}",
-                                    projectDescription:
-                                        "${homeCubit.projects[index].projectDescription}",
+                                        homeCubit.projects[index].projectName ??
+                                            "TBD",
+                                    projectDescription: homeCubit
+                                            .projects[index]
+                                            .projectDescription ??
+                                        "TBD",
                                     projectType:
                                         "${homeCubit.projects[index].type}",
                                     projectStatus:
@@ -168,21 +226,11 @@ class HomeScreen extends StatelessWidget {
                                                 null &&
                                             homeCubit.projects[index].endDate !=
                                                 null
-                                        ? getDaysDifference(
-                                                    homeCubit.projects[index]
-                                                        .startDate!,
-                                                    homeCubit.projects[index]
-                                                        .endDate!) !=
-                                                0
+                                        ? getDaysDifference(homeCubit.projects[index].startDate!, homeCubit.projects[index].endDate!) != 0
                                             ? "${getDaysDifference(homeCubit.projects[index].startDate!, homeCubit.projects[index].endDate!)} days"
                                             : "Over"
                                         : "not yet",
-                                    isSelectedTeamMember: homeCubit
-                                            .projects[index]
-                                            .membersProject!
-                                            .isNotEmpty
-                                        ? true
-                                        : false),
+                                    isSelectedTeamMember: homeCubit.projects[index].membersProject!.isNotEmpty ? true : false),
                               );
                             }),
                           ),

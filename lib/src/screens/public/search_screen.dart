@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/search_cubit/search_cubit.dart';
 import 'package:project_7/src/helper/colors.dart';
+import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/models/project/project_model.dart';
 import 'package:project_7/src/screens/public/result_screen.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
@@ -34,8 +35,11 @@ class SearchScreen extends StatelessWidget {
 
             if (state is FailedState) {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error.toString())));
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: state.error.toString(),
+                  colorStatus: color.uncompletedColor);
             }
             if (state is SuccessState) {
               Navigator.pop(context);
@@ -49,134 +53,128 @@ class SearchScreen extends StatelessWidget {
               );
             }
           },
-          child: Scaffold(
-            body: SafeArea(
-              bottom: false,
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    children: [
-                      BlocBuilder<SearchCubit, SearchState>(
-                        builder: (context, state) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                CustomTextField(
-                                  controller: searchCubit.nameController,
-                                  title: "search",
-                                  color: color.primaryColor,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      width: 100,
-                                      child: CustomTextField(
-                                        keyboardType: const TextInputType
-                                            .numberWithOptions(),
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.digitsOnly
-                                        ],
-                                        controller: searchCubit.fromController,
-                                        title: "from",
-                                        color: color.primaryColor,
-                                      ),
+          child: SafeArea(
+            bottom: false,
+            child: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  children: [
+                    BlocBuilder<SearchCubit, SearchState>(
+                      builder: (context, state) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              CustomTextField(
+                                controller: searchCubit.nameController,
+                                title: "search",
+                                color: color.primaryColor,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 100,
+                                    child: CustomTextField(
+                                      keyboardType: const TextInputType
+                                          .numberWithOptions(),
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                      controller: searchCubit.fromController,
+                                      title: "from",
+                                      color: color.primaryColor,
                                     ),
-                                    SizedBox(
-                                      width: 100,
-                                      child: CustomTextField(
-                                        keyboardType: const TextInputType
-                                            .numberWithOptions(),
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.digitsOnly
-                                        ],
-                                        controller: searchCubit.toController,
-                                        title: "to",
-                                        color: color.primaryColor,
-                                      ),
+                                  ),
+                                  SizedBox(
+                                    width: 100,
+                                    child: CustomTextField(
+                                      keyboardType: const TextInputType
+                                          .numberWithOptions(),
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                      controller: searchCubit.toController,
+                                      title: "to",
+                                      color: color.primaryColor,
                                     ),
-                                  ],
-                                ),
-                                BlocBuilder<SearchCubit, SearchState>(
-                                  builder: (context, state) {
-                                    return SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Row(
-                                            children: List<Widget>.generate(
-                                                searchCubit.bootCamp.length,
-                                                (int index) {
-                                          return Container(
-                                            margin: const EdgeInsets.all(19),
-                                            child: ChoiceChip(
-                                              checkmarkColor: Colors.red,
-                                              label: Text(searchCubit.bootCamp
-                                                  .elementAt(index)),
-                                              selected: bootcamp == index,
-                                              onSelected:
-                                                  (bool selected) async {
-                                                bootcamp =
-                                                    selected ? index : null;
-                                                searchCubit.bootcampController
-                                                        .text =
-                                                    searchCubit.bootCamp
-                                                        .elementAt(index);
-                                                await searchCubit.setState();
-                                              },
-                                            ),
-                                          );
-                                        }).toList()));
-                                  },
-                                ),
-                                BlocBuilder<SearchCubit, SearchState>(
-                                  builder: (context, state) {
-                                    return SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Row(
-                                            children: List<Widget>.generate(
-                                                searchCubit.type.length,
-                                                (int index) {
-                                          return Container(
-                                            margin: const EdgeInsets.all(19),
-                                            child: ChoiceChip(
-                                              checkmarkColor: Colors.red,
-                                              label: Text(searchCubit.type
-                                                  .elementAt(index)),
-                                              selected: type == index,
-                                              onSelected:
-                                                  (bool selected) async {
-                                                type = selected ? index : null;
-                                                log(type.toString());
-                                                searchCubit
-                                                        .typeController.text =
-                                                    searchCubit.type
-                                                        .elementAt(index);
-                                                await searchCubit.setState();
-                                              },
-                                            ),
-                                          );
-                                        }).toList()));
-                                  },
-                                ),
-                                CustomElevatedBTN(
-                                  text: "Search",
-                                  color: color,
-                                  onPressed: () async {
-                                    try {
-                                      project =
-                                          await searchCubit.search() ?? [];
-                                    } catch (e) {
-                                      log(e.toString());
-                                    }
-                                  },
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                                  ),
+                                ],
+                              ),
+                              BlocBuilder<SearchCubit, SearchState>(
+                                builder: (context, state) {
+                                  return SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                          children: List<Widget>.generate(
+                                              searchCubit.bootCamp.length,
+                                              (int index) {
+                                        return Container(
+                                          margin: const EdgeInsets.all(19),
+                                          child: ChoiceChip(
+                                            checkmarkColor: Colors.red,
+                                            label: Text(searchCubit.bootCamp
+                                                .elementAt(index)),
+                                            selected: bootcamp == index,
+                                            onSelected: (bool selected) async {
+                                              bootcamp =
+                                                  selected ? index : null;
+                                              searchCubit
+                                                      .bootcampController.text =
+                                                  searchCubit.bootCamp
+                                                      .elementAt(index);
+                                              await searchCubit.setState();
+                                            },
+                                          ),
+                                        );
+                                      }).toList()));
+                                },
+                              ),
+                              BlocBuilder<SearchCubit, SearchState>(
+                                builder: (context, state) {
+                                  return SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                          children: List<Widget>.generate(
+                                              searchCubit.type.length,
+                                              (int index) {
+                                        return Container(
+                                          margin: const EdgeInsets.all(19),
+                                          child: ChoiceChip(
+                                            checkmarkColor: Colors.red,
+                                            label: Text(searchCubit.type
+                                                .elementAt(index)),
+                                            selected: type == index,
+                                            onSelected: (bool selected) async {
+                                              type = selected ? index : null;
+                                              log(type.toString());
+                                              searchCubit.typeController.text =
+                                                  searchCubit.type
+                                                      .elementAt(index);
+                                              await searchCubit.setState();
+                                            },
+                                          ),
+                                        );
+                                      }).toList()));
+                                },
+                              ),
+                              CustomElevatedBTN(
+                                text: "Search",
+                                color: color,
+                                onPressed: () async {
+                                  try {
+                                    project = await searchCubit.search() ?? [];
+                                  } catch (e) {
+                                    log(e.toString());
+                                  }
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),

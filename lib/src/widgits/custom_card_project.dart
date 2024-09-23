@@ -13,7 +13,8 @@ class CustomCardProject extends StatelessWidget {
       required this.colorStatus,
       required this.projectDaysleft,
       required this.isSelectedTeamMember,
-      this.countTeam});
+      this.countTeam = 1,
+      this.url = ""});
   final String supervisorName;
   final String projectName;
   final String projectDescription;
@@ -23,7 +24,7 @@ class CustomCardProject extends StatelessWidget {
   final String projectDaysleft;
   final bool isSelectedTeamMember;
   final int? countTeam;
-
+  final String? url;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -63,11 +64,14 @@ class CustomCardProject extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.web),
+                            url != ""
+                                ? CircleAvatar(child: Image.network("$url"))
+                                : const Icon(Icons.web),
                             Text(
                               projectName,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -113,11 +117,12 @@ class CustomCardProject extends StatelessWidget {
                                       color: Color((0xff5c68ff))),
 
                                   showTotalCount: true,
-                                  totalCount: 5,
+                                  totalCount: countTeam!,
                                   itemBorderColor: Colors.black26,
                                   itemRadius: 40, // Radius of each images
-                                  itemCount:
-                                      3, // Maximum number of images to be shown in stack
+                                  itemCount: countTeam! > 4
+                                      ? countTeam! - 1
+                                      : countTeam, // Maximum number of images to be shown in stack
                                   itemBorderWidth: 3,
                                   children: const [
                                     CircleAvatar(
