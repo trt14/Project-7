@@ -1,7 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +36,8 @@ class ProjectScreen extends StatelessWidget {
         create: (context) => ProjectCubit(),
         child: Builder(builder: (context) {
           final projectCubit = context.read<ProjectCubit>();
+          String userRole = projectCubit.userDataLayer.user!.role.toString();
+
           projectCubit.editProjectNameController.text =
               userProject.projectName.toString();
 
@@ -71,15 +71,25 @@ class ProjectScreen extends StatelessWidget {
                 backgroundColor: color.secondaryColor,
                 automaticallyImplyLeading: false,
                 actions: [
-                  IconButton(
-                    onPressed: () {
-                      projectCubit.deleteProject(project: userProject);
-                    },
-                    icon: Icon(
-                      Icons.remove,
-                      color: color.txtwhiteColor,
-                    ),
-                  ),
+                  userRole != "user"
+                      ? IconButton(
+                          onPressed: () {
+                            userProject.isPublic == false
+                                ? projectCubit.deleteProject(
+                                    project: userProject)
+                                : showAlertSnackBar(
+                                    color: color,
+                                    context: context,
+                                    title:
+                                        "Project can't be delete becuase it's public  .",
+                                    colorStatus: color.uncompletedColor);
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: color.txtwhiteColor,
+                          ),
+                        )
+                      : const SizedBox(),
                   IconButton(
                     onPressed: () {
                       Navigator.push(

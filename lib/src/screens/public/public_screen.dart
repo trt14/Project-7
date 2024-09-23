@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/public_cubit/public_cubit.dart';
 import 'package:project_7/src/helper/colors.dart';
+import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
 import 'package:project_7/src/screens/public/search_screen.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
@@ -21,13 +22,17 @@ class PublicScreen extends StatelessWidget {
         Color color = Colors.black;
         final publicCubit = context.read<PublicCubit>();
 
+// we need to fix it here
         loading() async {
           try {
             await Future.delayed(const Duration(seconds: 3));
             await publicCubit.loadPublicProject();
           } catch (error) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(error.toString())));
+            showAlertSnackBar(
+                color: color,
+                context: context,
+                title: error.toString(),
+                colorStatus: color.uncompletedColor);
           }
         }
 
@@ -44,8 +49,11 @@ class PublicScreen extends StatelessWidget {
 
             if (state is FailedState) {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error.toString())));
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: state.error.toString(),
+                  colorStatus: color.uncompletedColor);
             }
             if (state is SuccessState) {
               Navigator.pop(context);

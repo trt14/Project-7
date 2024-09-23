@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     onPressed: () async {
                       try {
-                         String result = await Navigator.push(
+                        String result = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => QrCodeScanner(),
@@ -67,7 +67,9 @@ class HomeScreen extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Review(projectId: result,)));
+                                builder: (context) => Review(
+                                      projectId: result,
+                                    )));
                       } catch (e) {
                         log(e.toString());
                       }
@@ -156,11 +158,6 @@ class HomeScreen extends StatelessWidget {
                                     label: Text(
                                         homeCubit.bootCamp.elementAt(index)),
                                     selected: false,
-                                    // onSelected: (bool selected) async {
-                                    //   value = selected ? index : null;
-                                    //   log(value.toString());
-                                    //   await publicCubit.filtter(value);
-                                    // },
                                   ),
                                 );
                               }).toList())),
@@ -168,9 +165,7 @@ class HomeScreen extends StatelessWidget {
                             children: List.generate(homeCubit.projects.length,
                                 (index) {
                               return InkWell(
-                                onLongPress: (){
-                                  
-                                },
+                                onLongPress: () {},
                                 onTap: () {
                                   Navigator.push(
                                     context,
@@ -184,14 +179,18 @@ class HomeScreen extends StatelessWidget {
                                   });
                                 },
                                 child: CustomCardProject(
-                                    url:
-                                        homeCubit.projects[index].logoUrl ?? "",
+                                    countTeam: homeCubit
+                                        .projects[index].membersProject!.length,
+                                    url: homeCubit.projects[index].logoUrl ??
+                                        "https://cdn.tuwaiq.edu.sa/landing/images/logo/logo-h.png",
                                     supervisorName: "",
-                                    projectName: homeCubit.projects[index].projectName ??
-                                        "TBD",
-                                    projectDescription:
-                                        homeCubit.projects[index].projectDescription ??
+                                    projectName:
+                                        homeCubit.projects[index].projectName ??
                                             "TBD",
+                                    projectDescription: homeCubit
+                                            .projects[index]
+                                            .projectDescription ??
+                                        "TBD",
                                     projectType:
                                         "${homeCubit.projects[index].type}",
                                     projectStatus:
@@ -202,20 +201,16 @@ class HomeScreen extends StatelessWidget {
                                         homeCubit.projects[index].presentationDate != null
                                             ? color.completedColor
                                             : color.uncompletedColor,
-                                    projectDaysleft: homeCubit.projects[index].startDate != null &&
+                                    projectDaysleft: homeCubit.projects[index]
+                                                    .startDate !=
+                                                null &&
                                             homeCubit.projects[index].endDate !=
                                                 null
-                                        ? getDaysDifference(homeCubit.projects[index].startDate!, homeCubit.projects[index].endDate!) !=
-                                                0
+                                        ? getDaysDifference(homeCubit.projects[index].startDate!, homeCubit.projects[index].endDate!) != 0
                                             ? "${getDaysDifference(homeCubit.projects[index].startDate!, homeCubit.projects[index].endDate!)} days"
                                             : "Over"
                                         : "not yet",
-                                    isSelectedTeamMember: homeCubit
-                                            .projects[index]
-                                            .membersProject!
-                                            .isNotEmpty
-                                        ? true
-                                        : false),
+                                    isSelectedTeamMember: homeCubit.projects[index].membersProject!.isNotEmpty ? true : false),
                               );
                             }),
                           ),

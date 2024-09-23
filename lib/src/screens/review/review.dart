@@ -4,15 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/review_cubit/review_cubit.dart';
+import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
+import 'package:project_7/src/helper/colors.dart';
 
 class Review extends StatelessWidget {
   const Review({super.key, required this.projectId});
   final String projectId;
   @override
   Widget build(BuildContext context) {
+    Color color = Colors.black;
+
     return BlocProvider(
       create: (context) => ReviewCubit(),
       child: Builder(builder: (context) {
@@ -29,12 +33,18 @@ class Review extends StatelessWidget {
 
               if (state is FailedState) {
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.error.toString())));
+                showAlertSnackBar(
+                    color: color,
+                    context: context,
+                    title: state.error.toString(),
+                    colorStatus: color.uncompletedColor);
               }
               if (state is SuccessState) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Rveiwe completed")));
+                showAlertSnackBar(
+                    color: color,
+                    context: context,
+                    title: "Thank you for review :)",
+                    colorStatus: color.completedColor);
                 Navigator.pop(context);
 
                 Navigator.pop(context);
