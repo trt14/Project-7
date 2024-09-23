@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:project_7/src/data_layer/project_data_layer.dart';
 import 'package:project_7/src/data_layer/user_data_layer.dart';
-import 'package:project_7/src/models/project/project_model.dart';
 
 part 'home_state.dart';
 
