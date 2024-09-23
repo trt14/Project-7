@@ -1,4 +1,5 @@
 import 'package:project_7/src/networking/constant_networking.dart';
+import 'package:project_7/src/networking/mixins/admin_method_api.dart';
 import 'package:project_7/src/networking/mixins/auth_method_api.dart';
 import 'package:project_7/src/networking/mixins/member_method_api.dart';
 import 'package:project_7/src/networking/mixins/project_method_api.dart';
@@ -11,4 +12,5 @@ class NetworkingApi extends ConstantNetworking
         UserMethodApi,
         ProjectMethodApi,
         MemberMethodApi,
-        PublicMethodApi {}
+        PublicMethodApi,
+        AdminMethodApi {}

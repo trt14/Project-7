@@ -10,8 +10,8 @@ import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
 import 'package:project_7/src/helper/colors.dart';
 
-class Review extends StatelessWidget {
-  const Review({super.key, required this.projectId});
+class ReviewScreen extends StatelessWidget {
+  const ReviewScreen({super.key, required this.projectId});
   final String projectId;
   @override
   Widget build(BuildContext context) {

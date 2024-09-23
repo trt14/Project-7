@@ -131,7 +131,7 @@ class ProjectScreen extends StatelessWidget {
                               builder: (BuildContext context) => Center(
                                 child: SizedBox(
                                   child: Card(
-                                    child: QrImageView(
+                                    child: QrImageView(            
                                       data: userProject.projectId,
                                       version: QrVersions.auto,
                                     ),
