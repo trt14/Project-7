@@ -14,9 +14,6 @@ class HomeNavigation extends StatelessWidget {
         return Scaffold(
           body: BlocBuilder<HomeNavigationCubit, HomeNavigationState>(
             builder: (context, state) {
-              if (state is Navigate) {
-                return homeNavigation.screens[homeNavigation.currentPageIndex];
-              }
               return homeNavigation.screens[homeNavigation.currentPageIndex];
             },
           ),

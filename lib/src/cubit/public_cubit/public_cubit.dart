@@ -48,7 +48,6 @@ class PublicCubit extends Cubit<PublicState> {
     emit(LoadingState());
     try {
       log("check if public storage is empty");
-      print(GetIt.I.get<ProjectDataLayer>().publicProjects.isEmpty.toString());
       log(GetIt.I.get<ProjectDataLayer>().publicProjects.isEmpty.toString());
 
       if (GetIt.I.get<ProjectDataLayer>().publicProjects.isEmpty) {
