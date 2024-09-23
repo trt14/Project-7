@@ -11,16 +11,11 @@ class HomeNavigation extends StatelessWidget {
       create: (context) => HomeNavigationCubit(),
       child: Builder(builder: (context) {
         final homeNavigation = context.read<HomeNavigationCubit>();
-        return Scaffold(
-          body: BlocBuilder<HomeNavigationCubit, HomeNavigationState>(
-            builder: (context, state) {
-              return homeNavigation.screens[homeNavigation.currentPageIndex];
-            },
-          ),
-          bottomNavigationBar:
-              BlocBuilder<HomeNavigationCubit, HomeNavigationState>(
-            builder: (context, state) {
-              return NavigationBar(
+        return BlocBuilder<HomeNavigationCubit, HomeNavigationState>(
+          builder: (context, state) {
+            return Scaffold(
+              body: homeNavigation.screens[homeNavigation.currentPageIndex],
+              bottomNavigationBar: NavigationBar(
                 selectedIndex: homeNavigation.currentPageIndex,
                 onDestinationSelected: (int index) {
                   homeNavigation.navigate(index);
@@ -35,9 +30,9 @@ class HomeNavigation extends StatelessWidget {
                     label: 'Explore',
                   ),
                 ],
-              );
-            },
-          ),
+              ),
+            );
+          },
         );
       }),
     );
