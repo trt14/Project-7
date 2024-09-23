@@ -10,6 +10,7 @@ import 'package:project_7/src/helper/colors.dart';
 import 'package:project_7/src/screens/admin/assign_supervisor.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
 import 'package:project_7/src/screens/project/init_project.dart';
+import 'package:project_7/src/screens/review/review_screen.dart';
 import 'package:project_7/src/screens/user/profile_screen.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
@@ -74,7 +75,7 @@ class HomeScreen extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Review(
+                                builder: (context) => ReviewScreen(
                                       projectId: result,
                                     )));
                       } catch (e) {

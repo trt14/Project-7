@@ -1,6 +1,4 @@
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,13 +50,19 @@ class ProfileScreen extends StatelessWidget {
 
               if (state is FailedState) {
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.error.toString())));
+                showAlertSnackBar(
+                    color: color,
+                    context: context,
+                    title: state.error.toString(),
+                    colorStatus: color.uncompletedColor);
               }
               if (state is SuccessState) {
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Update was sucess")));
+                showAlertSnackBar(
+                    color: color,
+                    context: context,
+                    title: "Update was sucess :)",
+                    colorStatus: color.uncompletedColor);
               }
               if (state is LogoutState) {
                 Navigator.pushAndRemoveUntil(
@@ -343,10 +347,12 @@ class ProfileScreen extends StatelessWidget {
                                           try {
                                             await profileCubit.editProfile();
                                           } catch (e) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(const SnackBar(
-                                                    content:
-                                                        Text("update failed")));
+                                            showAlertSnackBar(
+                                                color: color,
+                                                context: context,
+                                                title: "update failed",
+                                                colorStatus:
+                                                    color.uncompletedColor);
                                           }
                                         },
                                         text: "Save",
