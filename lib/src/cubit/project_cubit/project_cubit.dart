@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
@@ -23,6 +24,8 @@ class ProjectCubit extends Cubit<ProjectState> {
   //links Controller
   TextEditingController typeController = TextEditingController();
   TextEditingController urlController = TextEditingController();
+  TextEditingController editProjectNameController = TextEditingController();
+  TextEditingController editProjectDescrController = TextEditingController();
 
   ProjectCubit() : super(ProjectInitial());
 
@@ -72,6 +75,38 @@ class ProjectCubit extends Cubit<ProjectState> {
     return userDataLayer.user!.projects!
         .where((element) => element.projectId == project.projectId)
         .first;
+  }
+
+  editProjectNameAndDescription({required ProjectModel project}) async {
+    await Future.delayed(Duration.zero);
+
+    emit(LoadingState());
+    try {
+      log("Iam at editProject");
+      project.projectName = editProjectNameController.text;
+      project.projectDescription = editProjectDescrController.text;
+
+      print(project.toJson());
+
+      Response<dynamic> response = await api.updateProject(
+          project: project, token: userDataLayer.auth!.token!);
+      final currenProject = ProjectModel.fromJson(response.data["data"]);
+      print(currenProject.toJson());
+      userDataLayer.user =
+          await api.getUserProfile(token: userDataLayer.auth!.token!);
+      if (response.statusCode == 200) {
+        emit(SuccessState());
+      } else {
+        emit(FailedState(error: "Invalid response code: $response.statusCode"));
+      }
+      return currenProject;
+    } catch (exeprion) {
+      log("iam at catch");
+      log(exeprion.toString());
+      log("befire emit faildstate");
+      final error = exeprion.toString().replaceAll("FormatException: ", "");
+      emit(FailedState(error: error));
+    }
   }
 
   addLink({required ProjectModel project}) async {
