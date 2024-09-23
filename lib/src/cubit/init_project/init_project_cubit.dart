@@ -52,6 +52,10 @@ class InitProjectCubit extends Cubit<InitProjectState> {
     emit(ChangeStatus(isTrue: value));
   }
 
+  void showDate() {
+    emit(ShowDateState());
+  }
+
   Future<String> initProjectEvetn({
     required InitProjectModel project,
   }) async {
