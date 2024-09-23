@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/rigester_cubit/rigester_account_cubit.dart';
+import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/screens/auth/login_screen.dart';
 import 'package:project_7/src/screens/auth/otp_screen.dart';
@@ -8,8 +9,9 @@ import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/painter/custom_painter_1.dart';
 import 'package:project_7/src/helper/colors.dart';
-import 'package:project_7/src/widgits/painter/custom_painter_2.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
+
+// Done SnackBar
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -23,7 +25,6 @@ class RegisterScreen extends StatelessWidget {
         final cubit = context.read<RigesterAccountCubit>();
         return BlocListener<RigesterAccountCubit, RigesterAccountState>(
           listener: (context, state) {
-            // TODO: implement listener
             if (state is LoadingState) {
               showDialog<String>(
                   context: context,
@@ -32,8 +33,11 @@ class RegisterScreen extends StatelessWidget {
             }
             if (state is ErrorState) {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error.toString())));
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: state.error.toString(),
+                  colorStatus: color.uncompletedColor);
             }
             if (state is SuccessfulState) {
               Navigator.push(context,
@@ -104,15 +108,18 @@ class RegisterScreen extends StatelessWidget {
                         try {
                           await cubit.rigesterEvent();
                         } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(e.toString())));
+                          showAlertSnackBar(
+                              color: color,
+                              context: context,
+                              title: e.toString(),
+                              colorStatus: color.completedColor);
                         }
                       }),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Have account?"),
-                      SizedBox(
+                      const Text("Have account?"),
+                      const SizedBox(
                         width: 5,
                       ),
                       TextButton(
@@ -120,15 +127,15 @@ class RegisterScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LoginScreen()));
+                                  builder: (context) => const LoginScreen()));
                         },
-                        child: Text(
+                        style: const ButtonStyle(
+                            alignment: Alignment.centerLeft,
+                            padding: WidgetStatePropertyAll(EdgeInsets.zero)),
+                        child: const Text(
                           "Login",
                           style: TextStyle(fontSize: 16),
                         ),
-                        style: ButtonStyle(
-                            alignment: Alignment.centerLeft,
-                            padding: WidgetStatePropertyAll(EdgeInsets.zero)),
                       )
                     ],
                   )

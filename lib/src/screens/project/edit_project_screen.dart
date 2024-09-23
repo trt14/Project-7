@@ -1,149 +1,19 @@
-// import 'package:flutter/material.dart';
-
-// class EditProjectScreen extends StatelessWidget {
-//   const EditProjectScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Container(
-//                             height: context.getHeight(value: 0.5),
-//                             color: color.bgColor,
-//                             child: Center(
-//                               child: Column(
-//                                 mainAxisAlignment: MainAxisAlignment.center,
-//                                 mainAxisSize: MainAxisSize.min,
-//                                 children: <Widget>[
-//                                   Text(
-//                                     "Edit Project",
-//                                     style: TextStyle(fontSize: 20),
-//                                   ),
-//                                   CustomTextField(
-//                                     title: "Project Name",
-//                                     color: color,
-//                                     controller:
-//                                         projectCubit.editProjectNameController,
-//                                   ),
-//                                   CustomTextField(
-//                                     title: "Project Description",
-//                                     color: color,
-//                                     controller:
-//                                         projectCubit.editProjectDescrController,
-//                                   ),
-//                                   projectCubit.userDataLayer.user!.role !=
-//                                           "user"
-//                                       ? Row(
-//                                           children: [
-//                                             Column(
-//                                               children: [
-//                                                 BlocBuilder<ProjectCubit,
-//                                                     ProjectState>(
-//                                                   builder: (context, state) {
-//                                                     return Text(userProject
-//                                                         .startDate
-//                                                         .toString());
-//                                                   },
-//                                                 ),
-//                                                 TextButton(
-//                                                     onPressed: () async {
-//                                                       DateTime? newDate =
-//                                                           await showDatePicker(
-//                                                         context: context,
-//                                                         initialDate:
-//                                                             initialStartDate,
-//                                                         firstDate:
-//                                                             initialStartDate,
-//                                                         lastDate: DateTime.now()
-//                                                             .add(const Duration(
-//                                                                 days: 365 * 5)),
-//                                                       );
-//                                                       if (newDate != null) {
-//                                                         userProject.startDate =
-//                                                             DateFormat(
-//                                                                     'yyyy-MM-dd')
-//                                                                 .format(
-//                                                                     newDate);
-//                                                         log("date :${userProject.startDate}");
-//                                                         await projectCubit.showDate();
-//                                                       }
-//                                                     },
-//                                                     child: const Text(
-//                                                         "Start Date")),
-//                                               ],
-//                                             ),
-//                                             TextButton(
-//                                                 onPressed: () async {
-//                                                   DateTime? newDate =
-//                                                       await showDatePicker(
-//                                                     context: context,
-//                                                     initialDate: initialEndDate,
-//                                                     firstDate: initialEndDate,
-//                                                     lastDate: DateTime.now()
-//                                                         .add(const Duration(
-//                                                             days: 365 * 5)),
-//                                                   );
-//                                                   if (newDate != null) {
-//                                                     userProject.endDate =
-//                                                         DateFormat('yyyy-MM-dd')
-//                                                             .format(newDate);
-//                                                     log("date :${userProject.endDate}");
-//                                                   }
-//                                                 },
-//                                                 child: const Text("End Date")),
-//                                             TextButton(
-//                                                 onPressed: () async {
-//                                                   DateTime? newDate =
-//                                                       await showDatePicker(
-//                                                     context: context,
-//                                                     initialDate:
-//                                                         initialPresDate,
-//                                                     firstDate: initialPresDate,
-//                                                     lastDate: DateTime.now()
-//                                                         .add(const Duration(
-//                                                             days: 365 * 5)),
-//                                                   );
-//                                                   if (newDate != null) {
-//                                                     userProject
-//                                                             .presentationDate =
-//                                                         DateFormat('yyyy-MM-dd')
-//                                                             .format(newDate);
-//                                                     log("date :${userProject.presentationDate}");
-//                                                   }
-//                                                 },
-//                                                 child: const Text(
-//                                                     "Preseintation Date")),
-//                                           ],
-//                                         )
-//                                       : const SizedBox(),
-//                                   ElevatedButton(
-//                                       child: const Text('Edit'),
-//                                       onPressed: () async {
-//                                         userProject = await projectCubit
-//                                             .editProjectNameAndDescription(
-//                                                 project: userProject);
-//                                       }),
-//                                 ],
-//                               ),
-//                             ),
-//                           );,
-//     );
-//   }
-// }
-
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:project_7/src/cubit/project_cubit/project_cubit.dart';
 import 'package:project_7/src/helper/colors.dart';
+import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/helper/screen.dart';
 import 'package:project_7/src/models/project/project_model.dart';
-import 'package:project_7/src/screens/home_screen.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
 
+// Done Snackbar
+
+// ignore: must_be_immutable
 class EditProjectScreen extends StatelessWidget {
   EditProjectScreen({super.key, required this.userProject});
   ProjectModel userProject;
@@ -186,16 +56,20 @@ class EditProjectScreen extends StatelessWidget {
 
             if (state is FailedState) {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error.toString())));
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: state.error.toString(),
+                  colorStatus: color.uncompletedColor);
             }
 
             if (state is NotificationSteps) {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(state.msg),
-                backgroundColor: Colors.green,
-              ));
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: state.msg.toString(),
+                  colorStatus: color.completedColor);
             }
 
             if (state is SuccessState) {
@@ -470,19 +344,19 @@ class EditProjectScreen extends StatelessWidget {
 
                         if (userRole != "user") {
                           if (endDateAsDate.isBefore(startDateAsDate)) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                  "The start date should be before end date"),
-                              backgroundColor: Colors.red,
-                            ));
+                            showAlertSnackBar(
+                                color: color,
+                                context: context,
+                                title:
+                                    "The start date should be before end date",
+                                colorStatus: color.uncompletedColor);
                           } else if (preDateAsDate.isBefore(endDateAsDate)) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                  "The presintation date should be after end date"),
-                              backgroundColor: Colors.red,
-                            ));
+                            showAlertSnackBar(
+                                color: color,
+                                context: context,
+                                title:
+                                    "The presintation date should be after end date",
+                                colorStatus: color.uncompletedColor);
                           } else {
                             userProject = await projectCubit
                                 .editProjectNameAndDescription(

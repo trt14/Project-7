@@ -22,6 +22,9 @@ import 'package:project_7/src/widgits/custom_text_field.dart';
 import 'package:project_7/src/widgits/custom_url_icon.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+// Done Snackbar
+
+// ignore: must_be_immutable
 class ProjectScreen extends StatelessWidget {
   ProjectScreen({super.key, required this.userProject});
   ProjectModel userProject;
@@ -55,15 +58,20 @@ class ProjectScreen extends StatelessWidget {
 
               if (state is FailedState) {
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.error.toString())));
+                showAlertSnackBar(
+                    color: color,
+                    context: context,
+                    title: state.error.toString(),
+                    colorStatus: color.uncompletedColor);
               }
               if (state is SuccessState) {
                 Navigator.pop(context);
                 Navigator.pop(context);
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Update was sucess")));
+                showAlertSnackBar(
+                    color: color,
+                    context: context,
+                    title: "Update was sucess :)",
+                    colorStatus: color.completedColor);
               }
             },
             child: Scaffold(

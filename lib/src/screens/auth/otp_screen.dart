@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/otp_cubit/otp_cubit.dart';
+import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/screens/home_screen.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_pinput.dart';
 import 'package:project_7/src/widgits/custom_rich_text.dart';
+import 'package:project_7/src/helper/colors.dart';
+
+// Done Snackbar
 
 class OtpScreen extends StatelessWidget {
   const OtpScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    Color color = Colors.black;
+
     return BlocProvider(
       create: (context) => OtpCubit(),
       child: Builder(builder: (context) {
@@ -25,8 +31,11 @@ class OtpScreen extends StatelessWidget {
 
             if (state is FailedState) {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error.toString())));
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: state.error,
+                  colorStatus: color.uncompletedColor);
             }
 
             if (state is SuccessState) {
@@ -59,8 +68,11 @@ class OtpScreen extends StatelessWidget {
                           try {
                             await otpCubit.verifyUser(otp: otp);
                           } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(e.toString())));
+                            showAlertSnackBar(
+                                color: color,
+                                context: context,
+                                title: e.toString(),
+                                colorStatus: color.uncompletedColor);
                           }
                         },
                       ),

@@ -13,6 +13,8 @@ import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
 
+// Done Snackbar
+
 class InitProject extends StatelessWidget {
   const InitProject({super.key});
 
@@ -35,16 +37,20 @@ class InitProject extends StatelessWidget {
 
             if (state is FailedState) {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error.toString())));
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: state.error.toString(),
+                  colorStatus: color.uncompletedColor);
             }
 
             if (state is NotificationSteps) {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(state.msg),
-                backgroundColor: Colors.green,
-              ));
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: state.msg.toString(),
+                  colorStatus: color.completedColor);
             }
 
             if (state is SuccessState) {
