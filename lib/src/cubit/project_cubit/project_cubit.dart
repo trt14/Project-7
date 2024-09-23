@@ -26,8 +26,16 @@ class ProjectCubit extends Cubit<ProjectState> {
   TextEditingController urlController = TextEditingController();
   TextEditingController editProjectNameController = TextEditingController();
   TextEditingController editProjectDescrController = TextEditingController();
+  late String editDate = "";
+  late String startDate = "";
+  late String endDate = "";
+  late String presDate = "";
 
   ProjectCubit() : super(ProjectInitial());
+
+  void showDate() {
+    emit(ShowDateState());
+  }
 
   addMemberEvent({required ProjectModel project}) async {
     await Future.delayed(Duration.zero);

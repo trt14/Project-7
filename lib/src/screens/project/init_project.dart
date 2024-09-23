@@ -299,13 +299,6 @@ class InitProject extends StatelessWidget {
                         DateTime preDateAsDate =
                             DateTime.parse(initProjectCubit.presDate);
 
-                        // if (initProjectCubit.editDate.isEmpty ||
-                        //     initProjectCubit.endDate.isEmpty ||
-                        //     initProjectCubit.startDate.isEmpty ||
-                        //     initProjectCubit.presDate.isEmpty) {
-                        //   print("hiii");
-                        // } else {
-
                         if (endDateAsDate.isBefore(startDateAsDate)) {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(

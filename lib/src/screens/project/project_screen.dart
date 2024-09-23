@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:project_7/src/cubit/project_cubit/project_cubit.dart';
 import 'package:project_7/src/helper/check_logo_type.dart';
 import 'package:project_7/src/helper/colors.dart';
@@ -30,6 +31,13 @@ class ProjectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color color = Colors.black;
+    DateTime initialStartDate =
+        DateTime.parse(userProject.startDate ?? DateTime.now().toString());
+    DateTime initialEndDate =
+        DateTime.parse(userProject.endDate ?? DateTime.now().toString());
+    DateTime initialPresDate = DateTime.parse(userProject.presentationDate ??
+        DateTime.now().toString()); // Convert string to DateTime
+
     return SafeArea(
       bottom: false,
       child: BlocProvider(
@@ -98,6 +106,75 @@ class ProjectScreen extends StatelessWidget {
                                     controller:
                                         projectCubit.editProjectDescrController,
                                   ),
+                                  projectCubit.userDataLayer.user!.role !=
+                                          "user"
+                                      ? Row(
+                                          children: [
+                                            TextButton(
+                                                onPressed: () async {
+                                                  DateTime? newDate =
+                                                      await showDatePicker(
+                                                    context: context,
+                                                    initialDate:
+                                                        initialStartDate,
+                                                    firstDate: initialStartDate,
+                                                    lastDate: DateTime.now()
+                                                        .add(const Duration(
+                                                            days: 365 * 5)),
+                                                  );
+                                                  if (newDate != null) {
+                                                    userProject.startDate =
+                                                        DateFormat('yyyy-MM-dd')
+                                                            .format(newDate);
+                                                    log("date :${userProject.startDate}");
+                                                  }
+                                                },
+                                                child:
+                                                    const Text("Start Date")),
+                                            TextButton(
+                                                onPressed: () async {
+                                                  DateTime? newDate =
+                                                      await showDatePicker(
+                                                    context: context,
+                                                    initialDate: initialEndDate,
+                                                    firstDate: initialEndDate,
+                                                    lastDate: DateTime.now()
+                                                        .add(const Duration(
+                                                            days: 365 * 5)),
+                                                  );
+                                                  if (newDate != null) {
+                                                    userProject.endDate =
+                                                        DateFormat('yyyy-MM-dd')
+                                                            .format(newDate);
+                                                    log("date :${userProject.endDate}");
+                                                  }
+                                                },
+                                                child: const Text("End Date")),
+                                            TextButton(
+                                                onPressed: () async {
+                                                  DateTime? newDate =
+                                                      await showDatePicker(
+                                                    context: context,
+                                                    initialDate:
+                                                        initialPresDate,
+                                                    firstDate: initialPresDate,
+                                                    lastDate: DateTime.now()
+                                                        .add(const Duration(
+                                                            days: 365 * 5)),
+                                                  );
+                                                  if (newDate != null) {
+                                                    userProject
+                                                            .presentationDate =
+                                                        DateFormat('yyyy-MM-dd')
+                                                            .format(newDate);
+                                                    log("date :${userProject.presentationDate}");
+                                                  }
+                                                },
+                                                child: const Text(
+                                                    "Preseintation Date")),
+                                          ],
+                                        )
+                                      : const SizedBox(),
                                   ElevatedButton(
                                       child: const Text('Edit'),
                                       onPressed: () async {
