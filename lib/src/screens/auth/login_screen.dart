@@ -5,6 +5,7 @@ import 'package:project_7/src/cubit/login_cubit/login_cubit.dart';
 import 'package:project_7/src/screens/auth/otp_screen.dart';
 import 'package:project_7/src/screens/auth/register_screen.dart';
 import 'package:project_7/src/screens/home_screen.dart';
+import 'package:project_7/src/screens/public/home_navigation.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/painter/custom_painter_1.dart';
@@ -165,6 +166,14 @@ class LoginScreen extends StatelessWidget {
                       ),
                     )
                   ],
+                ),
+                CustomElevatedBTN(
+                  color: Colors.black,
+                  text: "Gust",
+                  onPressed: () {
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (context)=>const HomeNavigation()));
+                  },
                 )
               ],
             ),

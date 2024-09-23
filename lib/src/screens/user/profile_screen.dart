@@ -14,6 +14,7 @@ import 'package:project_7/src/widgits/custom_circle_profile.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 // TODO: add flutter_svg to pubspec.yaml
 
 class ProfileScreen extends StatelessWidget {
@@ -73,6 +74,27 @@ class ProfileScreen extends StatelessWidget {
                 backgroundColor: color.secondaryColor,
                 automaticallyImplyLeading: false,
                 actions: [
+                  IconButton(
+                    onPressed: () {
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => Center(
+                          child: SizedBox(
+                            child: Card(
+                              child: QrImageView(
+                                data: profileCubit.userDataLayer.user!.id!,
+                                version: QrVersions.auto,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.qr_code,
+                      color: Colors.white,
+                    ),
+                  ),
                   IconButton(
                       onPressed: () {
                         Clipboard.setData(ClipboardData(
