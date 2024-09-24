@@ -1,4 +1,4 @@
----
+
 
 # Project Management Application
 
@@ -190,5 +190,4 @@ To run this project, make sure you have the following installed:
 - Mahdi Alhelal
 - Fahad Alharbi
 
----
 
