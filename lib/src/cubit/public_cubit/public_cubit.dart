@@ -41,6 +41,37 @@ class PublicCubit extends Cubit<PublicState> {
     emit(SuccessState());
   }
 
+  updateData() async {
+    log("iam at updateData");
+    emit(LoadingState());
+    try {
+      GetIt.I.get<ProjectDataLayer>().publicProjects =
+          await api.loadPublicProject();
+
+      GetIt.I
+          .get<ProjectDataLayer>()
+          .publicProjects
+          .map((e) => bootCamp.add(e.bootcampName.toString()))
+          .toList();
+
+      GetIt.I
+          .get<ProjectDataLayer>()
+          .publicProjects
+          .map((e) => type.add(e.type.toString()))
+          .toList();
+
+      GetIt.I.get<ProjectDataLayer>().publicProjectFillterd =
+          List.from(GetIt.I.get<ProjectDataLayer>().publicProjects);
+      emit(SuccessState());
+    } catch (expression) {
+      log("iam at catch");
+      log(expression.toString());
+      log("before emit FailedState");
+      final error = expression.toString().replaceAll("FormatException: ", "");
+      emit(FailedState(error: error));
+    }
+  }
+
   Future loadPublicProject() async {
     await Future.delayed(const Duration(seconds: 3));
 

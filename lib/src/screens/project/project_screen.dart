@@ -39,8 +39,9 @@ class ProjectScreen extends StatelessWidget {
         create: (context) => ProjectCubit(),
         child: Builder(builder: (context) {
           final projectCubit = context.read<ProjectCubit>();
-          String userRole = projectCubit.userDataLayer.user!.role.toString();
-
+          String? userRole =
+              projectCubit.userDataLayer.user?.role.toString() ?? "gust";
+          print("user role : $userRole");
           projectCubit.editProjectNameController.text =
               userProject.projectName.toString();
 
@@ -105,6 +106,9 @@ class ProjectScreen extends StatelessWidget {
                             builder: (context) =>
                                 EditProjectScreen(userProject: userProject)),
                       ).then((value) => projectCubit.update());
+                      userProject = projectCubit.userDataLayer.user!.projects!
+                          .firstWhere((element) =>
+                              userProject.projectId == element.projectId);
                     },
                     icon: Icon(
                       Icons.settings,
@@ -410,9 +414,9 @@ class ProjectScreen extends StatelessWidget {
                             ),
                           ),
                           projectCubit.userDataLayer.user?.id ==
-                                      userProject.userId ||
-                                  projectCubit.userDataLayer.user!.role !=
-                                      "user"
+                                      userProject.userId &&
+                                  projectCubit.userDataLayer.user?.role !=
+                                      "gust"
                               ? IconButton(
                                   onPressed: () async {
                                     try {
@@ -459,21 +463,24 @@ class ProjectScreen extends StatelessWidget {
                             height: 100,
                             child: BlocBuilder<ProjectCubit, ProjectState>(
                               builder: (context, state) {
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: List.generate(
-                                    userProject.linksProject?.length ?? 0,
-                                    (index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: CustomUrlIcon(
-                                            url: userProject
-                                                .linksProject![index].url,
-                                            img: getLogo(userProject
-                                                .linksProject![index].type),
-                                            width: 25),
-                                      );
-                                    },
+                                return SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: List.generate(
+                                      userProject.linksProject?.length ?? 0,
+                                      (index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: CustomUrlIcon(
+                                              url: userProject
+                                                  .linksProject![index].url,
+                                              img: getLogo(userProject
+                                                  .linksProject![index].type),
+                                              width: 25),
+                                        );
+                                      },
+                                    ),
                                   ),
                                 );
                               },

@@ -97,11 +97,11 @@ class InitProjectCubit extends Cubit<InitProjectState> {
         }
         return newProject.projectId;
       }
-    } catch (exeprion) {
+    } catch (expression) {
       log("iam at catch");
-      log(exeprion.toString());
-      log("befire emit faildstate");
-      final error = exeprion.toString().replaceAll("FormatException: ", "");
+      log(expression.toString());
+      log("before emit FailedState");
+      final error = expression.toString().replaceAll("FormatException: ", "");
       emit(FailedState(error: error));
     }
     return "";
@@ -117,26 +117,23 @@ class InitProjectCubit extends Cubit<InitProjectState> {
       newProject.projectDescription = projectDescController.text;
       newProject.projectName = projectNameController.text;
       newProject.type = typeController.text;
-      print(newProject.toJson());
 
       Response<dynamic> response = await api.updateProject(
           project: newProject, token: userDataLayer.auth!.token!);
       final currenProject = ProjectModel.fromJson(response.data["data"]);
-      print(currenProject.toJson());
 
       if (response.statusCode == 200) {
         emit(NotificationSteps(msg: "The seconed step is done"));
-        print(currenProject.bootcampName);
         thirdStepProjectEvetn(currenProject);
       } else {
         emit(FailedState(error: "Invalid response code: $response.statusCode"));
       }
       return newProject.projectId;
-    } catch (exeprion) {
+    } catch (expression) {
       log("iam at catch");
-      log(exeprion.toString());
-      log("befire emit faildstate");
-      final error = exeprion.toString().replaceAll("FormatException: ", "");
+      log(expression.toString());
+      log("before emit FailedState");
+      final error = expression.toString().replaceAll("FormatException: ", "");
       emit(FailedState(error: error));
     }
     return "";
@@ -148,7 +145,6 @@ class InitProjectCubit extends Cubit<InitProjectState> {
 
     try {
       log("Iam at thirdStep");
-      print(newProject.toJson());
       newProject.allowRating = rate;
       newProject.allowEdit = edit;
       newProject.isPublic = isPublic;
@@ -160,18 +156,18 @@ class InitProjectCubit extends Cubit<InitProjectState> {
         userDataLayer.user =
             await api.getUserProfile(token: userDataLayer.auth!.token!);
 
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(Duration.zero);
 
         emit(SuccessState());
       } else {
         emit(FailedState(error: "Invalid response code: $response.statusCode"));
       }
       return newProject.projectId;
-    } catch (exeprion) {
+    } catch (expression) {
       log("iam at catch");
-      log(exeprion.toString());
-      log("befire emit faildstate");
-      final error = exeprion.toString().replaceAll("FormatException: ", "");
+      log(expression.toString());
+      log("before emit FailedState");
+      final error = expression.toString().replaceAll("FormatException: ", "");
       emit(FailedState(error: error));
     }
     return "";

@@ -26,11 +26,11 @@ class OtpCubit extends Cubit<OtpState> {
           await api.getUserProfile(token: userDataLayer.auth!.token!);
 
       emit(SuccessState());
-    } catch (exeprion) {
+    } catch (expression) {
       log("iam at catch");
-      log(exeprion.toString());
-      log("befire emit faildstate");
-      final error = exeprion.toString().replaceAll("FormatException: ", "");
+      log(expression.toString());
+      log("before emit FailedState");
+      final error = expression.toString().replaceAll("FormatException: ", "");
       emit(FailedState(error: error));
     }
   }

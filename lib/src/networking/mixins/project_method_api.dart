@@ -119,7 +119,7 @@ mixin ProjectMethodApi on ConstantNetworking {
       String? endDate = project.endDate;
       String? presentationDate = project.presentationDate;
       String? endTimeEdit = project.timeEndEdit;
-      if (project.startDate!.contains("-") &&
+      if (project.startDate!.contains("-") &&   
           project.presentationDate!.contains("-") &&
           project.endDate!.contains("-") &&
           project.timeEndEdit!.contains("-")) {

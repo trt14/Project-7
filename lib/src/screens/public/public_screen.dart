@@ -62,73 +62,79 @@ class PublicScreen extends StatelessWidget {
           },
           child: SafeArea(
             bottom: false,
-            child: SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await publicCubit.updateData();
+              },
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Center(
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                                "Highlights")),
+                      ),
+                      BlocBuilder<PublicCubit, PublicState>(
+                        builder: (context, state) {
+                          return ListOfHighlights(
+                              publicProjects:
+                                  publicCubit.projectDataLayer.publicProjects);
+                        },
+                      ),
+                      const Divider(),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
                           child: Text(
                               style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
-                              "Highlights")),
-                    ),
-                    BlocBuilder<PublicCubit, PublicState>(
-                      builder: (context, state) {
-                        return ListOfHighlights(
-                            publicProjects:
-                                publicCubit.projectDataLayer.publicProjects);
-                      },
-                    ),
-                    const Divider(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 24),
-                            "Projects:"),
+                                  fontWeight: FontWeight.bold, fontSize: 24),
+                              "Projects:"),
+                        ),
                       ),
-                    ),
-                    BlocBuilder<PublicCubit, PublicState>(
-                      builder: (context, state) {
-                        return SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                                children: List<Widget>.generate(
-                                    publicCubit.bootCamp.length, (int index) {
-                              return Container(
-                                margin: const EdgeInsets.all(19),
-                                child: ChoiceChip(
-                                  checkmarkColor: Colors.red,
-                                  label: Text(
-                                      publicCubit.bootCamp.elementAt(index)),
-                                  selected: value == index,
-                                  onSelected: (bool selected) async {
-                                    value = selected ? index : null;
-                                    log(value.toString());
-                                    await publicCubit.filtter(value);
-                                  },
-                                ),
-                              );
-                            }).toList()));
-                      },
-                    ),
-                    BlocBuilder<PublicCubit, PublicState>(
-                      builder: (context, state) {
-                        return ListOfProjects(
-                            publicProjectFillterd: publicCubit
-                                .projectDataLayer.publicProjectFillterd,
-                            color: color);
-                      },
-                    )
-                  ],
+                      BlocBuilder<PublicCubit, PublicState>(
+                        builder: (context, state) {
+                          return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                  children: List<Widget>.generate(
+                                      publicCubit.bootCamp.length, (int index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(19),
+                                  child: ChoiceChip(
+                                    checkmarkColor: Colors.red,
+                                    label: Text(
+                                        publicCubit.bootCamp.elementAt(index)),
+                                    selected: value == index,
+                                    onSelected: (bool selected) async {
+                                      value = selected ? index : null;
+                                      log(value.toString());
+                                      await publicCubit.filtter(value);
+                                    },
+                                  ),
+                                );
+                              }).toList()));
+                        },
+                      ),
+                      BlocBuilder<PublicCubit, PublicState>(
+                        builder: (context, state) {
+                          return ListOfProjects(
+                              publicProjectFillterd: publicCubit
+                                  .projectDataLayer.publicProjectFillterd,
+                              color: color);
+                        },
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
