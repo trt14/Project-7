@@ -134,15 +134,34 @@ class HomeScreen extends StatelessWidget {
                             const SizedBox(
                               height: 20,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16),
-                              child: Text(
-                                "Welcome back 👋 ",
-                                style: TextStyle(
-                                    color: color.txtBlackColor,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500),
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 16),
+                                  child: Text(
+                                    "Welcome back 👋 ",
+                                    style: TextStyle(
+                                        color: color.txtBlackColor,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                homeCubit.user!.role == "admin"
+                                    ? TextButton(
+                                        child: const Text("Assign supervisor"),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const AssignSupervisor(),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : const SizedBox(),
+                              ],
                             ),
                             InkWell(
                               onTap: () {
@@ -175,21 +194,6 @@ class HomeScreen extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      homeCubit.user!.role == "admin"
-                          ? CustomElevatedBTN(
-                              text: "Assign supervisor",
-                              color: Colors.black,
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const AssignSupervisor(),
-                                  ),
-                                );
-                              },
-                            )
-                          : const SizedBox(),
                       Center(
                           child: CustomNotificationProject(
                               color: color,

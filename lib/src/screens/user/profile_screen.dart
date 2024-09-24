@@ -12,6 +12,7 @@ import 'package:project_7/src/widgits/custom_circle_profile.dart';
 import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
+import 'package:project_7/src/widgits/indicatro.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -277,16 +278,39 @@ class ProfileScreen extends StatelessWidget {
                         BlocBuilder<ProfileCubit, ProfileState>(
                           builder: (context, state) {
                             if (state is! EditState) {
-                              return Card(
-                                child: SizedBox(
-                                  width: 130,
-                                  height: 130,
-                                  child: PieChart(
-                                    PieChartData(
-                                      sections: getSections(),
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: PieChart(
+                                      PieChartData(
+                                        sections: getSections(color),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Indicator(
+                                          color: color.txtBlack45Color,
+                                          text: 'Completed',
+                                          isSquare: true,
+                                        ),
+                                        const SizedBox(
+                                          height: 4,
+                                        ),
+                                        Indicator(
+                                          color: color.secondaryColor,
+                                          text: 'Uncompleted',
+                                          isSquare: true,
+                                        ),
+                                      ]),
+                                ],
                               );
                             }
                             return const SizedBox();
@@ -365,12 +389,14 @@ class ProfileScreen extends StatelessWidget {
                                           try {
                                             await profileCubit.editProfile();
                                           } catch (e) {
-                                            showAlertSnackBar(
-                                                color: color,
-                                                context: context,
-                                                title: "update failed",
-                                                colorStatus:
-                                                    color.uncompletedColor);
+                                            if (context.mounted) {
+                                              showAlertSnackBar(
+                                                  color: color,
+                                                  context: context,
+                                                  title: "update failed",
+                                                  colorStatus:
+                                                      color.uncompletedColor);
+                                            }
                                           }
                                         },
                                         text: "Save",
@@ -395,10 +421,10 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-List<PieChartSectionData> getSections() {
+List<PieChartSectionData> getSections(Color color) {
   return [
     PieChartSectionData(
-      color: Colors.green,
+      color: color.txtBlack45Color,
       value: 40,
       title: '40%',
       radius: 50,
@@ -406,7 +432,7 @@ List<PieChartSectionData> getSections() {
           fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
     ),
     PieChartSectionData(
-      color: Colors.red,
+      color: color.secondaryColor,
       value: 30,
       title: '30%',
       radius: 50,
