@@ -13,7 +13,7 @@ import 'package:project_7/src/widgits/custom_elevated_btn.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:project_7/src/widgits/custom_text_field.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-// TODO: add flutter_svg to pubspec.yaml
+import 'package:fl_chart/fl_chart.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -61,7 +61,7 @@ class ProfileScreen extends StatelessWidget {
                 showAlertSnackBar(
                     color: color,
                     context: context,
-                    title: "Update was sucess :)",
+                    title: "Update was success :)",
                     colorStatus: color.completedColor);
               }
               if (state is LogoutState) {
@@ -274,6 +274,18 @@ class ProfileScreen extends StatelessWidget {
                             ],
                           ),
                         ),
+                        Card(
+                          child: SizedBox(
+                            width: 130,
+                            height: 130,
+                            child: PieChart(
+                              PieChartData(
+                                
+                                sections: getSections(),
+                              ),
+                            ),
+                          ),
+                        ),
                         BlocBuilder<ProfileCubit, ProfileState>(
                           builder: (context, state) {
                             if (state is EditState) {
@@ -375,4 +387,25 @@ class ProfileScreen extends StatelessWidget {
       }),
     );
   }
+}
+
+List<PieChartSectionData> getSections() {
+  return [
+    PieChartSectionData(
+      color: Colors.green,
+      value: 40,
+      title: '40%',
+      radius: 50,
+      titleStyle: const TextStyle(
+          fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+    ),
+    PieChartSectionData(
+      color: Colors.red,
+      value: 30,
+      title: '30%',
+      radius: 50,
+      titleStyle: const TextStyle(
+          fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+    ),
+  ];
 }

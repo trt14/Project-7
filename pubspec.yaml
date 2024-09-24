@@ -27,6 +27,7 @@ dependencies:
   qr_flutter: ^4.1.0
   mobile_scanner: ^5.2.3
   custom_rating_bar: ^3.0.0
+  fl_chart: ^0.69.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

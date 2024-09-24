@@ -80,7 +80,7 @@ class ProjectScreen extends StatelessWidget {
                       backgroundColor: color.secondaryColor,
                       automaticallyImplyLeading: false,
                       actions: [
-                        userRole == "admin" && userRole == "supervisor"
+                        userRole == "admin" || userRole == "supervisor"
                             ? IconButton(
                                 onPressed: () {
                                   userProject.isPublic == false
