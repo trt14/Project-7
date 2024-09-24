@@ -274,17 +274,23 @@ class ProfileScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Card(
-                          child: SizedBox(
-                            width: 130,
-                            height: 130,
-                            child: PieChart(
-                              PieChartData(
-                                
-                                sections: getSections(),
-                              ),
-                            ),
-                          ),
+                        BlocBuilder<ProfileCubit, ProfileState>(
+                          builder: (context, state) {
+                            if (state is! EditState) {
+                              return Card(
+                                child: SizedBox(
+                                  width: 130,
+                                  height: 130,
+                                  child: PieChart(
+                                    PieChartData(
+                                      sections: getSections(),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            return const SizedBox();
+                          },
                         ),
                         BlocBuilder<ProfileCubit, ProfileState>(
                           builder: (context, state) {
