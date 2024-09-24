@@ -68,11 +68,13 @@ class OtpScreen extends StatelessWidget {
                           try {
                             await otpCubit.verifyUser(otp: otp);
                           } catch (e) {
-                            showAlertSnackBar(
+                             if (context.mounted) {
+                               showAlertSnackBar(
                                 color: color,
                                 context: context,
                                 title: e.toString(),
                                 colorStatus: color.uncompletedColor);
+                             }
                           }
                         },
                       ),

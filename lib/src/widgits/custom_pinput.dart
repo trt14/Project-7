@@ -22,7 +22,7 @@ class CustomPinput extends StatelessWidget {
             color: Color.fromRGBO(30, 60, 87, 1),
             fontWeight: FontWeight.w600),
         decoration: BoxDecoration(
-          border: Border.all(color: const Color.fromRGBO(234, 239, 243, 1)),
+          border: Border.all(color: const Color.fromARGB(255, 134, 138, 141)),
           borderRadius: BorderRadius.circular(50),
         ),
       ),
