@@ -29,11 +29,13 @@ class PublicScreen extends StatelessWidget {
           try {
             await publicCubit.loadPublicProject();
           } catch (error) {
-            showAlertSnackBar(
+              if (context.mounted) {
+                showAlertSnackBar(
                 color: color,
                 context: context,
                 title: error.toString(),
                 colorStatus: color.uncompletedColor);
+              }
           }
         }
 
