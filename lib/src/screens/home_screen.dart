@@ -39,6 +39,7 @@ class HomeScreen extends StatelessWidget {
                         margin: const EdgeInsets.only(left: 20),
                         child: FloatingActionButton(
                             backgroundColor: color.secondaryColor,
+                            heroTag: 'add',
                             child: const Icon(
                               Icons.add,
                               color: Colors.white,
@@ -56,6 +57,7 @@ class HomeScreen extends StatelessWidget {
                     : const SizedBox(),
                 FloatingActionButton(
                     backgroundColor: color.secondaryColor,
+                    heroTag: 'camera',
                     child: const Icon(
                       Icons.camera,
                       color: Colors.white,
@@ -173,7 +175,6 @@ class HomeScreen extends StatelessWidget {
                               child: Row(
                                   children: List<Widget>.generate(
                                       homeCubit.bootCamp.length, (int index) {
-                                print(homeCubit.bootCamp);
                                 return Container(
                                   margin: const EdgeInsets.all(19),
                                   child: ChoiceChip(
@@ -185,16 +186,17 @@ class HomeScreen extends StatelessWidget {
                                 );
                               }).toList())),
                           Column(
-                            children: List.generate(homeCubit.projects.length,
+                            children: List.generate(
+                                homeCubit.userDataLayer.user!.projects!.length,
                                 (index) {
                               return InkWell(
-                                onLongPress: () {},
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ProjectScreen(
-                                        userProject: homeCubit.projects[index],
+                                        userProject: homeCubit.userDataLayer
+                                            .user!.projects![index],
                                       ),
                                     ),
                                   ).then((value) {
@@ -203,37 +205,43 @@ class HomeScreen extends StatelessWidget {
                                 },
                                 child: CustomCardProject(
                                     countTeam: homeCubit
-                                        .projects[index].membersProject!.length,
-                                    url: homeCubit.projects[index].logoUrl ??
+                                        .userDataLayer
+                                        .user!
+                                        .projects?[index]
+                                        .membersProject
+                                        ?.length,
+                                    url: homeCubit.userDataLayer.user!.projects?[index].logoUrl ??
                                         "https://cdn.tuwaiq.edu.sa/landing/images/logo/logo-h.png",
-                                    supervisorName: "",
-                                    projectName:
-                                        homeCubit.projects[index].projectName ??
-                                            "TBD",
+                                    supervisorName: "Someone  ",
+                                    projectName: homeCubit.userDataLayer.user!
+                                            .projects?[index].projectName ??
+                                        "TBD",
                                     projectDescription: homeCubit
-                                            .projects[index]
+                                            .userDataLayer
+                                            .user!
+                                            .projects?[index]
                                             .projectDescription ??
                                         "TBD",
                                     projectType:
-                                        "${homeCubit.projects[index].type}",
-                                    projectStatus:
-                                        homeCubit.projects[index].presentationDate != null
-                                            ? "COMPLETED"
-                                            : "UNCOMPLETED",
-                                    colorStatus:
-                                        homeCubit.projects[index].presentationDate != null
-                                            ? color.completedColor
-                                            : color.uncompletedColor,
-                                    projectDaysleft: homeCubit.projects[index]
-                                                    .startDate !=
-                                                null &&
-                                            homeCubit.projects[index].endDate !=
-                                                null
-                                        ? getDaysDifference(homeCubit.projects[index].startDate!, homeCubit.projects[index].endDate!) != 0
-                                            ? "${getDaysDifference(homeCubit.projects[index].startDate!, homeCubit.projects[index].endDate!)} days"
+                                        "${homeCubit.userDataLayer.user!.projects?[index].type}",
+                                    projectStatus: homeCubit
+                                                .userDataLayer
+                                                .user!
+                                                .projects?[index]
+                                                .presentationDate !=
+                                            null
+                                        ? "COMPLETED"
+                                        : "UNCOMPLETED",
+                                    colorStatus: homeCubit.userDataLayer.user!.projects?[index].presentationDate != null
+                                        ? color.completedColor
+                                        : color.uncompletedColor,
+                                    projectDaysleft: homeCubit.userDataLayer.user!.projects?[index].startDate != null &&
+                                            homeCubit.userDataLayer.user!.projects?[index].endDate != null
+                                        ? getDaysDifference(homeCubit.userDataLayer.user!.projects![index].startDate!, homeCubit.userDataLayer.user!.projects![index].endDate!) != 0
+                                            ? "${getDaysDifference(homeCubit.userDataLayer.user!.projects![index].startDate!, homeCubit.userDataLayer.user!.projects![index].endDate!)} days"
                                             : "Over"
                                         : "not yet",
-                                    isSelectedTeamMember: homeCubit.projects[index].membersProject!.isNotEmpty ? true : false),
+                                    isSelectedTeamMember: homeCubit.userDataLayer.user!.projects![index].membersProject!.isNotEmpty ? true : false),
                               );
                             }),
                           ),

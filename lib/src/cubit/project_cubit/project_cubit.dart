@@ -244,4 +244,8 @@ class ProjectCubit extends Cubit<ProjectState> {
       emit(FailedState(error: error));
     }
   }
+
+  update() {
+    emit(UpdateState());
+  }
 }

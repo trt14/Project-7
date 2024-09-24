@@ -299,32 +299,42 @@ class InitProject extends StatelessWidget {
                       text: "Create Project",
                       color: color.primaryColor,
                       onPressed: () {
-                        DateTime startDateAsDate =
-                            DateTime.parse(initProjectCubit.startDate);
-                        DateTime endDateAsDate =
-                            DateTime.parse(initProjectCubit.endDate);
-                        DateTime preDateAsDate =
-                            DateTime.parse(initProjectCubit.presDate);
+                        try {
+                          DateTime startDateAsDate =
+                              DateTime.parse(initProjectCubit.startDate);
+                          DateTime endDateAsDate =
+                              DateTime.parse(initProjectCubit.endDate);
+                          DateTime preDateAsDate =
+                              DateTime.parse(initProjectCubit.presDate);
 
-                        if (endDateAsDate.isBefore(startDateAsDate)) {
+                          if (endDateAsDate.isBefore(startDateAsDate)) {
+                            showAlertSnackBar(
+                                color: color,
+                                context: context,
+                                title:
+                                    "The start date should be before end date",
+                                colorStatus: color.uncompletedColor);
+                          } else if (preDateAsDate.isBefore(endDateAsDate)) {
+                            showAlertSnackBar(
+                                color: color,
+                                context: context,
+                                title:
+                                    "The presintation date should be after end date",
+                                colorStatus: color.uncompletedColor);
+                          } else {
+                            initProjectCubit.initProjectEvetn(
+                                project: InitProjectModel(
+                                    edit: initProjectCubit.edit.toString(),
+                                    timeEndEdit: initProjectCubit.editDate,
+                                    userId:
+                                        initProjectCubit.idController.text));
+                          }
+                        } catch (e) {
                           showAlertSnackBar(
                               color: color,
                               context: context,
-                              title: "The start date should be before end date",
+                              title: "PLease fill the fields",
                               colorStatus: color.uncompletedColor);
-                        } else if (preDateAsDate.isBefore(endDateAsDate)) {
-                          showAlertSnackBar(
-                              color: color,
-                              context: context,
-                              title:
-                                  "The presintation date should be after end date",
-                              colorStatus: color.uncompletedColor);
-                        } else {
-                          initProjectCubit.initProjectEvetn(
-                              project: InitProjectModel(
-                                  edit: initProjectCubit.edit.toString(),
-                                  timeEndEdit: initProjectCubit.editDate,
-                                  userId: initProjectCubit.idController.text));
                         }
                       },
                     ),

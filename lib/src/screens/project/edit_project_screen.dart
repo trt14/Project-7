@@ -75,6 +75,11 @@ class EditProjectScreen extends StatelessWidget {
             if (state is SuccessState) {
               Navigator.pop(context);
               Navigator.pop(context);
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: "Update was successful :)",
+                  colorStatus: color.completedColor);
             }
           },
           child: Scaffold(

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
 import 'package:project_7/src/models/auth/auth_model.dart';
-import 'package:project_7/src/models/project/project_model.dart';
 import 'package:project_7/src/models/user/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +9,7 @@ class UserDataLayer {
   UserModel? user;
 
   AuthModel? auth;
-  List<ProjectModel>? projects = [];
+  // List<ProjectModel>? projects = user.projects ?? [];
   String? email;
 
   // Initialize SharedPreferences
@@ -115,7 +114,7 @@ class UserDataLayer {
   Future<void> logoutFunction() async {
     user = null;
     auth = null;
-    projects?.clear();
+    // projects?.clear();
     email = null;
     await prefs.remove('user');
     await prefs.remove('auth');
