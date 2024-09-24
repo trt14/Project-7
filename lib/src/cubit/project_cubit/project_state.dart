@@ -27,3 +27,5 @@ final class ChangeStatus extends ProjectState {
   final bool isTrue;
   ChangeStatus({required this.isTrue});
 }
+
+final class DeleteSuccessState extends ProjectState {}
