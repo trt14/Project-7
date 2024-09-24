@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:project_7/src/helper/colors.dart';
+import 'package:project_7/src/helper/converter.dart';
 import 'package:project_7/src/models/project/project_model.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
 import 'package:project_7/src/widgits/custom_card_project.dart';
-
-
 
 class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key, required this.result});
@@ -36,7 +35,7 @@ class ResultScreen extends StatelessWidget {
                           );
                         },
                         child: CustomCardProject(
-                            supervisorName: "",
+                            supervisorName: "Someone",
                             projectName: "${result[index].projectName}",
                             projectDescription:
                                 "${result[index].projectDescription}",
@@ -48,7 +47,14 @@ class ResultScreen extends StatelessWidget {
                             colorStatus: result[index].presentationDate != null
                                 ? color.completedColor
                                 : color.uncompletedColor,
-                            projectDaysleft: "20 days left",
+                            projectDaysleft: result[index].startDate != null &&
+                                    result[index].endDate != null
+                                ? getDaysDifference(result[index].startDate!,
+                                            result[index].endDate!) !=
+                                        0
+                                    ? "${getDaysDifference(result[index].startDate!, result[index].endDate!)} days"
+                                    : "Over"
+                                : "not yet",
                             isSelectedTeamMember:
                                 result[index].membersProject!.isNotEmpty
                                     ? true

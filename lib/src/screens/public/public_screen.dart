@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_7/src/cubit/public_cubit/public_cubit.dart';
 import 'package:project_7/src/helper/colors.dart';
+import 'package:project_7/src/helper/converter.dart';
 import 'package:project_7/src/helper/functions.dart';
 import 'package:project_7/src/models/project/project_model.dart';
 import 'package:project_7/src/screens/project/project_screen.dart';
@@ -29,13 +30,13 @@ class PublicScreen extends StatelessWidget {
           try {
             await publicCubit.loadPublicProject();
           } catch (error) {
-              if (context.mounted) {
-                showAlertSnackBar(
-                color: color,
-                context: context,
-                title: error.toString(),
-                colorStatus: color.uncompletedColor);
-              }
+            if (context.mounted) {
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: error.toString(),
+                  colorStatus: color.uncompletedColor);
+            }
           }
         }
 
@@ -85,6 +86,7 @@ class PublicScreen extends StatelessWidget {
                       BlocBuilder<PublicCubit, PublicState>(
                         builder: (context, state) {
                           return ListOfHighlights(
+                              color: color,
                               publicProjects:
                                   publicCubit.projectDataLayer.publicProjects);
                         },
@@ -148,10 +150,10 @@ class PublicScreen extends StatelessWidget {
 }
 
 class ListOfHighlights extends StatelessWidget {
-  const ListOfHighlights({
-    super.key,
-    required this.publicProjects,
-  });
+  const ListOfHighlights(
+      {super.key, required this.publicProjects, required this.color});
+
+  final Color color;
 
   final List<ProjectModel> publicProjects;
   @override
@@ -169,6 +171,7 @@ class ListOfHighlights extends StatelessWidget {
                 ),
               );
             },
+            color: color,
             imageSrc: publicProjects[index].imagesProject!.isNotEmpty
                 ? publicProjects[index].imagesProject![0].url
                 : "",
@@ -216,19 +219,26 @@ class ListOfProjects extends StatelessWidget {
             );
           },
           child: CustomCardProject(
-              supervisorName: "",
+              supervisorName: "Someone",
               projectName: "${publicProjectFillterd[index].projectName}",
               projectDescription:
                   "${publicProjectFillterd[index].projectDescription}",
               projectType: "${publicProjectFillterd[index].type}",
               projectStatus:
-                  publicProjectFillterd[index].presentationDate != null
+                  publicProjectFillterd[index].presentationUrl != null
                       ? "COMPLETED"
                       : "UNCOMPLETED",
-              colorStatus: publicProjectFillterd[index].presentationDate != null
+              colorStatus: publicProjectFillterd[index].presentationUrl != null
                   ? color.completedColor
                   : color.uncompletedColor,
-              projectDaysleft: "20 days left",
+              projectDaysleft: publicProjectFillterd[index].startDate != null &&
+                      publicProjectFillterd[index].endDate != null
+                  ? getDaysDifference(publicProjectFillterd[index].startDate!,
+                              publicProjectFillterd[index].endDate!) !=
+                          0
+                      ? "${getDaysDifference(publicProjectFillterd[index].startDate!, publicProjectFillterd[index].endDate!)} days"
+                      : "Over"
+                  : "not yet",
               isSelectedTeamMember:
                   publicProjectFillterd[index].membersProject!.isNotEmpty
                       ? true

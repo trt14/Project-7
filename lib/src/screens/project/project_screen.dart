@@ -204,12 +204,14 @@ class ProjectScreen extends StatelessWidget {
                               initialRating: (userProject.rating! / 2),
                               minRating: 0,
                               direction: Axis.horizontal,
-                              allowHalfRating: true,
+                              allowHalfRating: false,
+                              tapOnlyMode: true,
+                              glow: false,
                               itemCount: 5,
                               itemPadding:
                                   const EdgeInsets.symmetric(horizontal: 4.0),
                               itemBuilder: (context, _) => Icon(
-                                Icons.assignment,
+                                Icons.star,
                                 color: color.primaryColor,
                               ),
                               onRatingUpdate: (rating) {

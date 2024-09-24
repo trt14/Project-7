@@ -89,11 +89,20 @@ class EditProjectScreen extends StatelessWidget {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  Image.asset(
-                    "assets/images/project.png",
-                    width: context.getWidth(value: 0.65),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Image.asset(
+                        "assets/images/project.png",
+                        width: context.getWidth(value: 0.2),
+                      ),
+                      Text(
+                        "Project ID : ${userProject.projectId}",
+                        style:
+                            TextStyle(color: color.primaryColor, fontSize: 20),
+                      ),
+                    ],
                   ),
-                  Text("Project ID : ${userProject.projectId}"),
                   CustomTextField(
                     title: "Project Name",
                     color: color,
