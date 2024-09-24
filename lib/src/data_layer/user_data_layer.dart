@@ -40,12 +40,12 @@ class UserDataLayer {
     }
 
     // Retrieve the 'projects' data from SharedPreferences as a JSON string
-    final String? projectsJson = prefs.getString('projects');
-    if (projectsJson != null) {
-      projects = (jsonDecode(projectsJson) as List)
-          .map((item) => ProjectModel.fromJson(item))
-          .toList();
-    }
+    // final String? projectsJson = prefs.getString('projects');
+    // if (projectsJson != null) {
+    //   projects = (jsonDecode(projectsJson) as List)
+    //       .map((item) => ProjectModel.fromJson(item))
+    //       .toList();
+    // }
 
     // Retrieve the 'email' data from SharedPreferences as a string
     email = prefs.getString('email');
@@ -76,11 +76,11 @@ class UserDataLayer {
   * Method: Save projects data to SharedPreferences
   *
   * */
-  Future<void> saveProjects(List<ProjectModel> projects) async {
-    this.projects = projects;
-    await prefs.setString(
-        'projects', jsonEncode(projects.map((item) => item.toJson()).toList()));
-  }
+  // Future<void> saveProjects(List<ProjectModel> projects) async {
+  //   this.projects = projects;
+  //   await prefs.setString(
+  //       'projects', jsonEncode(projects.map((item) => item.toJson()).toList()));
+  // }
 
   /*
   *
@@ -96,10 +96,10 @@ class UserDataLayer {
       await prefs.setString('user', jsonEncode(user!.toJson()));
     }
 
-    if (projects != null) {
-      await prefs.setString('projects',
-          jsonEncode(projects!.map((item) => item.toJson()).toList()));
-    }
+    // if (projects != null) {
+    //   await prefs.setString('projects',
+    //       jsonEncode(projects!.map((item) => item.toJson()).toList()));
+    // }
 
     if (email != null) {
       await prefs.setString('email', email!);
