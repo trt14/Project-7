@@ -12,7 +12,6 @@ import 'package:project_7/src/widgits/custom_card_project.dart';
 import 'package:project_7/src/widgits/custom_loading.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:project_7/src/widgits/highlights.dart';
-import 'package:project_7/src/helper/colors.dart';
 
 // Done Snackbar
 
@@ -31,13 +30,13 @@ class PublicScreen extends StatelessWidget {
           try {
             await publicCubit.loadPublicProject();
           } catch (error) {
-              if (context.mounted) {
-                showAlertSnackBar(
-                color: color,
-                context: context,
-                title: error.toString(),
-                colorStatus: color.uncompletedColor);
-              }
+            if (context.mounted) {
+              showAlertSnackBar(
+                  color: color,
+                  context: context,
+                  title: error.toString(),
+                  colorStatus: color.uncompletedColor);
+            }
           }
         }
 
