@@ -123,7 +123,7 @@ To run this project, make sure you have the following installed:
 
 1. **Clone the repository**:
    ```
-   git clone https://github.com/your-repo/project-management-app.git
+   git clone https://github.com/your-repo/project-7.git
    cd project-management-app
    ```
 
