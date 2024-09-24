@@ -1,70 +1,86 @@
-
 ---
 
 # Project Management Application
 
 ## Overview
-This project is a comprehensive project management system designed with multiple roles: **User**, **Supervisor**, and **Admin**. Each role has specific permissions and tasks, ensuring smooth project collaboration and management.
+
+This project is a comprehensive project management system designed with multiple roles: **User**, *
+*Supervisor**, and **Admin**. Each role has specific permissions and tasks, ensuring smooth project
+collaboration and management.
 
 ## Roles & Functionalities
 
 ### User:
-- **Registration and Login**: Users can register and log in via a verification code sent to their email.
+
+- **Registration and Login**: Users can register and log in via a verification code sent to their
+  email.
 - **Profile Management**: Add and modify personal accounts (GitHub, LinkedIn, etc.) and upload a CV.
 - **Project Management**:
-  - View all projects assigned by a supervisor or admin.
-  - Add members to the project using user IDs.
-  - Add project-related links (GitHub, Figma, video, APK, etc.).
-  - Edit project details (name, description, links).
-  - Display a QR code for project evaluation.
-  - View project evaluations when available.
+    - View all projects assigned by a supervisor or admin.
+    - Add members to the project using user IDs.
+    - Add project-related links (GitHub, Figma, video, APK, etc.).
+    - Edit project details (name, description, links).
+    - Display a QR code for project evaluation.
+    - View project evaluations when available.
 
 ### Supervisor:
+
 - **Login**: Log in via email and a verification code.
 - **Profile Management**: Add and edit personal accounts and upload a CV.
 - **Project Management**:
-  - Manage all assigned projects (add members, links, modify details).
-  - Add new projects and assign them to users.
-  - Delete personal projects (non-public ones).
-  - View project evaluations.
+    - Manage all assigned projects (add members, links, modify details).
+    - Add new projects and assign them to users.
+    - Delete personal projects (non-public ones).
+    - View project evaluations.
 
 ### Admin:
+
 - **Profile Management**: Add and edit personal accounts and upload a CV.
 - **Project Management**:
-  - View and manage all projects created by supervisors and themselves.
-  - Add and assign new projects to users.
-  - Modify project details, links, and permissions.
-  - Delete private projects.
-  - Change user roles (e.g., promote a user to a supervisor).
+    - View and manage all projects created by supervisors and themselves.
+    - Add and assign new projects to users.
+    - Modify project details, links, and permissions.
+    - Delete private projects.
+    - Change user roles (e.g., promote a user to a supervisor).
 
 ## Screenshot
-
+<img src="./assets/screens/login_screen.jpeg" width="300"/>
+<img src="./assets/screens/otp_screen.jpeg" width="300"/>
+<img src="./assets/screens/user_screen.jpeg" width="300"/>
+<img src="./assets/screens/my_project.jpeg" width="300"/>
 
 ## API Documentation
 
-The project uses the following API hosted at: [https://tuwaiq-gallery.onrender.com](https://tuwaiq-gallery.onrender.com)
+The project uses the following API hosted
+at: [https://tuwaiq-gallery.onrender.com](https://tuwaiq-gallery.onrender.com)
 
 Below is a summary of key API calls:
 
 ### Authentication:
+
 - **POST /v1/auth/create/new/account**: Create a new user account.
 - **POST /v1/auth/login**: User login.
 - **POST /v1/auth/verify**: Verify email with OTP.
 
 ### Profile Management:
+
 - **GET /v1/user/profile**: Retrieve the user profile.
 - **PUT /v1/user/update/profile**: Update user profile data.
 
 ### Project Management:
+
 - **PUT /v1/user/edit/project/base/{id}**: Update project base details.
 - **PUT /v1/user/edit/project/members/{id}**: Update project members.
 - **PUT /v1/user/edit/project/link/{id}**: Update project links (GitHub, Figma, etc.).
 
 ### Admin Functions:
+
 - **PUT /v1/admin/change/role/user**: Change the role of a user (e.g., promote to supervisor).
 
 ### More API Details:
-For further API details and the full list of available endpoints, please refer to the [API Documentation](https://tuwaiq-gallery.onrender.com).
+
+For further API details and the full list of available endpoints, please refer to
+the [API Documentation](https://tuwaiq-gallery.onrender.com).
 
 ## Project Structure
 
@@ -114,10 +130,13 @@ The following Flutter packages are utilized within the application:
 ## How to Run the Project
 
 ### Prerequisites
+
 To run this project, make sure you have the following installed:
+
 - **Flutter SDK**: [Flutter Installation Guide](https://flutter.dev/docs/get-started/install)
 - **Dart SDK**: Installed automatically with Flutter.
-- **Code Editor**: Recommended [Visual Studio Code](https://code.visualstudio.com/) or [Android Studio](https://developer.android.com/studio).
+- **Code Editor**: Recommended [Visual Studio Code](https://code.visualstudio.com/)
+  or [Android Studio](https://developer.android.com/studio).
 
 ### Steps to Run
 
@@ -153,21 +172,21 @@ To run this project, make sure you have the following installed:
 
 6. **Build the app**:
    To build the app for Android or iOS, use the following commands:
-   - For Android:
-     ```
-     flutter build apk
-     ```
-   - For iOS:
-     ```
-     flutter build ios
-     ```
+    - For Android:
+      ```
+      flutter build apk
+      ```
+    - For iOS:
+      ```
+      flutter build ios
+      ```
 
 7. **Testing and Debugging**:
-   - Use the `Flutter DevTools` for debugging and profiling the app.
-   - Run the app with `flutter run --debug` to see verbose logs.
+    - Use the `Flutter DevTools` for debugging and profiling the app.
+    - Run the app with `flutter run --debug` to see verbose logs.
 
+## Wondorful Team
 
-## Wondorful Team 
 - Mahdi Alhelal
 - Fahad Alharbi
 
