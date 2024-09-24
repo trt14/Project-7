@@ -67,10 +67,21 @@ class ProjectScreen extends StatelessWidget {
               }
               if (state is SuccessState) {
                 Navigator.pop(context);
+
                 showAlertSnackBar(
                     color: color,
                     context: context,
                     title: "Update was success :)",
+                    colorStatus: color.completedColor);
+              }
+              if (state is DeleteSuccessState) {
+                Navigator.pop(context);
+                Navigator.pop(context);
+
+                showAlertSnackBar(
+                    color: color,
+                    context: context,
+                    title: "Delete project was success :)",
                     colorStatus: color.completedColor);
               }
             },
@@ -177,7 +188,7 @@ class ProjectScreen extends StatelessWidget {
                               child: CarouselSlider(
                                 options: CarouselOptions(
                                   autoPlay: true,
-                                  aspectRatio: 2.0,
+                                  aspectRatio: 1.0,
                                   enlargeCenterPage: true,
                                   enlargeStrategy:
                                       CenterPageEnlargeStrategy.height,

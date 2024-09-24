@@ -69,7 +69,7 @@ class InitProject extends StatelessWidget {
                 children: [
                   Image.asset(
                     "assets/images/project.png",
-                    width: context.getWidth(value: 0.65),
+                    width: context.getWidth(value: 0.2),
                   ),
                   CustomTextField(
                     title: "User ID",

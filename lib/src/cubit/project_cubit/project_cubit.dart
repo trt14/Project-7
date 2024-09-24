@@ -233,7 +233,7 @@ class ProjectCubit extends Cubit<ProjectState> {
       userDataLayer.user =
           await api.getUserProfile(token: userDataLayer.auth!.token!);
 
-      emit(SuccessState());
+      emit(DeleteSuccessState());
       log("success");
     } catch (e) {
       log("iam at catch");
