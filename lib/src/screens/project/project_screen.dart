@@ -41,7 +41,7 @@ class ProjectScreen extends StatelessWidget {
           final projectCubit = context.read<ProjectCubit>();
           String? userRole =
               projectCubit.userDataLayer.user?.role.toString() ?? "gust";
-          print("user role : $userRole");
+          log("user role : $userRole");
           projectCubit.editProjectNameController.text =
               userProject.projectName.toString();
 
@@ -70,95 +70,101 @@ class ProjectScreen extends StatelessWidget {
                 showAlertSnackBar(
                     color: color,
                     context: context,
-                    title: "Update was sucess :)",
+                    title: "Update was success :)",
                     colorStatus: color.completedColor);
               }
             },
             child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: color.secondaryColor,
-                automaticallyImplyLeading: false,
-                actions: [
-                  userRole != "user"
-                      ? IconButton(
+              appBar: userRole != "gust"
+                  ? AppBar(
+                      backgroundColor: color.secondaryColor,
+                      automaticallyImplyLeading: false,
+                      actions: [
+                        userRole == "admin" && userRole == "supervisor"
+                            ? IconButton(
+                                onPressed: () {
+                                  userProject.isPublic == false
+                                      ? projectCubit.deleteProject(
+                                          project: userProject)
+                                      : showAlertSnackBar(
+                                          color: color,
+                                          context: context,
+                                          title:
+                                              "Project can't be delete because it's public  .",
+                                          colorStatus: color.uncompletedColor);
+                                },
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: color.txtwhiteColor,
+                                ),
+                              )
+                            : const SizedBox(),
+                        IconButton(
                           onPressed: () {
-                            userProject.isPublic == false
-                                ? projectCubit.deleteProject(
-                                    project: userProject)
-                                : showAlertSnackBar(
-                                    color: color,
-                                    context: context,
-                                    title:
-                                        "Project can't be delete becuase it's public  .",
-                                    colorStatus: color.uncompletedColor);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditProjectScreen(
+                                      userProject: userProject)),
+                            ).then((value) => projectCubit.update());
+                            userProject = projectCubit
+                                .userDataLayer.user!.projects!
+                                .firstWhere((element) =>
+                                    userProject.projectId == element.projectId);
                           },
                           icon: Icon(
-                            Icons.delete,
+                            Icons.settings,
                             color: color.txtwhiteColor,
                           ),
-                        )
-                      : const SizedBox(),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                EditProjectScreen(userProject: userProject)),
-                      ).then((value) => projectCubit.update());
-                      userProject = projectCubit.userDataLayer.user!.projects!
-                          .firstWhere((element) =>
-                              userProject.projectId == element.projectId);
-                    },
-                    icon: Icon(
-                      Icons.settings,
-                      color: color.txtwhiteColor,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Clipboard.setData(
-                              ClipboardData(text: userProject.projectId))
-                          .then((value) {
-                        if (context.mounted) {
-                          showAlertSnackBar(
-                              color: color,
-                              context: context,
-                              title: "Project ID has been copied.",
-                              colorStatus: color.completedColor);
-                        }
-                      });
-                    },
-                    icon: Icon(
-                      Icons.copy,
-                      color: color.txtwhiteColor,
-                    ),
-                  ),
-                  userProject.allowRating!
-                      ? IconButton(
+                        ),
+                        IconButton(
                           onPressed: () {
-                            showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => Center(
-                                child: SizedBox(
-                                  child: Card(
-                                    child: QrImageView(
-                                      data: userProject.projectId,
-                                      version: QrVersions.auto,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
+                            Clipboard.setData(
+                                    ClipboardData(text: userProject.projectId))
+                                .then((value) {
+                              if (context.mounted) {
+                                showAlertSnackBar(
+                                    color: color,
+                                    context: context,
+                                    title: "Project ID has been copied.",
+                                    colorStatus: color.completedColor);
+                              }
+                            });
                           },
-                          icon: const Icon(
-                            Icons.qr_code,
-                            color: Colors.white,
+                          icon: Icon(
+                            Icons.copy,
+                            color: color.txtwhiteColor,
                           ),
-                        )
-                      : const SizedBox(),
-                ],
-              ),
+                        ),
+                        userProject.allowRating!
+                            ? IconButton(
+                                onPressed: () {
+                                  showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) => Center(
+                                      child: SizedBox(
+                                        child: Card(
+                                          child: QrImageView(
+                                            data: userProject.projectId,
+                                            version: QrVersions.auto,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.qr_code,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const SizedBox(),
+                      ],
+                    )
+                  : AppBar(
+                      backgroundColor: color.secondaryColor,
+                      automaticallyImplyLeading: false,
+                      actions: const []),
               body: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -207,7 +213,7 @@ class ProjectScreen extends StatelessWidget {
                                 color: color.primaryColor,
                               ),
                               onRatingUpdate: (rating) {
-                                print(rating);
+                                log(rating.toString());
                               },
                             )
                           : const SizedBox(),
@@ -327,7 +333,7 @@ class ProjectScreen extends StatelessWidget {
                                             width: 5,
                                           ),
                                           Text(
-                                            "Presintation Date: ",
+                                            "Presentation Date: ",
                                             style: TextStyle(
                                                 color: color.secondaryColor,
                                                 fontSize: 12,
@@ -413,31 +419,33 @@ class ProjectScreen extends StatelessWidget {
                               },
                             ),
                           ),
-                          projectCubit.userDataLayer.user?.id ==
-                                      userProject.userId &&
-                                  projectCubit.userDataLayer.user?.role !=
-                                      "gust"
-                              ? IconButton(
-                                  onPressed: () async {
-                                    try {
-                                      addNewMembers(context,
-                                          memberIdController:
-                                              projectCubit.memberIdController,
-                                          positionController:
-                                              projectCubit.positionController,
-                                          onPressed: () async {
-                                        userProject =
-                                            await projectCubit.addMemberEvent(
-                                                project: userProject);
-                                      });
-                                    } catch (e) {
-                                      log(e.toString());
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Icons.person_add,
-                                    color: color.primaryColor,
-                                  ))
+                          projectCubit.userDataLayer.user?.role != "gust"
+                              ? projectCubit.userDataLayer.user?.id ==
+                                          userProject.userId ||
+                                      projectCubit.userDataLayer.user?.role !=
+                                          "user"
+                                  ? IconButton(
+                                      onPressed: () async {
+                                        try {
+                                          addNewMembers(context,
+                                              memberIdController: projectCubit
+                                                  .memberIdController,
+                                              positionController: projectCubit
+                                                  .positionController,
+                                              onPressed: () async {
+                                            userProject = await projectCubit
+                                                .addMemberEvent(
+                                                    project: userProject);
+                                          });
+                                        } catch (e) {
+                                          log(e.toString());
+                                        }
+                                      },
+                                      icon: Icon(
+                                        Icons.person_add,
+                                        color: color.primaryColor,
+                                      ))
+                                  : const SizedBox()
                               : const SizedBox()
                         ],
                       ),
@@ -520,7 +528,7 @@ class ProjectScreen extends StatelessWidget {
                                 builder: (context, state) {
                                   return Center(
                                     child: CustomElevatedBTN(
-                                      text: "Open Persentation file",
+                                      text: "Open presentation file",
                                       color: color,
                                       onPressed: () {
                                         try {
