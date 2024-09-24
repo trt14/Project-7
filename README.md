@@ -44,10 +44,10 @@ collaboration and management.
     - Change user roles (e.g., promote a user to a supervisor).
 
 ## Screenshot
-<img src="./assets/screens/login_screen.jpeg" width="300"/>
-<img src="./assets/screens/otp_screen.jpeg" width="300"/>
-<img src="./assets/screens/user_screen.jpeg" width="300"/>
-<img src="./assets/screens/my_project.jpeg" width="300"/>
+<img src="screens/login_screen.jpeg" width="300"/>
+<img src="screens/otp_screen.jpeg" width="300"/>
+<img src="screens/user_screen.jpeg" width="300"/>
+<img src="screens/my_project.jpeg" width="300"/>
 
 ## API Documentation
 
